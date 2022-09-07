@@ -1,29 +1,21 @@
 from datetime import date
 from typing import List, Optional
 
-from fastapi import Depends, HTTPException, Query
+from fastapi import Depends, HTTPException
 from pydantic import NonNegativeInt, PositiveInt, conint
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from ..auth.dependencies import get_current_user
 from ..auth.models import User
 from ..database import get_session, save_and_refresh
 from ..tweets_common.helper_functions import (
+    assert_not_null,
     get_a_tweet,
-    get_combined_tweet,
     get_db_overview,
     get_filtered_count,
-    get_filtered_selection,
-    make_tweet_read,
+    get_selection_filter,
 )
-from ..tweets_common.models import (
-    Overview,
-    Topics,
-    Tweet,
-    TweetCount,
-    TweetRead,
-    TweetUpdate,
-)
+from ..tweets_common.models import Overview, Tweet, TweetCount, TweetRead, TweetUpdate
 from . import router
 
 
@@ -39,7 +31,6 @@ def get_tweet_overview(session: Session = Depends(get_session)):
 
 @router.get("/count", response_model=TweetCount)
 def get_count(
-    topics: Optional[List[Topics]] = Query(None),
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     session: Session = Depends(get_session),
@@ -48,14 +39,13 @@ def get_count(
     Get the count of tweets for the given filters
     """
 
-    return get_filtered_count(Tweet, topics, start_date, end_date, session)
+    return get_filtered_count(Tweet, start_date, end_date, session)
 
 
 @router.get("/", response_model=List[TweetRead])
 def read_tweets(
     offset: NonNegativeInt = 0,
     limit: conint(le=10, gt=0) = 10,
-    topics: Optional[List[Topics]] = Query(None),
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     session: Session = Depends(get_session),
@@ -63,13 +53,11 @@ def read_tweets(
     """
     Read tweets within the offset and limit
     """
-    selection = get_filtered_selection(Tweet, topics, start_date, end_date)
+    selection = get_selection_filter(Tweet, start_date, end_date, select(Tweet))
 
-    tweets = session.exec(
+    return session.exec(
         selection.order_by(Tweet.id.desc()).offset(offset).limit(limit)
     ).all()
-
-    return tweets
 
 
 @router.get(
@@ -82,9 +70,7 @@ def read_tweet(tweet_id: PositiveInt, session: Session = Depends(get_session)):
     Read a tweet by id.
     """
 
-    tweet = get_a_tweet(session, tweet_id, Tweet)
-
-    return tweet
+    return get_a_tweet(session, tweet_id, Tweet)
 
 
 @router.patch(
@@ -111,7 +97,9 @@ def update_tweet(
     if len(tweet_data) == 0:
         raise HTTPException(status_code=400, detail="No Valid Data to Update")
 
-    db_tweet, others = get_combined_tweet(session, tweet_id, Tweet)
+    db_tweet = session.exec(select(Tweet).where(Tweet.id == tweet_id)).one_or_none()
+
+    assert_not_null(db_tweet, tweet_id, Tweet)
 
     for key, value in tweet_data.items():
         setattr(db_tweet, key, value)
@@ -119,7 +107,7 @@ def update_tweet(
     db_tweet.modifier = db_user
 
     save_and_refresh(session, db_tweet)
-    return make_tweet_read(db_tweet, others)
+    return db_tweet
 
 
 @router.post("/edit_request/{tweet_id}")
@@ -129,7 +117,7 @@ def request_tweet_edit(tweet_id: PositiveInt, tweet: TweetUpdate):
     """
     # NOTE: DANGER...CHANGE THIS CODE
     # ONLY FOR DEMO PURPOSE
-    with open("edits.txt", "a", encoding="utf-8") as f:
+    with open("edits.txt", "a") as f:
         f.write(f"Tweet, {tweet_id}, {tweet}\n")
 
     return {"message": "Successfully submitted edit request."}

@@ -1,89 +1,60 @@
 from datetime import date, datetime, timezone
-from enum import Enum
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
-from pydantic import BaseModel, PositiveInt
-from sqlmodel import Field, Relationship, SQLModel, func
+from pydantic import BaseModel, PositiveInt, conint, confloat
+from sqlmodel import Field, Relationship, SQLModel, func, CheckConstraint
 
 if TYPE_CHECKING:
     from app.auth.models import User
 
 # Data Models
 
-
-class Topics(str, Enum):
-    """
-    Used as choices to filter the tweets
-    """
-
-    covid_stats = "covid_stats"
-    vaccination = "vaccination"
-    covid_politics = "covid_politics"
-    humour = "humour"
-    lockdown = "lockdown"
-    civic_views = "civic_views"
-    life_during_pandemic = "life_during_pandemic"
-    covid_waves_and_variants = "covid_waves_and_variants"
-    others = "others"
+# Sexual score is in the range of 1 to 10
+sexual_score_kwargs = {"ge": 1, "le": 10}
+sexual_score_int = conint(**sexual_score_kwargs)
 
 
 class TweetCount(BaseModel):
-    covid_stats: int
-    vaccination: int
-    covid_politics: int
-    humour: int
-    lockdown: int
-    civic_views: int
-    life_during_pandemic: int
-    covid_waves_and_variants: int
-    others: int
+    is_abuse: int
     total: int
 
 
-class Overview(TweetCount):
+class Overview(BaseModel):
     created_date: date
+    is_abuse: bool
+    # Can be float due to averaging
+    sexual_score: confloat(**sexual_score_kwargs)
 
 
 class TweetUpdate(BaseModel):
-    covid_stats: Optional[bool] = None
-    vaccination: Optional[bool] = None
-    covid_politics: Optional[bool] = None
-    humour: Optional[bool] = None
-    lockdown: Optional[bool] = None
-    civic_views: Optional[bool] = None
-    life_during_pandemic: Optional[bool] = None
-    covid_waves_and_variants: Optional[bool] = None
+    is_abuse: Optional[bool] = None
+    sexual_score: Optional[sexual_score_int] = None
 
 
-class TweetBase(SQLModel):
+class PredictionOutput(BaseModel):
+    # Raw prediction logits
+    predictions: List[List[float]]
+    # Thresholded labels
+    labels: List[Tuple[bool, float]]
+
+
+class TweetRead(SQLModel):
+
+    __table_args__ = (CheckConstraint("sexual_score >= 1 AND sexual_score <= 10"),)
+
     id: Optional[PositiveInt] = Field(default=None, primary_key=True)
     text: str
     username: str
     created_at: datetime
-    covid_stats: bool
-    vaccination: bool
-    covid_politics: bool
-    humour: bool
-    lockdown: bool
-    civic_views: bool
-    life_during_pandemic: bool
-    covid_waves_and_variants: bool
-
-
-class TweetRead(TweetBase):
-    others: bool
-
-
-class PredictionOutput(BaseModel):
-    predictions: List[float]
-    labels: List[bool]
+    is_abuse: bool
+    sexual_score: sexual_score_int
 
 
 # Table Models
 
 
-class Tweet(TweetBase, table=True):
-    # The user who moved tweet from TweetBase to Tweet
+class Tweet(TweetRead, table=True):
+    # The user who moved tweet from PseudoTweet to Tweet
     verifier_id: PositiveInt = Field(foreign_key="user.id")
     verifier: "User" = Relationship(
         back_populates="verified_tweets",
@@ -108,5 +79,5 @@ class Tweet(TweetBase, table=True):
     )
 
 
-class PseudoTweet(TweetBase, table=True):
+class PseudoTweet(TweetRead, table=True):
     __tablename__ = "pseudo_tweet"
