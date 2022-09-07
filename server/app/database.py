@@ -2,7 +2,6 @@ from typing import Optional, TypeVar
 
 from fastapi import HTTPException
 from sqlmodel import Session, SQLModel, create_engine
-from sqlmodel.sql.expression import Select, SelectOfScalar
 
 from .config import settings
 
@@ -13,12 +12,6 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     echo=settings.database_echo,
 )
-
-# Fix Unncessary caching warning for now. Refer to
-# https://github.com/tiangolo/sqlmodel/issues/189 for more info
-
-SelectOfScalar.inherit_cache = True
-Select.inherit_cache = True
 
 # Make a Generic Type to get the original type completion back
 ModelType = TypeVar("ModelType")

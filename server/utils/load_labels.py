@@ -3,6 +3,7 @@ from datetime import datetime
 from random import randrange
 from typing import List, Mapping, Union
 
+from sqlalchemy.exc import NoResultFound
 from sqlmodel import Session, select
 
 from app.auth.models import User
@@ -32,9 +33,14 @@ def load_database(write_session: Session):
             # If cache misses
             if verifier_id is None:
                 # Get from database
-                verifier_id = read_session.exec(
-                    select(User.id).where(User.email == verifier_email)
-                ).one()
+                try:
+                    verifier_id = read_session.exec(
+                        select(User.id).where(User.email == verifier_email)
+                    ).one()
+                except NoResultFound:
+                    print(f"User {verifier_email} not found")
+                    return tweets
+
                 # And update the cache
                 email_to_id[verifier_email] = verifier_id
 
