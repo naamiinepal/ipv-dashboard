@@ -21,9 +21,10 @@ class TweetCount(BaseModel):
 
 class Overview(BaseModel):
     created_date: date
-    is_abuse: bool
+    is_abuse: int
     # Can be float due to averaging
-    sexual_score: confloat(**sexual_score_kwargs)
+    sexual_score: Optional[confloat(**sexual_score_kwargs)]
+    total: int
 
 
 class TweetUpdate(BaseModel):

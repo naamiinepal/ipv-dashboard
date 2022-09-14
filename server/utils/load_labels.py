@@ -81,9 +81,8 @@ def load_database(write_session: Session):
                 "verifier_id": verifier_id,
                 "verified_at": get_random_time(),
             }
-            tweet = Tweet(**kwargs)
 
-            tweets.append(tweet)
+            tweets.append(Tweet(**kwargs))
 
     write_session.bulk_save_objects(tweets)
     write_session.commit()

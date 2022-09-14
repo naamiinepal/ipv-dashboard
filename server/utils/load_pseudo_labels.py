@@ -8,14 +8,17 @@ from app.tweets_common.models import PseudoTweet
 
 
 def load_database(session: Session):
-    with open("utils/pseudo_label_dataset_feb_23.csv") as csvfile:
+    with open("utils/sent_pseudo_labels_combined.csv") as csvfile:
         pseudo_tweets: List[PseudoTweet] = []
         for row in DictReader(csvfile):
             created_at: datetime = datetime.strptime(
                 row["created_at"], r"%a %b %d %H:%M:%S %z %Y"
             )
+            is_abuse = float(row["abuse_pred"]) >= 0.5
             kwargs: Mapping[str, Union[str, datetime]] = {
                 **row,
+                "is_abuse": is_abuse,
+                "sexual_score": max(min(round(float(row["sexual_score"])), 10), 1),
                 "created_at": created_at,
             }
             pseudo_tweets.append(PseudoTweet(**kwargs))
