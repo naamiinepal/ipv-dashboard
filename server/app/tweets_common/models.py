@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 # Sexual score is in the range of 1 to 10
 sexual_score_kwargs = {"ge": 1, "le": 10}
-sexual_score_int = conint(**sexual_score_kwargs)
+sexual_score_int = Optional[conint(**sexual_score_kwargs)]
 
 
 class TweetCount(BaseModel):
@@ -28,7 +28,7 @@ class Overview(BaseModel):
 
 class TweetUpdate(BaseModel):
     is_abuse: Optional[bool] = None
-    sexual_score: Optional[sexual_score_int] = None
+    sexual_score: sexual_score_int = None
 
 
 class PredictionOutput(BaseModel):
