@@ -1,8 +1,8 @@
-import DialogTitle from "@mui/material/DialogTitle";
 import { Button, Card, TextField } from "@mui/material";
+import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
-import { useAuth } from "./AuthProvider";
 import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "./AuthProvider";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -21,7 +21,6 @@ export default function Login() {
       // won't end up back on the login page, which is also really nice for the
       // user experience.
       const from = location.state?.from?.pathname || "/";
-
       navigate(from, { replace: true });
     });
   }

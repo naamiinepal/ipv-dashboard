@@ -1,26 +1,24 @@
-import { useEffect, useRef, useState } from "react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  ArcElement,
-  Tooltip,
-  Legend,
-  Filler,
-  BarElement,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import axios from "axios";
 import { Card } from "@mui/material";
-import { columns } from "../constants";
+import axios from "axios";
+import {
+  ArcElement,
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
-import { useFilter } from "./FilterProvider";
+import { useEffect, useState } from "react";
+import { Line } from "react-chartjs-2";
+import { columns } from "../constants";
 import BarChart from "./BarChart";
-
-// import faker from 'faker';
+import { useFilter } from "./FilterProvider";
 
 ChartJS.register(
   ArcElement,
@@ -43,7 +41,7 @@ const options = {
     legend: {
       position: "top",
     },
-    tooltip: { cornerRadius: 0 },
+    // tooltip: { cornerRadius: 0 },
     title: {
       display: true,
       text: "Line Chart",
@@ -69,10 +67,10 @@ const options = {
       },
     },
     y: {
-      stacked: true,
+      // stacked: true,
       title: {
         display: true,
-        text: "Tweet Count",
+        text: "Tweet Count per day",
       },
     },
   },
@@ -96,60 +94,30 @@ const optionsPie = {
   },
 };
 
-const fetchLabels = async (startDate, endDate) =>
+const fetchLabels = async () =>
   axios
     .get(`/pseudo_tweets/overview?all=true`)
-    .then((data) => data.data)
-    .then((data) => {
+    .then(({ data }) => {
       const finalData = {};
-      if (data) {
-        console.log(data[0].created_date.substring(5, 7));
 
-        data = data.filter(
-          (datum) =>
-            new Date(datum.created_date) > new Date(startDate) &&
-            new Date(datum.created_date) < new Date(endDate)
-        );
-      }
+      const is_abuse = data.map((datum) => datum.is_abuse);
+      const sexual_score = data.map((datum) => datum.sexual_score);
 
-      const covid_stats = data.map((datum) => datum.covid_stats);
-      const vaccination = data.map((datum) => datum.vaccination);
-      const covid_politics = data.map((datum) => datum.covid_politics);
-      const humour = data.map((datum) => datum.humour);
-      const lockdown = data.map((datum) => datum.lockdown);
-      const civic_views = data.map((datum) => datum.civic_views);
-      const others = data.map((datum) => datum.others);
-      const life_during_pandemic = data.map(
-        (datum) => datum.life_during_pandemic
-      );
-      const covid_waves_and_variants = data.map(
-        (datum) => datum.covid_waves_and_variants
-      );
       const dataArrays = {
-        covid_stats: covid_stats,
-        vaccination: vaccination,
-        covid_politics: covid_politics,
-        humour: humour,
-        lockdown: lockdown,
-        civic_views: civic_views,
-        life_during_pandemic: life_during_pandemic,
-        covid_waves_and_variants: covid_waves_and_variants,
-        others: others,
+        is_abuse,
+        sexual_score,
       };
       finalData["labels"] = data.map((datum) => datum.created_date);
+
       finalData["datasets"] = columns
-        .filter(
-          (column) => column.field !== "text" && column.field !== "verify"
-        )
-        .map((column) => {
-          return {
-            data: dataArrays[column.field],
-            label: column.label,
-            fill: true,
-            borderColor: column.areaColor,
-            backgroundColor: column.areaColor,
-          };
-        });
+        .filter(({ field }) => Object.keys(dataArrays).includes(field))
+        .map(({ field, label, areaColor }) => ({
+          data: dataArrays[field],
+          label: label,
+          fill: true,
+          borderColor: areaColor,
+          backgroundColor: areaColor,
+        }));
 
       console.log(finalData);
       return finalData;
@@ -158,37 +126,30 @@ const fetchLabels = async (startDate, endDate) =>
       console.log(error);
     });
 
-function LineChart() {
+const LineChart = () => {
   const [labels, setLabels] = useState({});
-  const [loading, setLoading] = useState(false);
-  // const { year, month } = useFilter();
-  let { startDate, endDate } = useFilter();
-
-  const chartRef = useRef(null);
-  // const [pieData, setPieData] = useState({ labels: [] });
-  // const resetZoom = () => {
-  //   chartRef.current.resetZoom();
-  // };
+  const [loaded, setLoaded] = useState(false);
+  const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    fetchLabels(startDate, endDate).then((label2) => {
-      setLabels(label2);
-      setLoading(true);
+    fetchLabels(startDate, endDate).then((label) => {
+      setLabels(label);
+      setLoaded(true);
     });
   }, [startDate, endDate]);
 
   return (
     <div className="flex w-11/12 my-3 mx-16">
-      {loading && (
+      {loaded && (
         <Card className="flex-1">
           {/* <Button onClick={resetZoom}>Zoom Out</Button> */}
-          <Line ref={chartRef} options={options} data={labels} />
+          <Line options={options} data={labels} />
         </Card>
       )}
       <BarChart />
     </div>
   );
-}
+};
 
 export { options, optionsPie };
 export default LineChart;

@@ -8,11 +8,11 @@ import {
   Snackbar,
 } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
-
 import PersonIcon from "@mui/icons-material/Person";
-import { columns, months } from "../constants";
-import { useEffect, useState } from "react";
 import axios from "axios";
+import { useEffect, useState } from "react";
+import { columns, months } from "../constants";
+
 const Tweet = ({ tweet }) => {
   const [changedColumn, setChangedColumn] = useState({ ...tweet });
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -21,6 +21,7 @@ const Tweet = ({ tweet }) => {
     message: "",
     intent: "success",
   });
+
   useEffect(() => {
     setChangedColumn({ ...tweet });
   }, [tweet]);
@@ -44,6 +45,7 @@ const Tweet = ({ tweet }) => {
         });
       });
   };
+
   const handleClose = () => {
     console.log("Closed");
     setSnackOpen({ ...snackOpen, display: false });
@@ -54,7 +56,9 @@ const Tweet = ({ tweet }) => {
     console.log(changeTemp);
     setChangedColumn(changeTemp);
   };
+
   const created_date = new Date(tweet.created_at);
+
   return (
     <Card className="p-5 mb-2" variant="outlined">
       <div>
@@ -67,31 +71,23 @@ const Tweet = ({ tweet }) => {
       </div>
       {tweet.text}
       <div className="mt-1 flex">
-        {tweet &&
-          Object.keys(tweet)
-            .filter(
-              (col) =>
-                col !== "id" &&
-                col !== "created_at" &&
-                col !== "text" &&
-                col !== "username"
-            )
-            .map((rowElement) => {
-              if (tweet[rowElement]) {
-                return (
-                  <Chip className="mr-1" label={rowElement} color="success" />
-                );
-              } else {
-                return <></>;
-              }
-            })}
+        {tweet.is_abuse && (
+          <>
+            <Chip className="mr-1" label="abusive" color="success" />
+            <Chip
+              className="mr-1"
+              label={`Sexual Score: ${tweet.sexual_score}`}
+              color="success"
+            />
+          </>
+        )}
         <Button
           sx={{ marginLeft: "auto" }}
           onClick={() => {
             setIsEditOpen(true);
           }}
         >
-          {"Edit"}
+          Edit
         </Button>
       </div>
       {isEditOpen && (
@@ -117,24 +113,22 @@ const Tweet = ({ tweet }) => {
                 />
               ))}
           </FormGroup>
-          <>
-            <Snackbar
-              open={snackOpen.display}
-              autoHideDuration={3000}
+          <Snackbar
+            open={snackOpen.display}
+            autoHideDuration={3000}
+            onClose={handleClose}
+          >
+            <Alert
               onClose={handleClose}
+              severity={snackOpen.intent}
+              sx={{ width: "100%" }}
             >
-              <Alert
-                onClose={handleClose}
-                severity={snackOpen.intent}
-                sx={{ width: "100%" }}
-              >
-                {snackOpen.message}
-              </Alert>
-            </Snackbar>
-            <Button variant="contained" onClick={editSubmit}>
-              Request
-            </Button>
-          </>
+              {snackOpen.message}
+            </Alert>
+          </Snackbar>
+          <Button variant="contained" onClick={editSubmit}>
+            Request
+          </Button>
         </>
       )}
     </Card>

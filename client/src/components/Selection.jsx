@@ -63,9 +63,9 @@ const Selection = ({
       {!endUser && (
         <>
           <TextField
-            label={"Offset"}
+            label="Offset"
             value={offsetTemp}
-            type={"number"}
+            type="number"
             onChange={(event) => {
               setOffsetTemp(event.target.value);
             }}

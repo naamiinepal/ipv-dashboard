@@ -5,37 +5,31 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { columns } from "../../constants";
-// import Selection from "../Selection";
 import SelectionAdmin from "./SelectionAdmin";
 import Tweet from "./Tweet";
-// const buttonRef = React.createRef();
 
 const TweetCollectionAdminPanel = ({ action }) => {
   const [dataList, setDataList] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [topic, setTopic] = useState("none");
-  const [reload, setReload] = useState(true);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams([
+      ["offset", offset],
+      ["limit", 10],
+    ]);
     axios
-      .get(
-        `/${
-          action === "verify" ? "pseudo_tweets" : "tweets"
-        }/?offset=${offset}&limit=10${
-          topic !== `none` ? `&topics=${topic}` : ""
-        }&maximize_labels=false`
-      )
-      .then((data) => data.data)
-      .then((data) => {
+      .get(`/${action === "verify" ? "pseudo_tweets" : "tweets"}/`, { params })
+      .then(({ data }) => {
         // console.log("Tweet Collection", data);
         setDataList(data);
       });
-  }, [offset, topic, reload, action]);
+  }, [offset, action, reload]);
 
   const toggleReload = () => {
     setReload(!reload);
@@ -46,9 +40,7 @@ const TweetCollectionAdminPanel = ({ action }) => {
       <SelectionAdmin
         offset={offset}
         setOffset={setOffset}
-        topic={topic}
         toggleReload={toggleReload}
-        setTopic={setTopic}
       />
       <TableContainer component={Paper} sx={{ height: 500 }}>
         <Table
@@ -89,12 +81,12 @@ const TweetCollectionAdminPanel = ({ action }) => {
           </TableHead>
 
           <TableBody>
-            {dataList.map((row, index) => (
+            {dataList.map((row) => (
               <Tweet
-                key={index}
+                key={row.id}
                 row={{ ...row }}
                 action={action}
-                verified={Boolean(row["verified_at"])}
+                verified={Boolean(row.verified_at)}
               />
             ))}
           </TableBody>

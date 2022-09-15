@@ -1,8 +1,9 @@
 import { Card } from "@mui/material";
 import axios from "axios";
-import Title from "./Title";
 import { useEffect, useState } from "react";
 import ReactWordcloud from "react-wordcloud";
+import Title from "./Title";
+
 const options = {
   colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
   enableTooltip: true,
@@ -18,35 +19,32 @@ const options = {
   spiral: "archimedean",
   transitionDuration: 1000,
 };
+
 const WordCloud = () => {
   const [words, setWords] = useState([]);
   // const [counts, setCounts] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    let params = new URLSearchParams();
-    params.append("month", "2021-09");
-    // if (year !== "none" && month !== "none") {
-    //   params.append("month", `${year}-${month}`);
-    // }
-    axios
-      .get("/tweets_commons/", { params })
-      .then((data) => data.data)
-      .then((data) => {
-        // console.log(data);
-        let wordCount = data.map((datum) => {
-          return { text: datum[0], value: datum[1] };
-        });
-        console.log(wordCount);
-        setWords(wordCount);
-        setLoading(true);
-      });
+    const params = new URLSearchParams([["month", "2021-09"]]);
+
+    axios.get("/tweets_commons/", { params }).then(({ data }) => {
+      // console.log(data);
+      const wordCount = data.map((datum) => ({
+        text: datum[0],
+        value: datum[1],
+      }));
+      console.log(wordCount);
+      setWords(wordCount);
+      setLoaded(true);
+    });
   }, []);
+
   return (
     <div>
-      {loading && (
-        <Card className="p-3 h-96 mt-24 ml-2">
-          <Title text={"Trending Words"}></Title>
+      {loaded && (
+        <Card className="h-96 ml-2">
+          <Title text="Trending Words"></Title>
           <ReactWordcloud options={options} words={words} />
         </Card>
       )}

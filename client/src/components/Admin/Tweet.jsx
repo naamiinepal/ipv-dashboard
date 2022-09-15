@@ -5,6 +5,7 @@ import {
   Snackbar,
   TableCell,
   TableRow,
+  TextField
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -18,16 +19,18 @@ const Tweet = ({ row, verified, action }) => {
     message: "",
     intent: "success",
   });
+
   useEffect(() => {
     setChangedColumn({ ...row });
     setIsVerified(verified);
   }, [row, verified]);
+
   const modifySubmit = () => {
-    let toSubmit = {};
+    const toSubmit = {};
     for (const prop in row) {
       toSubmit[prop] = changedColumn[prop];
     }
-    let accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("accessToken");
     axios
       .patch(`/tweets/${row.id}`, toSubmit, {
         headers: {
@@ -49,14 +52,15 @@ const Tweet = ({ row, verified, action }) => {
         });
       });
   };
+
   const verifySubmit = () => {
-    let toSubmit = {};
+    const toSubmit = {};
     for (const prop in row) {
       if (row[prop] !== changedColumn[prop]) {
         toSubmit[prop] = changedColumn[prop];
       }
     }
-    let accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("accessToken");
     axios
       .patch(`/pseudo_tweets/${row.id}`, toSubmit, {
         headers: {
@@ -67,16 +71,19 @@ const Tweet = ({ row, verified, action }) => {
         setIsVerified(true);
       });
   };
+
   const handleClose = () => {
     console.log("Closed");
     setSnackOpen({ ...snackOpen, display: false });
   };
-  const handleChange = (event, column) => {
-    let changeTemp = JSON.parse(JSON.stringify(changedColumn));
-    changeTemp[column] = event.target.checked;
+
+  const handleChange = (value, column) => {
+    const changeTemp = JSON.parse(JSON.stringify(changedColumn));
+    changeTemp[column] = value;
     console.log(changeTemp);
     setChangedColumn(changeTemp);
   };
+
   return (
     <TableRow
       key={row.id}
@@ -86,7 +93,7 @@ const Tweet = ({ row, verified, action }) => {
     >
       {columns
         .map((column) => column.field)
-        .filter((datum) => datum !== "verify" && datum !== "others")
+        .filter((datum) => datum !== "action" && datum !== "others")
         .map((datum, index) => {
           if (datum === "text")
             return (
@@ -94,13 +101,26 @@ const Tweet = ({ row, verified, action }) => {
                 {row[datum]}
               </TableCell>
             );
+          else if (datum === "sexual_score")
+            return (
+              <TableCell key={index} align="right">
+                <TextField
+                  inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+                  value={changedColumn[datum]}
+                  onChange={({ target: { value } }) => {
+                    handleChange(value, datum);
+                  }}
+                  helperText="1-10"
+                />
+              </TableCell>
+            );
           else
             return (
               <TableCell key={index} align="right">
                 <Checkbox
                   checked={changedColumn[datum]}
-                  onChange={(event) => {
-                    handleChange(event, datum);
+                  onChange={({ target: { checked } }) => {
+                    handleChange(checked, datum);
                   }}
                 />
               </TableCell>

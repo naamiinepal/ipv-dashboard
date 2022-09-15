@@ -1,41 +1,37 @@
 import axios from "axios";
-import { useContext, useState } from "react";
-import { createContext } from "react";
+import { createContext, useContext, useState } from "react";
 import { loggedInOrNot } from "./utility";
 
-let AuthContext = createContext(null);
+const AuthContext = createContext(null);
 
-export default function AuthProvider({ children }) {
-  let [user, setUser] = useState(loggedInOrNot());
-  let signin = async (username, password, callback) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(loggedInOrNot());
+
+  const signin = async (username, password, callback) => {
+    const headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
     };
-    const params = new URLSearchParams();
-    params.append("username", username);
-    params.append("password", password);
 
-    return axios
-      .post("/auth/login", params, config)
-      .then((data) => data.data)
-      .then((data) => {
-        sessionStorage.setItem("accessToken", data.access_token);
-        setUser(loggedInOrNot());
-        callback();
-      });
+    const params = new URLSearchParams([
+      ["username", username],
+      ["password", password],
+    ]);
+
+    return axios.post("/auth/login", params, { headers }).then(({ data }) => {
+      sessionStorage.setItem("accessToken", data.access_token);
+      setUser(loggedInOrNot());
+      callback();
+    });
   };
 
-  let signout = (callback) => {
-    return "Signed Out";
-  };
+  const signout = () => "Signed Out";
 
-  let value = { user, signin, signout };
+  const value = { user, signin, signout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+const useAuth = () => useContext(AuthContext);
+
+export default AuthProvider;
+export { useAuth };
