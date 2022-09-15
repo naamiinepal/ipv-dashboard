@@ -1,4 +1,4 @@
-import MomentUtils from "@date-io/moment";
+import MomentUtils from "moment";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
