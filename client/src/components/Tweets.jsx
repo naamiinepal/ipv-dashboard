@@ -27,12 +27,7 @@ const Tweets = () => {
         params,
       })
       .then(({ data }) => {
-        // Temp solution to avoid duplicate data
-        setDataList((dl) => {
-          return JSON.stringify(dl) === JSON.stringify(data)
-            ? dl
-            : [...dl, ...data];
-        });
+        setDataList((dl) => [...dl, ...data]);
       });
   }, [offset, startDate, endDate]);
 
