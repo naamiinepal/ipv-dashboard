@@ -26,9 +26,7 @@ const WordCloud = () => {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams([["month", "2021-09"]]);
-
-    axios.get("/tweets_commons/", { params }).then(({ data }) => {
+    axios.get("/tweets_commons/").then(({ data }) => {
       // console.log(data);
       const wordCount = data.map((datum) => ({
         text: datum[0],
