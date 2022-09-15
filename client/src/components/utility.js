@@ -29,7 +29,7 @@ const parseJwt = (token) => {
     if (baseSplit.length !== 3) throw new Error("Token has been tampered");
     const str = baseSplit[1].replace(/-/g, "+").replace(/_/g, "/");
     const jsonPayload = decodeURIComponent(
-      Buffer.from(str, "base64")
+      atob(str)
         .split("")
         .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
         .join("")
