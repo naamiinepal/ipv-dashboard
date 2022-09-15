@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.23cc9fff.css",
-    "main.js": "/static/js/main.8800b26e.js",
+    "main.js": "/static/js/main.000f3056.js",
     "static/media/Safal.png": "/static/media/Safal.c6d6655f98b858ce9902.png",
     "static/media/4.jpg": "/static/media/4.245707e37330a7f62613.jpg",
     "static/media/childsafenetlogo.jpg": "/static/media/childsafenetlogo.7cdf1afe206a68a276fd.jpg",
@@ -10,10 +10,10 @@
     "static/media/nepal.svg": "/static/media/nepal.bcdde207c6225a17ddea0f5b70865730.svg",
     "index.html": "/index.html",
     "main.23cc9fff.css.map": "/static/css/main.23cc9fff.css.map",
-    "main.8800b26e.js.map": "/static/js/main.8800b26e.js.map"
+    "main.000f3056.js.map": "/static/js/main.000f3056.js.map"
   },
   "entrypoints": [
     "static/css/main.23cc9fff.css",
-    "static/js/main.8800b26e.js"
+    "static/js/main.000f3056.js"
   ]
 }
