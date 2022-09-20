@@ -26,13 +26,14 @@
     "react-wordcloud": "^1.2.7",
     "typescript": "^4.8.3"
   },
-  "proxy": "http://127.0.0.1:8000",
+  "proxy": "http://localhost:5000",
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "build-to-server": "craco build && ./move_to_server.sh",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build-to-server": "craco build && ./move_to_server.sh",
+    "generate-client": "openapi --input http://localhost:5000/openapi.json --output ./src/client --client axios --useOptions"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +54,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.11",
+    "openapi-typescript-codegen": "^0.23.0",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8"
   }

@@ -5,31 +5,35 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import type { TweetRead } from "../../client";
+import { PseudoTweetsService, TweetsService } from "../../client";
 import { columns } from "../../constants";
 import SelectionAdmin from "./SelectionAdmin";
 import Tweet from "./Tweet";
 
-const TweetCollectionAdminPanel = ({ action }) => {
-  const [dataList, setDataList] = useState([]);
+interface Props {
+  action: "verify" | "modify";
+}
+
+const TweetCollectionAdminPanel = ({ action }: Props) => {
+  const [dataList, setDataList] = useState<TweetRead[]>([]);
   const [offset, setOffset] = useState(0);
   const [reload, setReload] = useState(false);
 
+  const tweetFetcher = useMemo(
+    () =>
+      action === "verify"
+        ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
+        : TweetsService.tweetsReadTweets,
+    [action]
+  );
+
   useEffect(() => {
-    const params = new URLSearchParams([
-      ["offset", offset],
-      ["limit", 10],
-    ]);
-    axios
-      .get(`/${action === "verify" ? "pseudo_tweets" : "tweets"}/`, { params })
-      .then(({ data }) => {
-        // console.log("Tweet Collection", data);
-        setDataList(data);
-      });
-  }, [offset, action, reload]);
+    tweetFetcher({ offset, limit: 10 }).then((data) => setDataList(data));
+  }, [offset, reload, tweetFetcher]);
 
   const toggleReload = () => {
     setReload(!reload);
@@ -64,30 +68,23 @@ const TweetCollectionAdminPanel = ({ action }) => {
             <TableRow>
               {columns
                 .filter((column) => column.field !== "others")
-                .map((column, index) => {
-                  return (
-                    <TableCell
-                      key={index}
-                      sx={{
-                        width: 50,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {column.headerName}
-                    </TableCell>
-                  );
-                })}
+                .map((column, index) => (
+                  <TableCell
+                    key={index}
+                    sx={{
+                      width: 50,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {column.headerName}
+                  </TableCell>
+                ))}
             </TableRow>
           </TableHead>
 
           <TableBody>
             {dataList.map((row) => (
-              <Tweet
-                key={row.id}
-                row={{ ...row }}
-                action={action}
-                verified={Boolean(row.verified_at)}
-              />
+              <Tweet key={row.id} row={row} action={action} />
             ))}
           </TableBody>
         </Table>

@@ -1,26 +1,28 @@
 import { Button, Card, TextField } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
+import type { FormEvent } from "react";
 import { useState } from "react";
+import type { To } from "react-router";
 import { useLocation, useNavigate } from "react-router";
 import { useAuth } from "./AuthProvider";
 
-export default function Login() {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const auth = useAuth();
+  const { signin } = useAuth();
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    auth.signin(username, password, () => {
+    signin(username, password, () => {
       // Send them back to the page they tried to visit when they were
       // redirected to the login page. Use { replace: true } so we don't create
       // another entry in the history stack for the login page.  This means that
       // when they get to the protected page and click the back button, they
       // won't end up back on the login page, which is also really nice for the
       // user experience.
-      const from = location.state?.from?.pathname || "/";
+      const from: To = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
     });
   }
@@ -60,4 +62,6 @@ export default function Login() {
       </form>
     </Card>
   );
-}
+};
+
+export default Login;

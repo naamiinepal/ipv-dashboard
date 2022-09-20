@@ -1,10 +1,12 @@
 import { Card } from "@mui/material";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
+import { TweetsCommonsService } from "../client";
+import { useFilter } from "./FilterProvider";
 import Title from "./Title";
 
-const options = {
+const options: OptionsProp = {
   colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
   enableTooltip: true,
   deterministic: false,
@@ -20,23 +22,33 @@ const options = {
   transitionDuration: 1000,
 };
 
+interface Response extends Array<[string, number]> {}
+
+interface Word {
+  text: string;
+  value: number;
+}
+
 const WordCloud = () => {
-  const [words, setWords] = useState([]);
+  const [words, setWords] = useState<Word[]>([]);
   // const [counts, setCounts] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
+  const { startDate, endDate } = useFilter();
+
   useEffect(() => {
-    axios.get("/tweets_commons/").then(({ data }) => {
-      // console.log(data);
-      const wordCount = data.map((datum) => ({
-        text: datum[0],
-        value: datum[1],
-      }));
-      console.log(wordCount);
-      setWords(wordCount);
-      setLoaded(true);
-    });
-  }, []);
+    TweetsCommonsService.tweetsCommonsGetWordCloud({ startDate, endDate }).then(
+      (data) => {
+        const wordCount = (data as Response).map(([text, value]) => ({
+          text,
+          value,
+        }));
+        console.log(wordCount);
+        setWords(wordCount);
+        setLoaded(true);
+      }
+    );
+  }, [startDate, endDate]);
 
   return (
     <div>

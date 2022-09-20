@@ -5,7 +5,7 @@ import Purpose from "./Purpose";
 const EndUser = () => (
   <div>
     <Nav />
-    <div className=" bg-blue-50">
+    <div className="bg-blue-50">
       <Purpose />
       <FilteredContainer />
     </div>

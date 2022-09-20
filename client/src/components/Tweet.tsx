@@ -1,3 +1,5 @@
+import PersonIcon from "@mui/icons-material/Person";
+import type { AlertColor } from "@mui/material";
 import {
   Alert,
   Button,
@@ -6,29 +8,53 @@ import {
   Chip,
   FormControlLabel,
   Snackbar,
+  TextField,
 } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
-import PersonIcon from "@mui/icons-material/Person";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { TweetRead, TweetUpdate } from "../client";
+import { TweetsService } from "../client";
 import { columns, months } from "../constants";
 
-const Tweet = ({ tweet }) => {
-  const [changedColumn, setChangedColumn] = useState({ ...tweet });
+interface Props {
+  tweet: TweetRead;
+}
+
+type ValueOf<T> = T[keyof T];
+
+interface SnackProps {
+  display: boolean;
+  message: string;
+  intent: AlertColor;
+}
+
+const Tweet = ({ tweet }: Props) => {
+  const [currentTweet, setCurrentTweet] = useState(tweet);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [snackOpen, setSnackOpen] = useState({
+  const [snackOpen, setSnackOpen] = useState<SnackProps>({
     display: false,
     message: "",
     intent: "success",
   });
 
-  useEffect(() => {
-    setChangedColumn({ ...tweet });
-  }, [tweet]);
+  const getChangedColumns = () => {
+    const toSubmit: TweetUpdate = {};
+
+    for (const key of ["is_abuse", "sexual_score"]) {
+      // @ts-ignore
+      if (row[key] !== currentRow[key]) {
+        // @ts-ignore
+        toSubmit[key] = currentRow[key];
+      }
+    }
+    return toSubmit;
+  };
 
   const editSubmit = () => {
-    axios
-      .post(`/tweets/edit_request/${tweet.id}`, changedColumn)
+    TweetsService.tweetsRequestTweetEdit({
+      tweetId: tweet.id as number,
+      requestBody: getChangedColumns(),
+    })
       .then(() => {
         setIsEditOpen(false);
         setSnackOpen({
@@ -50,11 +76,12 @@ const Tweet = ({ tweet }) => {
     console.log("Closed");
     setSnackOpen({ ...snackOpen, display: false });
   };
-  const handleChange = (event, column) => {
-    let changeTemp = JSON.parse(JSON.stringify(changedColumn));
-    changeTemp[column] = event.target.checked;
-    console.log(changeTemp);
-    setChangedColumn(changeTemp);
+
+  const handleChange = (
+    value: Exclude<ValueOf<TweetUpdate>, undefined>,
+    column: keyof TweetUpdate
+  ) => {
+    setCurrentTweet({ ...currentTweet, [column]: value });
   };
 
   const created_date = new Date(tweet.created_at);
@@ -95,23 +122,33 @@ const Tweet = ({ tweet }) => {
           <FormGroup sx={{ fontSize: "0.5em" }}>
             {columns
               .map((column) => column.field)
-              .filter(
-                (datum) =>
-                  datum !== "verify" && datum !== "others" && datum !== "text"
-              )
-              .map((datum) => (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={changedColumn[datum]}
-                      onChange={(event) => {
-                        handleChange(event, datum);
-                      }}
-                    />
-                  }
-                  label={datum}
-                />
-              ))}
+              .filter((datum) => datum !== "verify" && datum !== "text")
+              .map((datum) =>
+                datum === "is_abuse" ? (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={
+                          currentTweet[datum as keyof TweetUpdate] as boolean
+                        }
+                        onChange={({ target: { checked } }) => {
+                          handleChange(checked, datum);
+                        }}
+                      />
+                    }
+                    label={datum}
+                  />
+                ) : (
+                  <TextField
+                    inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+                    value={currentTweet[datum as keyof TweetUpdate]}
+                    onChange={({ target: { value } }) => {
+                      handleChange(parseInt(value), datum as keyof TweetUpdate);
+                    }}
+                    helperText="1-10"
+                  />
+                )
+              )}
           </FormGroup>
           <Snackbar
             open={snackOpen.display}

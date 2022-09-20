@@ -2,12 +2,18 @@ import { Button, TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { useState } from "react";
 import { useFilter } from "./FilterProvider";
 import LineChart from "./LineChart";
 import Tweets from "./Tweets";
 
-const CustomDatePicker = ({ textLabel, ...props }) => (
+interface CustomDatePickerProps
+  extends Omit<ComponentPropsWithoutRef<typeof DatePicker>, "renderInput"> {
+  textLabel: ReactNode;
+}
+
+const CustomDatePicker = ({ textLabel, ...props }: CustomDatePickerProps) => (
   <div className="mx-2 flex items-center w-2/12">
     <div className="text-white text-base font-semibold mr-2">{textLabel}</div>
     <div className="bg-white pt-2">
@@ -31,10 +37,6 @@ const FilteredContainer = () => {
 
   const [selectedEndDate, setSelectedEndDate] = useState(new Date(endDate));
 
-  useEffect(() => {
-    console.log(moment(selectedStartDate).format("YYYY-MM-DD"));
-  }, [selectedStartDate]);
-
   const submitFilter = () => {
     setStartDate(moment(selectedStartDate).format("YYYY-MM-DD"));
     setEndDate(moment(selectedEndDate).format("YYYY-MM-DD"));
@@ -48,13 +50,13 @@ const FilteredContainer = () => {
           textLabel="From"
           label="Start Date"
           value={selectedStartDate}
-          onChange={setSelectedStartDate}
+          onChange={(value) => setSelectedStartDate(value as Date)}
         />
         <CustomDatePicker
           textLabel="To"
           label="End Date"
           value={selectedEndDate}
-          onChange={setSelectedEndDate}
+          onChange={(value) => setSelectedEndDate(value as Date)}
         />
         <Button
           variant="contained"

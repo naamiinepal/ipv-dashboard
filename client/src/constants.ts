@@ -1,5 +1,3 @@
-const baseAddress = "http://localhost:8000";
-
 const months = [
   "January",
   "February",
@@ -42,4 +40,4 @@ const columns = [
   },
   { field: "action", label: "Action", headerName: "Action" },
 ];
-export { baseAddress, columns, months };
+export { columns, months };

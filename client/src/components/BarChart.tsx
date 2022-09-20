@@ -1,11 +1,12 @@
 import { Card } from "@mui/material";
-import axios from "axios";
+import type { ChartData, ChartOptions } from "chart.js";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { PseudoTweetsService } from "../client";
 import { useFilter } from "./FilterProvider";
 import { toTitleCase } from "./utility";
 
-const optionsBar = {
+const optionsBar: ChartOptions<"bar"> = {
   responsive: true,
   indexAxis: "y",
   maintainAspectRatio: false,
@@ -23,18 +24,19 @@ const optionsBar = {
 };
 
 const BarChart = () => {
-  const [data, setData] = useState({});
+  const [data, setData] = useState<ChartData<"bar">>({
+    labels: [],
+    datasets: [],
+  });
   const [loaded, setLoaded] = useState(false);
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    const params = new URLSearchParams([
-      ["all", true],
-      ["start_date", startDate],
-      ["end_date", endDate],
-    ]);
-
-    axios.get(`/pseudo_tweets/count`, { params }).then(({ data }) => {
+    PseudoTweetsService.pseudoTweetsGetCount({
+      startDate,
+      endDate,
+      all: true,
+    }).then((data) => {
       setData({
         labels: Object.keys(data).map(toTitleCase),
         datasets: [

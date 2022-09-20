@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
-import About from "./components/About";
 import Admin from "./components/Admin";
 import TweetCollectionAdminPanel from "./components/Admin/TweetCollectionAdminPanel";
 import AuthProvider from "./components/AuthProvider";
@@ -14,9 +13,9 @@ const App = () => (
     <FilterProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<EndUser />} />
+          <Route path="*" element={<EndUser />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/about" element={<About />} />
+          {/* <Route path="/about" element={<About />} /> */}
           <Route
             path="/ap"
             element={

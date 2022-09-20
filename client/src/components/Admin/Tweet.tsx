@@ -1,3 +1,4 @@
+import type { AlertColor } from "@mui/material";
 import {
   Alert,
   Button,
@@ -5,38 +6,53 @@ import {
   Snackbar,
   TableCell,
   TableRow,
-  TextField
+  TextField,
 } from "@mui/material";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { TweetRead, TweetUpdate } from "../../client";
+import { PseudoTweetsService, TweetsService } from "../../client";
 import { columns } from "../../constants";
 
-const Tweet = ({ row, verified, action }) => {
-  const [changedColumn, setChangedColumn] = useState({ ...row });
-  const [isVerified, setIsVerified] = useState(verified);
-  const [snackOpen, setSnackOpen] = useState({
+interface Props {
+  row: TweetRead;
+  action: "verify" | "modify";
+}
+
+type ValueOf<T> = T[keyof T];
+
+interface SnackProps {
+  display: boolean;
+  message: string;
+  intent: AlertColor;
+}
+
+const Tweet = ({ row, action }: Props) => {
+  const [currentRow, setCurrentRow] = useState(row);
+  const [isVerified, setIsVerified] = useState(false);
+  const [snackOpen, setSnackOpen] = useState<SnackProps>({
     display: false,
     message: "",
     intent: "success",
   });
 
-  useEffect(() => {
-    setChangedColumn({ ...row });
-    setIsVerified(verified);
-  }, [row, verified]);
+  const getChangedColumns = () => {
+    const toSubmit: TweetUpdate = {};
 
-  const modifySubmit = () => {
-    const toSubmit = {};
-    for (const prop in row) {
-      toSubmit[prop] = changedColumn[prop];
+    for (const key of ["is_abuse", "sexual_score"]) {
+      // @ts-ignore
+      if (row[key] !== currentRow[key]) {
+        // @ts-ignore
+        toSubmit[key] = currentRow[key];
+      }
     }
-    const accessToken = sessionStorage.getItem("accessToken");
-    axios
-      .patch(`/tweets/${row.id}`, toSubmit, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    return toSubmit;
+  };
+
+  const modifySubmit = () =>
+    TweetsService.tweetsUpdateTweet({
+      tweetId: row.id as number,
+      requestBody: getChangedColumns(),
+    })
       .then(() => {
         setSnackOpen({
           display: true,
@@ -51,25 +67,12 @@ const Tweet = ({ row, verified, action }) => {
           intent: "error",
         });
       });
-  };
 
   const verifySubmit = () => {
-    const toSubmit = {};
-    for (const prop in row) {
-      if (row[prop] !== changedColumn[prop]) {
-        toSubmit[prop] = changedColumn[prop];
-      }
-    }
-    const accessToken = sessionStorage.getItem("accessToken");
-    axios
-      .patch(`/pseudo_tweets/${row.id}`, toSubmit, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
-      .then(() => {
-        setIsVerified(true);
-      });
+    PseudoTweetsService.pseudoTweetsVerifyPseudoTweet({
+      pseudoTweetId: row.id as number,
+      requestBody: getChangedColumns(),
+    }).then(() => setIsVerified(true));
   };
 
   const handleClose = () => {
@@ -77,12 +80,10 @@ const Tweet = ({ row, verified, action }) => {
     setSnackOpen({ ...snackOpen, display: false });
   };
 
-  const handleChange = (value, column) => {
-    const changeTemp = JSON.parse(JSON.stringify(changedColumn));
-    changeTemp[column] = value;
-    console.log(changeTemp);
-    setChangedColumn(changeTemp);
-  };
+  const handleChange = (
+    value: Exclude<ValueOf<TweetUpdate>, undefined>,
+    column: keyof TweetUpdate
+  ) => setCurrentRow({ ...currentRow, [column]: value });
 
   return (
     <TableRow
@@ -106,25 +107,27 @@ const Tweet = ({ row, verified, action }) => {
               <TableCell key={index} align="right">
                 <TextField
                   inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-                  value={changedColumn[datum]}
+                  value={currentRow[datum]}
                   onChange={({ target: { value } }) => {
-                    handleChange(value, datum);
+                    handleChange(parseInt(value), datum);
                   }}
                   helperText="1-10"
                 />
               </TableCell>
             );
-          else
+          else {
+            const typeDatum = datum as keyof TweetUpdate;
             return (
               <TableCell key={index} align="right">
                 <Checkbox
-                  checked={changedColumn[datum]}
+                  checked={currentRow[typeDatum] as boolean}
                   onChange={({ target: { checked } }) => {
-                    handleChange(checked, datum);
+                    handleChange(checked, typeDatum);
                   }}
                 />
               </TableCell>
             );
+          }
         })}
       <TableCell align="right">
         {action === "modify" ? (
@@ -151,7 +154,7 @@ const Tweet = ({ row, verified, action }) => {
             {isVerified ? (
               <Button
                 color="success"
-                disabled={action === "verify" && isVerified}
+                disabled={action === "verify"}
                 // variant="contained"
                 onClick={verifySubmit}
               >

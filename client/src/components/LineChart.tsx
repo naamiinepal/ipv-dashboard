@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import axios from "axios";
+import type { ChartData, ChartOptions } from "chart.js";
 import {
   ArcElement,
   BarElement,
@@ -16,6 +16,7 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
+import { PseudoTweetsService } from "../client";
 import { columns } from "../constants";
 import BarChart from "./BarChart";
 import { useFilter } from "./FilterProvider";
@@ -34,9 +35,8 @@ ChartJS.register(
   Filler
 );
 
-const options = {
+const options: ChartOptions<"line"> = {
   responsive: true,
-  cubicInterpolationMode: "monotone",
   plugins: {
     legend: {
       position: "top",
@@ -76,7 +76,7 @@ const options = {
   },
 };
 
-const optionsPie = {
+const optionsPie: ChartOptions<"pie"> = {
   responsive: true,
   indexAxis: "y",
   maintainAspectRatio: false,
@@ -94,46 +94,41 @@ const optionsPie = {
   },
 };
 
-const fetchLabels = async () =>
-  axios
-    .get(`/pseudo_tweets/overview?all=true`)
-    .then(({ data }) => {
-      const finalData = {};
-
-      const is_abuse = data.map((datum) => datum.is_abuse);
-      const sexual_score = data.map((datum) => datum.sexual_score);
-
-      const dataArrays = {
-        is_abuse,
-        sexual_score,
-      };
-      finalData["labels"] = data.map((datum) => datum.created_date);
-
-      finalData["datasets"] = columns
-        .filter(({ field }) => Object.keys(dataArrays).includes(field))
-        .map(({ field, label, areaColor }) => ({
-          data: dataArrays[field],
-          label: label,
-          fill: true,
-          borderColor: areaColor,
-          backgroundColor: areaColor,
-        }));
-
-      console.log(finalData);
-      return finalData;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
 const LineChart = () => {
-  const [labels, setLabels] = useState({});
+  const [data, setData] = useState<ChartData<"line">>({
+    labels: [],
+    datasets: [],
+  });
   const [loaded, setLoaded] = useState(false);
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    fetchLabels(startDate, endDate).then((label) => {
-      setLabels(label);
+    PseudoTweetsService.pseudoTweetsGetPseudoOverview({
+      all: true,
+      startDate,
+      endDate,
+    }).then((data) => {
+      const dataArrays = {
+        is_abuse: data.map((datum) => datum.is_abuse),
+        sexual_score: data.map((datum) => datum.sexual_score ?? null),
+      };
+
+      const finalData = {
+        labels: data.map((datum) => datum.created_date),
+        datasets: columns
+          .filter(({ field }) => Object.keys(dataArrays).includes(field))
+          .map(({ field, label, areaColor }) => ({
+            data: dataArrays[field as keyof typeof dataArrays],
+            label: label,
+            fill: true,
+            borderColor: areaColor,
+            backgroundColor: areaColor,
+          })),
+      };
+
+      console.log(finalData);
+
+      setData(finalData);
       setLoaded(true);
     });
   }, [startDate, endDate]);
@@ -143,7 +138,7 @@ const LineChart = () => {
       {loaded && (
         <Card className="flex-1">
           {/* <Button onClick={resetZoom}>Zoom Out</Button> */}
-          <Line options={options} data={labels} />
+          <Line options={options} data={data} />
         </Card>
       )}
       <BarChart />

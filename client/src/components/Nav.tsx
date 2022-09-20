@@ -1,15 +1,16 @@
+import type { ReactNode } from "react";
+import type { To } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import ChildSafeNetLogo from "../images/childsafenetlogo.jpg";
 import NaamiiLogo from "../images/naamii-logo.png";
 import Name from "./Name";
 
-const CustomNavLink = ({
-  to,
-  children,
-}: {
-  to: string;
-  children: JSX.Element | string;
-}) => (
+interface CustomNavLinkProps {
+  to: To;
+  children: ReactNode;
+}
+
+const CustomNavLink = ({ to, children }: CustomNavLinkProps) => (
   <NavLink
     to={to}
     className={({ isActive }) =>
@@ -33,7 +34,6 @@ const Nav = () => (
     </div>
     <div className="border-b-2 bg-white px-16 flex items-center justify-between">
       <CustomNavLink to="/">Home</CustomNavLink>
-      <CustomNavLink to="/about">About</CustomNavLink>
       <CustomNavLink to="/ap">Admin</CustomNavLink>
     </div>
   </div>
