@@ -1,8 +1,8 @@
 from datetime import date, datetime, timezone
 from typing import TYPE_CHECKING, List, Optional, Tuple
 
-from pydantic import BaseModel, PositiveInt, conint, confloat
-from sqlmodel import Field, Relationship, SQLModel, func, CheckConstraint
+from pydantic import BaseModel, PositiveInt, confloat, conint
+from sqlmodel import CheckConstraint, Field, Relationship, SQLModel, func
 
 if TYPE_CHECKING:
     from app.auth.models import User

@@ -22,7 +22,7 @@ def get_selection_filter(
     Filter the selection by various dimensions.
     `selection` is the selection before filtering
     """
-
+    # Passing text doesn't work for comparision
     created_date = func.date(Model.created_at)
 
     if start_date is not None:
@@ -53,7 +53,12 @@ def assert_not_null(tweet: Optional[ModelType], id: PositiveInt, Model: ModelTyp
         raise HTTPException(404, f"{Model.__name__} with id: {id} not found.")
 
 
-def get_db_overview(session: Session, Model: ModelType) -> List[tuple]:
+def get_db_overview(
+    Model: ModelType,
+    start_date: Optional[date],
+    end_date: Optional[date],
+    session: Session,
+) -> List[tuple]:
     """
     Get overview of the database for the given Model
     """
@@ -61,15 +66,20 @@ def get_db_overview(session: Session, Model: ModelType) -> List[tuple]:
     created_date_label = "created_date"
     created_date = func.date(Model.created_at).label(created_date_label)
 
-    return session.exec(
+    selection = get_selection_filter(
+        Model,
+        start_date,
+        end_date,
         select(
             func.sum(Model.is_abuse, type_=Integer).label("is_abuse"),
             func.avg(Model.sexual_score).label("sexual_score"),
             created_date,
             func.count().label("total"),
-        ).group_by(
-            text(created_date_label)
-        )  # Created_date is already defined
+        ),
+    )
+
+    return session.exec(
+        selection.group_by(text(created_date_label))  # Created_date is already defined
     ).all()
 
 

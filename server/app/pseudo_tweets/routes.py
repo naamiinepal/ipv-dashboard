@@ -29,14 +29,19 @@ from . import router
 
 # Keep it in the top to avoid clashing with pseudo_tweet_id
 @router.get("/overview", response_model=List[Overview])
-def get_pseudo_overview(all: bool = False, session: Session = Depends(get_session)):
+def get_pseudo_overview(
+    all: bool = False,
+    start_date: Optional[date] = None,
+    end_date: Optional[date] = None,
+    session: Session = Depends(get_session),
+):
     """
     Get overview by grouping on created_at
     """
 
     Model = get_combined_model() if all else PseudoTweet
 
-    return get_db_overview(session, Model)
+    return get_db_overview(Model, start_date, end_date, session)
 
 
 @router.get("/count", response_model=TweetCount)
