@@ -3,6 +3,7 @@ from functools import lru_cache
 
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
+from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
 
 # Mount routers before database to read their database models
@@ -13,7 +14,12 @@ from .tweets_common import router as tweets_common_router
 
 from .database import create_tables  # isort: skip
 
-app = FastAPI()
+
+def custom_generate_unique_id(route: APIRoute):
+    return f"{route.tags[0]}-{route.name}" if route.tags else route.name
+
+
+app = FastAPI(generate_unique_id_function=custom_generate_unique_id)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")

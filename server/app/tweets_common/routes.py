@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Optional
+from typing import List, Optional, Tuple
 
 import requests
 from fastapi import Depends, HTTPException
@@ -16,7 +16,7 @@ from .word_cloud_helper import get_word_count_distribution
 CACHE_TIMEOUT = 6 * 60 * 60  # 6 hours
 
 
-@router.get("/")
+@router.get("/", response_model=List[Tuple[str, int]])
 @timed_lru_cache(seconds=CACHE_TIMEOUT, maxsize=64)
 def get_word_cloud(
     start_date: Optional[date] = None,
