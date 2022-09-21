@@ -11,7 +11,6 @@ import {
 import { useState } from "react";
 import type { TweetRead, TweetUpdate } from "../../client";
 import { PseudoTweetsService, TweetsService } from "../../client";
-import { columns } from "../../constants";
 
 interface Props {
   row: TweetRead;
@@ -92,43 +91,37 @@ const Tweet = ({ row, action }: Props) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      {columns
-        .map((column) => column.field)
-        .filter((datum) => datum !== "action" && datum !== "others")
-        .map((datum, index) => {
-          if (datum === "text")
-            return (
-              <TableCell key={index} sx={{ fontSize: "1rem" }} align="left">
-                {row[datum]}
-              </TableCell>
-            );
-          else if (datum === "sexual_score")
-            return (
-              <TableCell key={index} align="right">
-                <TextField
-                  inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-                  value={currentRow[datum]}
-                  onChange={({ target: { value } }) => {
-                    handleChange(parseInt(value), datum);
-                  }}
-                  helperText="1-10"
-                />
-              </TableCell>
-            );
-          else {
-            const typeDatum = datum as keyof TweetUpdate;
-            return (
-              <TableCell key={index} align="right">
-                <Checkbox
-                  checked={currentRow[typeDatum] as boolean}
-                  onChange={({ target: { checked } }) => {
-                    handleChange(checked, typeDatum);
-                  }}
-                />
-              </TableCell>
-            );
-          }
-        })}
+      <TableCell sx={{ fontSize: "1rem" }} align="left">
+        {row.text}
+      </TableCell>
+      <TableCell align="right">
+        <TextField
+          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+          value={currentRow.sexual_score}
+          onChange={({ target: { value } }) => {
+            handleChange(parseInt(value), "sexual_score");
+          }}
+          helperText="1-10"
+        />
+      </TableCell>
+      <TableCell align="right">
+        <TextField
+          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+          value={currentRow.sexual_score}
+          onChange={({ target: { value } }) => {
+            handleChange(parseInt(value), "sexual_score");
+          }}
+          helperText="1-10"
+        />
+      </TableCell>
+      <TableCell align="right">
+        <Checkbox
+          checked={currentRow.is_abuse as boolean}
+          onChange={({ target: { checked } }) => {
+            handleChange(checked, "is_abuse");
+          }}
+        />
+      </TableCell>
       <TableCell align="right">
         {action === "modify" ? (
           <>

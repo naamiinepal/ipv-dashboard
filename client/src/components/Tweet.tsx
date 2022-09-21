@@ -14,7 +14,7 @@ import FormGroup from "@mui/material/FormGroup";
 import { useState } from "react";
 import type { TweetRead, TweetUpdate } from "../client";
 import { TweetsService } from "../client";
-import { columns, months } from "../constants";
+import { months } from "../constants";
 
 interface Props {
   tweet: TweetRead;
@@ -120,35 +120,25 @@ const Tweet = ({ tweet }: Props) => {
       {isEditOpen && (
         <>
           <FormGroup sx={{ fontSize: "0.5em" }}>
-            {columns
-              .map((column) => column.field)
-              .filter((datum) => datum !== "verify" && datum !== "text")
-              .map((datum) =>
-                datum === "is_abuse" ? (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={
-                          currentTweet[datum as keyof TweetUpdate] as boolean
-                        }
-                        onChange={({ target: { checked } }) => {
-                          handleChange(checked, datum);
-                        }}
-                      />
-                    }
-                    label={datum}
-                  />
-                ) : (
-                  <TextField
-                    inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-                    value={currentTweet[datum as keyof TweetUpdate]}
-                    onChange={({ target: { value } }) => {
-                      handleChange(parseInt(value), datum as keyof TweetUpdate);
-                    }}
-                    helperText="1-10"
-                  />
-                )
-              )}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={currentTweet.is_abuse as boolean}
+                  onChange={({ target: { checked } }) => {
+                    handleChange(checked, "is_abuse");
+                  }}
+                />
+              }
+              label="is Abuse"
+            />
+            <TextField
+              inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+              value={currentTweet.sexual_score}
+              onChange={({ target: { value } }) => {
+                handleChange(parseInt(value), "sexual_score");
+              }}
+              helperText="1-10"
+            />
           </FormGroup>
           <Snackbar
             open={snackOpen.display}

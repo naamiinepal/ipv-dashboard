@@ -17,9 +17,10 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import { useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { PseudoTweetsService } from "../client";
-import { columns } from "../constants";
+import { predictionColumns } from "../constants";
 import BarChart from "./BarChart";
 import { useFilter } from "./FilterProvider";
+import { toTitleCase } from "./utility";
 
 ChartJS.register(
   ArcElement,
@@ -109,21 +110,19 @@ const LineChart = () => {
       endDate,
     }).then((data) => {
       const dataArrays = {
-        is_abuse: data.map((datum) => datum.is_abuse),
-        sexual_score: data.map((datum) => datum.sexual_score ?? null),
+        is_abuse: data.map(({ is_abuse }) => is_abuse),
+        sexual_score: data.map(({ sexual_score }) => sexual_score ?? null),
       };
 
       const finalData = {
-        labels: data.map((datum) => datum.created_date),
-        datasets: columns
-          .filter(({ field }) => Object.keys(dataArrays).includes(field))
-          .map(({ field, label, areaColor }) => ({
-            data: dataArrays[field as keyof typeof dataArrays],
-            label: label,
-            fill: true,
-            borderColor: areaColor,
-            backgroundColor: areaColor,
-          })),
+        labels: data.map(({ created_date }) => created_date),
+        datasets: predictionColumns.map(({ field, areaColor }) => ({
+          data: dataArrays[field as keyof typeof dataArrays],
+          label: toTitleCase(field),
+          fill: true,
+          borderColor: areaColor,
+          backgroundColor: areaColor,
+        })),
       };
 
       console.log(finalData);
