@@ -1,4 +1,4 @@
-import { AlertColor } from "@mui/material";
+import type { AlertColor } from "@mui/material";
 import { useState } from "react";
 import type { TweetRead, TweetsService, TweetUpdate } from "./client";
 
@@ -7,6 +7,7 @@ interface Props {
   serviceFunc: typeof TweetsService.tweetsUpdateTweet;
   submitCallback?: () => void;
 }
+
 type ValueOf<T> = T[keyof T];
 
 interface SnackProps {
@@ -14,6 +15,7 @@ interface SnackProps {
   message: string;
   intent: AlertColor;
 }
+
 const useTweetModifications = ({
   row,
   serviceFunc,
@@ -68,10 +70,10 @@ const useTweetModifications = ({
   };
 
   return {
-    getChangedColumns,
     currentRow,
-    handleChange,
     snackOpen,
+    getChangedColumns,
+    handleChange,
     handleClose,
     modifySubmit,
   };
