@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import type { TweetRead } from "../client";
 import { TweetsService } from "../client";
-import { useFilter } from "./FilterProvider";
+import { useFilter } from "../contexts/FilterProvider";
 import Tweet from "./Tweet";
 import WordCloud from "./WordCloud";
 
@@ -20,19 +20,16 @@ const Tweets = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    TweetsService.tweetsReadTweets({
-      offset,
-      limit: 10,
-      startDate,
-      endDate,
-    }).then((data) => {
-      // Removes duplicates
-      const tempDataList: TweetObj = {};
-      for (const tweet of data) {
-        tempDataList[tweet.id as number] = tweet;
+    TweetsService.tweetsReadTweets(offset, 10, startDate, endDate).then(
+      (data) => {
+        // Removes duplicates
+        const tempDataList: TweetObj = {};
+        for (const tweet of data) {
+          tempDataList[tweet.id] = tweet;
+        }
+        setDataList((dl) => ({ ...dl, ...tempDataList }));
       }
-      setDataList((dl) => ({ ...dl, ...tempDataList }));
-    });
+    );
   }, [offset, startDate, endDate]);
 
   const fetchData = () => setOffset(offset + 10);

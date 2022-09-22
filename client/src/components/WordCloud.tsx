@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
 import { TweetsCommonsService } from "../client";
-import { useFilter } from "./FilterProvider";
+import { useFilter } from "../contexts/FilterProvider";
 import Title from "./Title";
 
 const options: OptionsProp = {
@@ -22,7 +22,7 @@ const options: OptionsProp = {
   transitionDuration: 1000,
 };
 
-interface Response extends Array<[string, number]> {}
+type Response = [string, number][];
 
 interface Word {
   text: string;
@@ -37,7 +37,7 @@ const WordCloud = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    TweetsCommonsService.tweetsCommonsGetWordCloud({ startDate, endDate }).then(
+    TweetsCommonsService.tweetsCommonsGetWordCloud(startDate, endDate).then(
       (data) => {
         const wordCount = (data as Response).map(([text, value]) => ({
           text,

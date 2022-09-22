@@ -2,11 +2,11 @@ import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import Admin from "./components/Admin";
 import TweetCollectionAdminPanel from "./components/Admin/TweetCollectionAdminPanel";
-import AuthProvider from "./components/AuthProvider";
 import EndUser from "./components/EndUser";
-import FilterProvider from "./components/FilterProvider";
 import Login from "./components/Login";
 import RequireAuth from "./components/RequireAuth";
+import AuthProvider from "./contexts/AuthProvider";
+import FilterProvider from "./contexts/FilterProvider";
 
 const App = () => (
   <AuthProvider>

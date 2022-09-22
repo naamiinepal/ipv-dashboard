@@ -3,8 +3,8 @@ import type { ChartData, ChartOptions } from "chart.js";
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { PseudoTweetsService } from "../client";
-import { useFilter } from "./FilterProvider";
-import { toTitleCase } from "./utility";
+import { useFilter } from "../contexts/FilterProvider";
+import { toTitleCase } from "../utility";
 
 const optionsBar: ChartOptions<"bar"> = {
   responsive: true,
@@ -32,23 +32,21 @@ const BarChart = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetCount({
-      startDate,
-      endDate,
-      all: true,
-    }).then((data) => {
-      setData({
-        labels: Object.keys(data).map(toTitleCase),
-        datasets: [
-          {
-            label: "Number of abusive texts in given range",
-            data: Object.values(data),
-            backgroundColor: "#247881",
-          },
-        ],
-      });
-      setLoaded(true);
-    });
+    PseudoTweetsService.pseudoTweetsGetCount(true, startDate, endDate).then(
+      (data) => {
+        setData({
+          labels: Object.keys(data).map(toTitleCase),
+          datasets: [
+            {
+              label: "Number of abusive texts in given range",
+              data: Object.values(data),
+              backgroundColor: "#247881",
+            },
+          ],
+        });
+        setLoaded(true);
+      }
+    );
   }, [startDate, endDate]);
 
   return (

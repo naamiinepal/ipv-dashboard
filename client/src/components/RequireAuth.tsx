@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const { user } = useAuth();

@@ -11,7 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { TweetRead } from "../../client";
 import { PseudoTweetsService, TweetsService } from "../../client";
 import { predictionColumns } from "../../constants";
-import { toTitleCase } from "../utility";
+import { toTitleCase } from "../../utility";
 import SelectionAdmin from "./SelectionAdmin";
 import Tweet from "./Tweet";
 
@@ -33,7 +33,7 @@ const TweetCollectionAdminPanel = ({ action }: Props) => {
   );
 
   useEffect(() => {
-    tweetFetcher({ offset, limit: 10 }).then((data) => setDataList(data));
+    tweetFetcher(offset, 10).then((data) => setDataList(data));
   }, [offset, reload, tweetFetcher]);
 
   const toggleReload = () => {

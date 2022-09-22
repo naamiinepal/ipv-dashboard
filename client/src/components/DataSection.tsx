@@ -8,7 +8,7 @@ const DataSection = () => {
   const [tweetCount, setTweetCount] = useState(0);
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetCount({ all: true }).then((data) => {
+    PseudoTweetsService.pseudoTweetsGetCount(true).then((data) => {
       setTweetCount(data.total);
     });
   }, []);

@@ -1,4 +1,3 @@
-import type { AlertColor } from "@mui/material";
 import {
   Alert,
   Button,
@@ -6,83 +5,38 @@ import {
   Snackbar,
   TableCell,
   TableRow,
-  TextField,
+  TextField
 } from "@mui/material";
 import { useState } from "react";
-import type { TweetRead, TweetUpdate } from "../../client";
+import type { TweetRead } from "../../client";
 import { PseudoTweetsService, TweetsService } from "../../client";
+import { useTweetModifications } from "../../hooks";
 
 interface Props {
   row: TweetRead;
   action: "verify" | "modify";
 }
 
-type ValueOf<T> = T[keyof T];
-
-interface SnackProps {
-  display: boolean;
-  message: string;
-  intent: AlertColor;
-}
-
 const Tweet = ({ row, action }: Props) => {
-  const [currentRow, setCurrentRow] = useState(row);
-  const [isVerified, setIsVerified] = useState(false);
-  const [snackOpen, setSnackOpen] = useState<SnackProps>({
-    display: false,
-    message: "",
-    intent: "success",
+  const {
+    getChangedColumns,
+    currentRow,
+    handleChange,
+    snackOpen,
+    handleClose,
+    modifySubmit,
+  } = useTweetModifications({
+    row,
+    serviceFunc: TweetsService.tweetsUpdateTweet,
   });
-
-  const getChangedColumns = () => {
-    const toSubmit: TweetUpdate = {};
-
-    for (const key of ["is_abuse", "sexual_score"]) {
-      // @ts-ignore
-      if (row[key] !== currentRow[key]) {
-        // @ts-ignore
-        toSubmit[key] = currentRow[key];
-      }
-    }
-    return toSubmit;
-  };
-
-  const modifySubmit = () =>
-    TweetsService.tweetsUpdateTweet({
-      tweetId: row.id as number,
-      requestBody: getChangedColumns(),
-    })
-      .then(() => {
-        setSnackOpen({
-          display: true,
-          message: "Successfully Modified",
-          intent: "success",
-        });
-      })
-      .catch(() => {
-        setSnackOpen({
-          display: false,
-          message: "Modification Failed",
-          intent: "error",
-        });
-      });
+  const [isVerified, setIsVerified] = useState(false);
 
   const verifySubmit = () => {
-    PseudoTweetsService.pseudoTweetsVerifyPseudoTweet({
-      pseudoTweetId: row.id as number,
-      requestBody: getChangedColumns(),
-    }).then(() => setIsVerified(true));
+    PseudoTweetsService.pseudoTweetsVerifyPseudoTweet(
+      row.id,
+      getChangedColumns()
+    ).then(() => setIsVerified(true));
   };
-
-  const handleClose = () => {
-    console.log("Closed");
-    setSnackOpen({ ...snackOpen, display: false });
-  };
-
-  const handleChange = (
-    value: Exclude<ValueOf<TweetUpdate>, undefined>,
-    column: keyof TweetUpdate
-  ) => setCurrentRow({ ...currentRow, [column]: value });
 
   return (
     <TableRow

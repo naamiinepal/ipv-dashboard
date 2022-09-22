@@ -4,7 +4,7 @@ import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { useState } from "react";
-import { useFilter } from "./FilterProvider";
+import { useFilter } from "../contexts/FilterProvider";
 import LineChart from "./LineChart";
 import Tweets from "./Tweets";
 

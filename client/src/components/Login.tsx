@@ -4,7 +4,7 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import type { To } from "react-router";
 import { useLocation, useNavigate } from "react-router";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 
 const Login = () => {
   const [username, setUsername] = useState("");

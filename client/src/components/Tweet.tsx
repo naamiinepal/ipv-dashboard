@@ -1,5 +1,4 @@
 import PersonIcon from "@mui/icons-material/Person";
-import type { AlertColor } from "@mui/material";
 import {
   Alert,
   Button,
@@ -12,77 +11,29 @@ import {
 } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import { useState } from "react";
-import type { TweetRead, TweetUpdate } from "../client";
+import type { TweetRead } from "../client";
 import { TweetsService } from "../client";
 import { months } from "../constants";
+import { useTweetModifications } from "../hooks";
 
 interface Props {
   tweet: TweetRead;
 }
 
-type ValueOf<T> = T[keyof T];
-
-interface SnackProps {
-  display: boolean;
-  message: string;
-  intent: AlertColor;
-}
-
 const Tweet = ({ tweet }: Props) => {
-  const [currentTweet, setCurrentTweet] = useState(tweet);
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [snackOpen, setSnackOpen] = useState<SnackProps>({
-    display: false,
-    message: "",
-    intent: "success",
+
+  const {
+    currentRow: currentTweet,
+    handleChange,
+    snackOpen,
+    handleClose,
+    modifySubmit: editSubmit,
+  } = useTweetModifications({
+    row: tweet,
+    serviceFunc: TweetsService.tweetsRequestTweetEdit,
+    submitCallback: () => setIsEditOpen(false),
   });
-
-  const getChangedColumns = () => {
-    const toSubmit: TweetUpdate = {};
-
-    for (const key of ["is_abuse", "sexual_score"]) {
-      // @ts-ignore
-      if (row[key] !== currentRow[key]) {
-        // @ts-ignore
-        toSubmit[key] = currentRow[key];
-      }
-    }
-    return toSubmit;
-  };
-
-  const editSubmit = () => {
-    TweetsService.tweetsRequestTweetEdit({
-      tweetId: tweet.id as number,
-      requestBody: getChangedColumns(),
-    })
-      .then(() => {
-        setIsEditOpen(false);
-        setSnackOpen({
-          display: true,
-          message: "Successfully Modified",
-          intent: "success",
-        });
-      })
-      .catch(() => {
-        setSnackOpen({
-          display: false,
-          message: "Modification Failed",
-          intent: "error",
-        });
-      });
-  };
-
-  const handleClose = () => {
-    console.log("Closed");
-    setSnackOpen({ ...snackOpen, display: false });
-  };
-
-  const handleChange = (
-    value: Exclude<ValueOf<TweetUpdate>, undefined>,
-    column: keyof TweetUpdate
-  ) => {
-    setCurrentTweet({ ...currentTweet, [column]: value });
-  };
 
   const created_date = new Date(tweet.created_at);
 

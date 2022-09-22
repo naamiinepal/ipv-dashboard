@@ -19,8 +19,8 @@ import { Line } from "react-chartjs-2";
 import { PseudoTweetsService } from "../client";
 import { predictionColumns } from "../constants";
 import BarChart from "./BarChart";
-import { useFilter } from "./FilterProvider";
-import { toTitleCase } from "./utility";
+import { useFilter } from "../contexts/FilterProvider";
+import { toTitleCase } from "../utility";
 
 ChartJS.register(
   ArcElement,
@@ -104,11 +104,11 @@ const LineChart = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetPseudoOverview({
-      all: true,
+    PseudoTweetsService.pseudoTweetsGetPseudoOverview(
+      true,
       startDate,
-      endDate,
-    }).then((data) => {
+      endDate
+    ).then((data) => {
       const dataArrays = {
         is_abuse: data.map(({ is_abuse }) => is_abuse),
         sexual_score: data.map(({ sexual_score }) => sexual_score ?? null),

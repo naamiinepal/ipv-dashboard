@@ -8,9 +8,9 @@
     "@emotion/styled": "^11.10.4",
     "@material-ui/core": "^4.12.4",
     "@material-ui/pickers": "^3.3.10",
-    "@mui/icons-material": "^5.10.3",
-    "@mui/material": "^5.10.5",
-    "@mui/x-date-pickers": "^5.0.1",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.6",
+    "@mui/x-date-pickers": "^5.0.2",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
     "axios": "^0.27.2",
@@ -21,7 +21,7 @@
     "react-chartjs-2": "^4.3.1",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-router-dom": "^6.4.0",
+    "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "react-wordcloud": "^1.2.7",
     "typescript": "^4.8.3"
@@ -33,7 +33,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "build-to-server": "craco build && ./move_to_server.sh",
-    "generate-client": "openapi --input http://localhost:5000/openapi.json --output ./src/client --client axios --useOptions"
+    "generate-client": "openapi --input http://localhost:5000/openapi.json --output ./src/client --client axios"
   },
   "eslintConfig": {
     "extends": [
@@ -53,7 +53,7 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.11",
+    "autoprefixer": "^10.4.12",
     "openapi-typescript-codegen": "^0.23.0",
     "postcss": "^8.4.16",
     "tailwindcss": "^3.1.8"
