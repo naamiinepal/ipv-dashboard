@@ -46,9 +46,9 @@ def get_pseudo_overview(
 
 @router.get("/count", response_model=TweetCount)
 def get_count(
+    all: bool = False,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
-    all: bool = False,
     session: Session = Depends(get_session),
 ):
     """
