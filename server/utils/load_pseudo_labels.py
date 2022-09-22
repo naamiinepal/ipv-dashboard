@@ -7,8 +7,10 @@ from sqlmodel import Session
 from app.tweets_common.models import PseudoTweet
 
 
-def load_database(session: Session):
-    with open("utils/sent_pseudo_labels_combined.csv") as csvfile:
+def load_database(
+    session: Session, csv_path: str = "utils/sent_pseudo_labels_combined.csv"
+):
+    with open(csv_path) as csvfile:
         pseudo_tweets: List[PseudoTweet] = []
         for row in DictReader(csvfile):
             created_at: datetime = datetime.strptime(
@@ -16,7 +18,8 @@ def load_database(session: Session):
             )
             is_abuse = float(row["abuse_pred"]) >= 0.5
             kwargs: Mapping[str, Union[str, datetime]] = {
-                **row,
+                "text": row["text"],
+                "username": row["user_name"],
                 "is_abuse": is_abuse,
                 "sexual_score": max(min(round(float(row["sexual_score"])), 10), 1),
                 "created_at": created_at,
