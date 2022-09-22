@@ -40,10 +40,7 @@ class PredictionOutput(BaseModel):
 
 
 class TweetRead(SQLModel):
-
-    __table_args__ = (CheckConstraint("sexual_score >= 1 AND sexual_score <= 10"),)
-
-    id: Optional[PositiveInt] = Field(default=None, primary_key=True)
+    id: PositiveInt
     text: str
     username: str
     created_at: datetime
@@ -51,10 +48,17 @@ class TweetRead(SQLModel):
     sexual_score: sexual_score_int
 
 
+class DBTweetBase(TweetRead):
+
+    __table_args__ = (CheckConstraint("sexual_score >= 1 AND sexual_score <= 10"),)
+
+    id: Optional[PositiveInt] = Field(default=None, primary_key=True)
+
+
 # Table Models
 
 
-class Tweet(TweetRead, table=True):
+class Tweet(DBTweetBase, table=True):
     # The user who moved tweet from PseudoTweet to Tweet
     verifier_id: PositiveInt = Field(foreign_key="user.id")
     verifier: "User" = Relationship(
@@ -80,5 +84,5 @@ class Tweet(TweetRead, table=True):
     )
 
 
-class PseudoTweet(TweetRead, table=True):
+class PseudoTweet(DBTweetBase, table=True):
     __tablename__ = "pseudo_tweet"
