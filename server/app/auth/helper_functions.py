@@ -72,3 +72,4 @@ def authenticate_user(session: Session, username: str, plain_password: str):
     user = get_user(session, username)
     if user is not None and verify_password(plain_password, user.hashed_password):
         return user
+    return None
