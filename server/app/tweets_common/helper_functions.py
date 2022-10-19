@@ -123,3 +123,11 @@ def get_filtered_count(
     selection = get_selection_filter(Model, start_date, end_date, selection)
 
     return session.exec(selection).one()
+
+
+def get_abusive_tweets(
+    Model: ModelType, start_date: date, end_date: date
+) -> Select[tuple]:
+    return get_selection_filter(
+        Model, start_date, end_date, select(Model.text).where(Model.is_abuse)
+    )

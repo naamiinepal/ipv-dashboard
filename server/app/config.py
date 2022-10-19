@@ -11,8 +11,8 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 28800  # 20 days
 
-    # Model Prediction URL
-    model_url: str = "http://localhost:8502/v1/models/muril_batchnorm_d0.5:predict"
+    # Scraping Config
+    youtube_api_key: str
 
     class Config:
         env_file = ".env"

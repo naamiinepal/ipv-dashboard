@@ -1,19 +1,27 @@
 from datetime import date
+from functools import lru_cache
 from typing import List, Optional, Tuple
 
 import requests
 from fastapi import Depends, HTTPException
+from pydantic import conint
 from sqlmodel import Session, select, union_all
 
 from ..config import settings
 from ..database import get_session
 from . import router
 from .decorators import timed_lru_cache
-from .helper_functions import get_selection_filter
+from .helper_functions import get_abusive_tweets
 from .models import PredictionOutput, PseudoTweet, Tweet
+from .scrape_youtube import (
+    YoutubeScrapeResponse,
+    youtube_comment_scraper,
+    youtube_video_scraper,
+)
 from .word_cloud_helper import get_word_count_distribution
 
 CACHE_TIMEOUT = 6 * 60 * 60  # 6 hours
+MaxResultsType = conint(ge=1, le=100)
 
 
 @router.get("/", response_model=List[Tuple[str, int]])
@@ -27,12 +35,8 @@ def get_word_cloud(
     Get the word-count distribution within the given time range
     """
 
-    args = (start_date, end_date)
-
-    tweet_selection = get_selection_filter(Tweet, *args, select(Tweet.text))
-    pseudo_tweet_selection = get_selection_filter(
-        PseudoTweet, *args, select(PseudoTweet.text)
-    )
+    tweet_selection = get_abusive_tweets(Tweet, start_date, end_date)
+    pseudo_tweet_selection = get_abusive_tweets(PseudoTweet, start_date, end_date)
 
     combined_model = union_all(tweet_selection, pseudo_tweet_selection).subquery().c
 
@@ -76,3 +80,47 @@ def get_prediction(text: str):
     ]
 
     return PredictionOutput(predictions=predictions, labels=labels)
+
+
+@router.get("/scrape_youtube", response_model=List[YoutubeScrapeResponse])
+@lru_cache(maxsize=16)
+def scrape_youtube(
+    video_query: str,
+    max_video_results: MaxResultsType = 2,
+    max_comment_results: MaxResultsType = 2,
+):
+    video_search_response = youtube_video_scraper.list(
+        part="id", q=video_query, maxResults=max_video_results, type="video"
+    ).execute()
+
+    # Get all the video ids
+    video_ids: Tuple[str] = tuple(
+        item["id"]["videoId"] for item in video_search_response["items"]
+    )
+
+    response = []
+    for video_id in video_ids:
+        comment_search_response = youtube_comment_scraper.list(
+            part="snippet,replies",
+            videoId=video_id,
+            maxResults=max_comment_results,
+            textFormat="plainText",
+        ).execute()
+
+        comment_snippets = tuple(
+            {
+                "top_level_comment": comment_item["snippet"]["topLevelComment"][
+                    "snippet"
+                ],
+                "replies": [
+                    reply["snippet"] for reply in comment_item["replies"]["comments"]
+                ]
+                if "replies" in comment_item
+                else [],
+            }
+            for comment_item in comment_search_response["items"]
+        )
+
+        response.append({"video_id": video_id, "comments": comment_snippets})
+
+    return response
