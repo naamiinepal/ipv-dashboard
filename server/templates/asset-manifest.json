@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/static/css/main.84219b1c.css",
-    "main.js": "/static/js/main.5ba82abf.js",
+    "main.js": "/static/js/main.67ba1fbb.js",
     "static/media/childsafenetlogo.jpg": "/static/media/childsafenetlogo.7cdf1afe206a68a276fd.jpg",
     "static/media/nepal.svg": "/static/media/nepal.bcdde207c6225a17ddea0f5b70865730.svg",
     "index.html": "/index.html",
     "main.84219b1c.css.map": "/static/css/main.84219b1c.css.map",
-    "main.5ba82abf.js.map": "/static/js/main.5ba82abf.js.map"
+    "main.67ba1fbb.js.map": "/static/js/main.67ba1fbb.js.map"
   },
   "entrypoints": [
     "static/css/main.84219b1c.css",
-    "static/js/main.5ba82abf.js"
+    "static/js/main.67ba1fbb.js"
   ]
 }
