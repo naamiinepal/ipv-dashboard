@@ -4,7 +4,6 @@ from typing import List, Optional, Tuple
 
 import requests
 from fastapi import Depends, HTTPException
-from pydantic import conint
 from sqlmodel import Session, select, union_all
 
 from ..config import settings
@@ -18,10 +17,10 @@ from .scrape_youtube import (
     youtube_comment_scraper,
     youtube_video_scraper,
 )
+from .types import MaxResultsType
 from .word_cloud_helper import get_word_count_distribution
 
 CACHE_TIMEOUT = 6 * 60 * 60  # 6 hours
-MaxResultsType = conint(ge=1, le=100)
 
 
 @router.get("/", response_model=List[Tuple[str, int]])

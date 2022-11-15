@@ -3,12 +3,13 @@ from typing import List, Optional, TypeVar
 
 from fastapi import HTTPException
 from pydantic import PositiveInt
-from sqlmodel import Integer, Session, func, select, text, union_all
+from sqlmodel import Integer, Session, cast, func, select, text, union_all
 from sqlmodel.sql.expression import Select
 
 from .models import PseudoTweet, Tweet
 
 # Make a Generic Type to get the original type completion back
+# Moving to the types file will create a circular import
 ModelType = TypeVar("ModelType", Tweet, PseudoTweet)
 
 
@@ -71,7 +72,7 @@ def get_db_overview(
         start_date,
         end_date,
         select(
-            func.sum(Model.is_abuse, type_=Integer).label("is_abuse"),
+            func.sum(cast(Model.is_abuse, type_=Integer)).label("is_abuse"),
             func.avg(Model.sexual_score).label("sexual_score"),
             created_date,
             func.count().label("total"),
@@ -116,7 +117,7 @@ def get_filtered_count(
 ):
 
     selection = select(
-        func.sum(Model.is_abuse, type_=Integer).label("is_abuse"),
+        func.sum(cast(Model.is_abuse, type_=Integer)).label("is_abuse"),
         func.count().label("total"),
     )
 

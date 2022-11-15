@@ -1,17 +1,25 @@
 from datetime import date, datetime, timezone
 from typing import TYPE_CHECKING, List, Optional, Tuple
 
-from pydantic import BaseModel, PositiveInt, confloat, conint
-from sqlmodel import CheckConstraint, Field, Relationship, SQLModel, func
+from pydantic import BaseModel, PositiveInt, confloat, validator
+from sqlmodel import (
+    ARRAY,
+    CheckConstraint,
+    Column,
+    Field,
+    Integer,
+    Relationship,
+    SQLModel,
+    func,
+)
+
+from .types import AspectAnnoType, sexual_score_int, sexual_score_kwargs
 
 if TYPE_CHECKING:
     from app.auth.models import User
 
-# Data Models
 
-# Sexual score is in the range of 1 to 10
-sexual_score_kwargs = {"ge": 1, "le": 10}
-sexual_score_int = Optional[conint(**sexual_score_kwargs)]
+# Data Models
 
 
 class TweetCount(BaseModel):
@@ -30,6 +38,7 @@ class Overview(BaseModel):
 class TweetUpdate(BaseModel):
     is_abuse: Optional[bool] = None
     sexual_score: sexual_score_int = None
+    aspects_anno: AspectAnnoType = None
 
 
 class PredictionOutput(BaseModel):
@@ -46,6 +55,25 @@ class TweetRead(SQLModel):
     created_at: datetime
     is_abuse: bool
     sexual_score: sexual_score_int
+
+    aspects_anno: Optional[AspectAnnoType] = Field(
+        default=None,
+        description="List of aspects in the tweet",
+        sa_column=Column(
+            ARRAY(Integer, dimensions=2),
+        ),
+    )
+
+    @validator("aspects_anno")
+    def validate_aspects_anno(cls, v: Optional[AspectAnnoType]):
+        # If v is None or empty list, return None
+        if not v:
+            return None
+
+        for (start, end, _) in v:
+            if start >= end:
+                raise ValueError("Start index must be less than end index")
+        return v
 
 
 class DBTweetBase(TweetRead):

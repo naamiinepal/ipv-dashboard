@@ -1,10 +1,11 @@
 import os.path
 from functools import lru_cache
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from pydantic import ValidationError
 
 # Mount routers before database to read their database models
 from .auth import router as auth_router
@@ -20,6 +21,12 @@ def custom_generate_unique_id(route: APIRoute):
 
 
 app = FastAPI(generate_unique_id_function=custom_generate_unique_id)
+
+
+@app.exception_handler(ValidationError)
+async def validation_exception_handler(request: Request, exc: ValidationError):
+    # Capture the Validation errror from pydantic and return it as a JSON response
+    return JSONResponse({"detail": exc.errors()}, status_code=422)
 
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
