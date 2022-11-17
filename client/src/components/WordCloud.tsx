@@ -1,9 +1,9 @@
 import { Card } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState, memo } from "react";
 import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
-import { TweetsCommonsService } from "../client";
-import { useFilter } from "../contexts/FilterProvider";
+import { CancelError, TweetsCommonsService } from "../client";
+import { FilterContext } from "../contexts/FilterProvider";
 import Title from "./Title";
 
 const options: OptionsProp = {
@@ -34,21 +34,27 @@ const WordCloud = () => {
   // const [counts, setCounts] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
-  const { startDate, endDate } = useFilter();
+  const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
     const request = TweetsCommonsService.tweetsCommonsGetWordCloud(
       startDate,
       endDate
     );
-    request.then((data) => {
-      const wordCount = (data as Response).map(([text, value]) => ({
-        text,
-        value,
-      }));
-      setWords(wordCount);
-      setLoaded(true);
-    });
+    request
+      .then((data) => {
+        const wordCount = (data as Response).map(([text, value]) => ({
+          text,
+          value,
+        }));
+        setWords(wordCount);
+        setLoaded(true);
+      })
+      .catch((err) => {
+        if (err instanceof CancelError) {
+          console.log("WordCloud umounted");
+        }
+      });
     return () => {
       request?.cancel();
     };
@@ -58,7 +64,7 @@ const WordCloud = () => {
     <div>
       {loaded && (
         <Card className="h-96 ml-2">
-          <Title text="Trending Words"></Title>
+          <Title element={<h2>Trending Words</h2>} />
           <ReactWordcloud options={options} words={words} />
         </Card>
       )}
@@ -66,4 +72,4 @@ const WordCloud = () => {
   );
 };
 
-export default WordCloud;
+export default memo(WordCloud);

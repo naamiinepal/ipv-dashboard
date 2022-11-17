@@ -1,6 +1,6 @@
 import moment from "moment";
 import type { Dispatch, SetStateAction } from "react";
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
 interface FilterProviderValue {
   startDate: string;
@@ -33,7 +33,5 @@ const FilterProvider = ({ children }: Props) => {
   );
 };
 
-const useFilter = () => useContext(FilterContext);
-
 export default FilterProvider;
-export { useFilter };
+export { FilterContext };

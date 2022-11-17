@@ -6,7 +6,7 @@ import Title from "./Title";
 const Purpose = () => (
   <div className="ml-16 w-11/12 flex justify-between">
     <Paper className="w-3/12 mt-2 p-2">
-      <Title text="An Idea Behind"></Title>
+      <Title element={<h2>An Idea Behind</h2>} />
       <p>
         Detecting the Intimate Partner Violence (IPV) is a hard task due to
         unavailability of conversations of intimate partners. We aim to find the

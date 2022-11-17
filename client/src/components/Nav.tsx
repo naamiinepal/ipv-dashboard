@@ -26,9 +26,9 @@ const Nav = () => (
       <div className="font-bold w-20">
         <img alt="ChildSafeNet-Logo" src={ChildSafeNetLogo} />
       </div>
-      <div className="font-bold text-primary ml-3 text-2xl">
-        Online IPV Detection System
-      </div>
+      <h1 className="font-bold text-primary ml-3 text-2xl">
+        Online Abusive Text Detection System
+      </h1>
       <div className="w-14">
         <img alt="NAAMII-Logo" src={NaamiiLogo} />
       </div>

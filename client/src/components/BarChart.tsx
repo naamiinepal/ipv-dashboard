@@ -1,9 +1,9 @@
 import { Card } from "@mui/material";
 import type { ChartData, ChartOptions } from "chart.js";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { PseudoTweetsService } from "../client";
-import { useFilter } from "../contexts/FilterProvider";
+import { CancelError, PseudoTweetsService } from "../client";
+import { FilterContext } from "../contexts/FilterProvider";
 import { toTitleCase } from "../utility";
 
 const optionsBar: ChartOptions<"bar"> = {
@@ -29,7 +29,7 @@ const BarChart = () => {
     datasets: [],
   });
   const [loaded, setLoaded] = useState(false);
-  const { startDate, endDate } = useFilter();
+  const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
     const request = PseudoTweetsService.pseudoTweetsGetCount(
@@ -37,19 +37,25 @@ const BarChart = () => {
       startDate,
       endDate
     );
-    request.then((response_data) => {
-      setData({
-        labels: Object.keys(response_data).map(toTitleCase),
-        datasets: [
-          {
-            label: "Number of abusive texts in given range",
-            data: Object.values(response_data),
-            backgroundColor: "#247881",
-          },
-        ],
+    request
+      .then((response_data) => {
+        setData({
+          labels: Object.keys(response_data).map(toTitleCase),
+          datasets: [
+            {
+              label: "Number of abusive texts in given range",
+              data: Object.values(response_data),
+              backgroundColor: "#247881",
+            },
+          ],
+        });
+        setLoaded(true);
+      })
+      .catch((err) => {
+        if (err instanceof CancelError) {
+          console.log("BarChart umounted");
+        }
       });
-      setLoaded(true);
-    });
     return () => {
       request?.cancel();
     };

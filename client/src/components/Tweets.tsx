@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import type { TweetRead } from "../client";
-import { TweetsService } from "../client";
-import { useFilter } from "../contexts/FilterProvider";
+import { CancelError, TweetRead, TweetsService } from "../client";
+import { FilterContext } from "../contexts/FilterProvider";
 import Tweet from "./Tweet";
 import WordCloud from "./WordCloud";
 
@@ -13,7 +12,7 @@ interface TweetObj {
 const Tweets = () => {
   const [dataList, setDataList] = useState<TweetObj>({});
   const [offset, setOffset] = useState(0);
-  const { startDate, endDate } = useFilter();
+  const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
     setDataList([]);
@@ -26,14 +25,20 @@ const Tweets = () => {
       startDate,
       endDate
     );
-    request.then((data) => {
-      // Removes duplicates
-      const tempDataList: TweetObj = {};
-      for (const tweet of data) {
-        tempDataList[tweet.id] = tweet;
-      }
-      setDataList((dl) => ({ ...dl, ...tempDataList }));
-    });
+    request
+      .then((data) => {
+        // Removes duplicates
+        const tempDataList: TweetObj = {};
+        for (const tweet of data) {
+          tempDataList[tweet.id] = tweet;
+        }
+        setDataList((dl) => ({ ...dl, ...tempDataList }));
+      })
+      .catch((err) => {
+        if (err instanceof CancelError) {
+          console.log("Tweets umounted");
+        }
+      });
     return () => {
       request?.cancel();
     };
@@ -54,9 +59,11 @@ const Tweets = () => {
             </p>
           }
         >
-          {Object.entries(dataList).map(([id, tweet]) => (
-            <Tweet tweet={tweet} key={id} />
-          ))}
+          {Object.entries(dataList)
+            .sort(([id1], [id2]) => parseInt(id2) - parseInt(id1))
+            .map(([id, tweet]) => (
+              <Tweet tweet={tweet} key={id} />
+            ))}
         </InfiniteScroll>
       </div>
       <div className="w-1/2">

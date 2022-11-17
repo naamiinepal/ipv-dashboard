@@ -14,13 +14,13 @@ import {
   Tooltip,
 } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { PseudoTweetsService } from "../client";
+import { CancelError, PseudoTweetsService } from "../client";
 import { predictionColumns } from "../constants";
-import BarChart from "./BarChart";
-import { useFilter } from "../contexts/FilterProvider";
+import { FilterContext } from "../contexts/FilterProvider";
 import { toTitleCase } from "../utility";
+import BarChart from "./BarChart";
 
 ChartJS.register(
   ArcElement,
@@ -101,7 +101,7 @@ const LineChart = () => {
     datasets: [],
   });
   const [loaded, setLoaded] = useState(false);
-  const { startDate, endDate } = useFilter();
+  const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
     const request = PseudoTweetsService.pseudoTweetsGetPseudoOverview(
@@ -109,28 +109,34 @@ const LineChart = () => {
       startDate,
       endDate
     );
-    request.then((response_data) => {
-      const dataArrays = {
-        is_abuse: response_data.map(({ is_abuse }) => is_abuse),
-        sexual_score: response_data.map(
-          ({ sexual_score }) => sexual_score ?? null
-        ),
-      };
+    request
+      .then((response_data) => {
+        const dataArrays = {
+          is_abuse: response_data.map(({ is_abuse }) => is_abuse),
+          sexual_score: response_data.map(
+            ({ sexual_score }) => sexual_score ?? null
+          ),
+        };
 
-      const finalData = {
-        labels: response_data.map(({ created_date }) => created_date),
-        datasets: predictionColumns.map(({ field, areaColor }) => ({
-          data: dataArrays[field as keyof typeof dataArrays],
-          label: toTitleCase(field),
-          fill: true,
-          borderColor: areaColor,
-          backgroundColor: areaColor,
-        })),
-      };
+        const finalData = {
+          labels: response_data.map(({ created_date }) => created_date),
+          datasets: predictionColumns.map(({ field, areaColor }) => ({
+            data: dataArrays[field as keyof typeof dataArrays],
+            label: toTitleCase(field),
+            fill: true,
+            borderColor: areaColor,
+            backgroundColor: areaColor,
+          })),
+        };
 
-      setData(finalData);
-      setLoaded(true);
-    });
+        setData(finalData);
+        setLoaded(true);
+      })
+      .catch((err) => {
+        if (err instanceof CancelError) {
+          console.log("LineChart umounted");
+        }
+      });
     return () => {
       request?.cancel();
     };

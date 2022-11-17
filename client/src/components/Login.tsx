@@ -35,7 +35,7 @@ const Login = () => {
           <TextField
             id="outlined-username"
             label="Username"
-            onChange={({target: {value}}) => setUsername(value)}
+            onChange={({ target: { value } }) => setUsername(value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -46,7 +46,7 @@ const Login = () => {
             id="outlined-password"
             label="Password"
             type="password"
-            onChange={({target:{value}}) => setPassword(value)}
+            onChange={({ target: { value } }) => setPassword(value)}
             InputLabelProps={{
               shrink: true,
             }}
