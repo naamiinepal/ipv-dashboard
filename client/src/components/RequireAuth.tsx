@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthProvider";
+import { loggedInOrNot } from "../utility";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
-  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
+    const user = loggedInOrNot();
     if (!user) {
       // Redirect them to the /login page, but save the current location they were
       // trying to go to when they were redirected. This allows us to send them
@@ -15,7 +15,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
       // than dropping them off on the home page.
       navigate("/login", { state: { from: location }, replace: true });
     }
-  }, [navigate, user, location]);
+  }, [navigate, location]);
 
   return children;
 };

@@ -26,10 +26,13 @@ interface Props {
 const FilterProvider = ({ children }: Props) => {
   const [startDate, setStartDate] = useState(defaultStartDate);
   const [endDate, setEndDate] = useState(defaultEndDate);
-  const value = { startDate, endDate, setStartDate, setEndDate };
 
   return (
-    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
+    <FilterContext.Provider
+      value={{ startDate, endDate, setStartDate, setEndDate }}
+    >
+      {children}
+    </FilterContext.Provider>
   );
 };
 

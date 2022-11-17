@@ -72,7 +72,7 @@ const Tweet = ({ tweet }: Props) => {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={currentTweet.is_abuse as boolean}
+                  checked={currentTweet.is_abuse}
                   onChange={({ target: { checked } }) => {
                     handleChange(checked, "is_abuse");
                   }}

@@ -21,7 +21,7 @@ const CustomNavLink = ({ to, children }: CustomNavLinkProps) => (
 );
 
 const Nav = () => (
-  <div>
+  <>
     <div className="border-t-2 bg-white px-16 py-2 flex items-center justify-between">
       <div className="font-bold w-20">
         <img alt="ChildSafeNet-Logo" src={ChildSafeNetLogo} />
@@ -37,7 +37,7 @@ const Nav = () => (
       <CustomNavLink to="/">Home</CustomNavLink>
       <CustomNavLink to="/ap">Admin</CustomNavLink>
     </div>
-  </div>
+  </>
 );
 
 export default Nav;

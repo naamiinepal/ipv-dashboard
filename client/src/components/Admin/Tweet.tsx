@@ -5,7 +5,7 @@ import {
   Snackbar,
   TableCell,
   TableRow,
-  TextField
+  TextField,
 } from "@mui/material";
 import { useState } from "react";
 import type { TweetRead } from "../../client";
@@ -48,32 +48,22 @@ const Tweet = ({ row, action }: Props) => {
       <TableCell sx={{ fontSize: "1rem" }} align="left">
         {row.text}
       </TableCell>
-      <TableCell align="right">
-        <TextField
-          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-          value={currentRow.sexual_score}
-          onChange={({ target: { value } }) => {
-            handleChange(parseInt(value), "sexual_score");
-          }}
-          helperText="1-10"
-        />
-      </TableCell>
-      <TableCell align="right">
-        <TextField
-          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-          value={currentRow.sexual_score}
-          onChange={({ target: { value } }) => {
-            handleChange(parseInt(value), "sexual_score");
-          }}
-          helperText="1-10"
-        />
-      </TableCell>
-      <TableCell align="right">
+      <TableCell align="center">
         <Checkbox
-          checked={currentRow.is_abuse as boolean}
+          checked={currentRow.is_abuse}
           onChange={({ target: { checked } }) => {
             handleChange(checked, "is_abuse");
           }}
+        />
+      </TableCell>
+      <TableCell align="center">
+        <TextField
+          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+          value={currentRow.sexual_score}
+          onChange={({ target: { value } }) => {
+            handleChange(parseInt(value), "sexual_score");
+          }}
+          helperText="1-10"
         />
       </TableCell>
       <TableCell align="right">

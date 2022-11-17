@@ -6,7 +6,6 @@ import EndUser from "./components/EndUser";
 import Login from "./components/Login";
 import NoMatch from "./components/NoMatch";
 import RequireAuth from "./components/RequireAuth";
-import AuthProvider from "./contexts/AuthProvider";
 import FilterProvider from "./contexts/FilterProvider";
 
 // Do not load AdminPanel code at first
@@ -15,42 +14,40 @@ const TweetCollectionAdminPanel = lazy(
 );
 
 const App = () => (
-  <AuthProvider>
-    <FilterProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route index element={<EndUser />} />
-          <Route path="/login" element={<Login />} />
+  <FilterProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route index element={<EndUser />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/ap"
+          element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
+          }
+        >
           <Route
-            path="/ap"
+            index
             element={
-              <RequireAuth>
-                <Admin />
-              </RequireAuth>
+              <Suspense fallback="Loading">
+                <TweetCollectionAdminPanel action="verify" />
+              </Suspense>
             }
-          >
-            <Route
-              index
-              element={
-                <Suspense fallback="Loading">
-                  <TweetCollectionAdminPanel action="verify" />
-                </Suspense>
-              }
-            />
-            <Route
-              path="modify"
-              element={
-                <Suspense fallback="Loading">
-                  <TweetCollectionAdminPanel action="modify" />
-                </Suspense>
-              }
-            />
-          </Route>
-          <Route path="*" element={<NoMatch />} />
-        </Routes>
-      </BrowserRouter>
-    </FilterProvider>
-  </AuthProvider>
+          />
+          <Route
+            path="modify"
+            element={
+              <Suspense fallback="Loading">
+                <TweetCollectionAdminPanel action="modify" />
+              </Suspense>
+            }
+          />
+        </Route>
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+    </BrowserRouter>
+  </FilterProvider>
 );
 
 export default App;

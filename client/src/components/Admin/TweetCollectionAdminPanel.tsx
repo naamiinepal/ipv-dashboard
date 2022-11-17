@@ -7,9 +7,9 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { TweetRead } from "../../client";
-import { PseudoTweetsService, TweetsService } from "../../client";
+import { CancelError, PseudoTweetsService, TweetsService } from "../../client";
 import { predictionColumns } from "../../constants";
 import { toTitleCase } from "../../utility";
 import SelectionAdmin from "./SelectionAdmin";
@@ -24,18 +24,28 @@ const TweetCollectionAdminPanel = ({ action }: Props) => {
   const [offset, setOffset] = useState(0);
   const [reload, setReload] = useState(false);
 
-
   useEffect(() => {
-    const tweetFetcher = action === "verify"
-          ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
-          : TweetsService.tweetsReadTweets
-    tweetFetcher(offset, 10).then((data) => setDataList(data));
+    const tweetFetcher =
+      action === "verify"
+        ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
+        : TweetsService.tweetsReadTweets;
+    const request = tweetFetcher(offset, 10);
+    request
+      .then((data) => setDataList(data))
+      .catch((err) => {
+        if (err instanceof CancelError) {
+          console.log("TweetCollectionAdminPanel umounted");
+        }
+      });
+    return () => {
+      request?.cancel();
+    };
   }, [offset, reload]);
 
   const toggleReload = () => setReload(!reload);
 
   return (
-    <div className=" mt-10 w-11/12 mx-auto ">
+    <div className="mt-10 w-11/12 mx-auto ">
       <SelectionAdmin
         offset={offset}
         setOffset={setOffset}
@@ -48,32 +58,27 @@ const TweetCollectionAdminPanel = ({ action }: Props) => {
           aria-label="simple table"
         >
           <colgroup>
-            <col width="80%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="2%" />
-            <col width="6%" />
+            <col width="70%" />
+            <col width="10%" />
+            <col width="10%" />
+            <col width="10%" />
           </colgroup>
           <TableHead>
             <TableRow>
-              {[...predictionColumns.map(({ field }) => field), "text"].map(
-                (column, index) => (
+              {["Text", ...predictionColumns.map(({ field }) => field)]
+                .map(toTitleCase)
+                .map((titleColumn, index) => (
                   <TableCell
+                    align="center"
                     key={index}
                     sx={{
                       width: 50,
                       fontWeight: "bold",
                     }}
                   >
-                    {toTitleCase(column)}
+                    {titleColumn}
                   </TableCell>
-                )
-              )}
+                ))}
             </TableRow>
           </TableHead>
 

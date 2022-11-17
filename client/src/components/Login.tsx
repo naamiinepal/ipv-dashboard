@@ -4,27 +4,29 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import type { To } from "react-router";
 import { useLocation, useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthProvider";
+import { AuthService } from "../client";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  const { signin } = useAuth();
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    signin(username, password, () => {
-      // Send them back to the page they tried to visit when they were
-      // redirected to the login page. Use { replace: true } so we don't create
-      // another entry in the history stack for the login page.  This means that
-      // when they get to the protected page and click the back button, they
-      // won't end up back on the login page, which is also really nice for the
-      // user experience.
-      const from: To = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+    const { access_token } = await AuthService.authLogin({
+      username,
+      password,
     });
+    sessionStorage.setItem("accessToken", access_token);
+    // Send them back to the page they tried to visit when they were
+    // redirected to the login page. Use { replace: true } so we don't create
+    // another entry in the history stack for the login page.  This means that
+    // when they get to the protected page and click the back button, they
+    // won't end up back on the login page, which is also really nice for the
+    // user experience.
+    const from: To = location.state?.from?.pathname || "/";
+    navigate(from, { replace: true });
   }
 
   return (
