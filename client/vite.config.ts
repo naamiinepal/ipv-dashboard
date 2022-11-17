@@ -1,11 +1,9 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
-import svgrPlugin from "vite-plugin-svgr";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  plugins: [react()],
   build: {
     outDir: "build",
     manifest: true,
@@ -13,7 +11,7 @@ export default defineConfig({
   server: {
     open: true,
     proxy: {
-      "^/.*tweets": {
+      "^/(.*tweets|auth)": {
         target: "http://localhost:8001/",
       },
     },
