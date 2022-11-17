@@ -17,9 +17,7 @@ const SelectionAdmin = ({ offset, setOffset, toggleReload }: Props) => {
         label="Offset"
         value={offsetTemp}
         type="number"
-        onChange={({ target: { value } }) => {
-          setOffsetTemp(parseInt(value));
-        }}
+        onChange={({ target: { value } }) => setOffsetTemp(parseInt(value))}
         onKeyDown={({ key }) => {
           if (key === "Enter") {
             setOffset(offsetTemp);

@@ -24,21 +24,15 @@ const TweetCollectionAdminPanel = ({ action }: Props) => {
   const [offset, setOffset] = useState(0);
   const [reload, setReload] = useState(false);
 
-  const tweetFetcher = useMemo(
-    () =>
-      action === "verify"
-        ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
-        : TweetsService.tweetsReadTweets,
-    [action]
-  );
 
   useEffect(() => {
+    const tweetFetcher = action === "verify"
+          ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
+          : TweetsService.tweetsReadTweets
     tweetFetcher(offset, 10).then((data) => setDataList(data));
-  }, [offset, reload, tweetFetcher]);
+  }, [offset, reload]);
 
-  const toggleReload = () => {
-    setReload(!reload);
-  };
+  const toggleReload = () => setReload(!reload);
 
   return (
     <div className=" mt-10 w-11/12 mx-auto ">

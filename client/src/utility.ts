@@ -7,20 +7,17 @@ const loggedInOrNot = (provided_token: AccessToken = null) => {
     accessToken = sessionStorage.getItem("accessToken");
     if (!accessToken) return null;
   }
-  console.log("AccessToken", accessToken);
 
   const parsedJwt = parseJwt(accessToken);
 
   if (parsedJwt.invalid) {
-    console.log("AccessToken", parsedJwt.invalid);
-    console.log("Invalid access token.");
+    console.error("Invalid Access Token");
     sessionStorage.removeItem("accessToken");
     return null;
   }
   const sub = parsedJwt?.sub;
   if (!sub) return null;
 
-  console.log("AccessToken Check", parsedJwt);
   return sub;
 };
 
@@ -60,4 +57,6 @@ const toTitleCase = (str: string) =>
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 
-export { loggedInOrNot, parseJwt, toTitleCase };
+const signout = () => sessionStorage.removeItem("accessToken");
+
+export { loggedInOrNot, parseJwt, toTitleCase, signout };

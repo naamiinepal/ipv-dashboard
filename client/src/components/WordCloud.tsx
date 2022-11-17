@@ -9,7 +9,7 @@ import Title from "./Title";
 const options: OptionsProp = {
   colors: ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b"],
   enableTooltip: true,
-  deterministic: false,
+  deterministic: true,
   fontFamily: "impact",
   fontSizes: [5, 60],
   fontStyle: "normal",
@@ -37,17 +37,21 @@ const WordCloud = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    TweetsCommonsService.tweetsCommonsGetWordCloud(startDate, endDate).then(
-      (data) => {
-        const wordCount = (data as Response).map(([text, value]) => ({
-          text,
-          value,
-        }));
-        console.log(wordCount);
-        setWords(wordCount);
-        setLoaded(true);
-      }
+    const request = TweetsCommonsService.tweetsCommonsGetWordCloud(
+      startDate,
+      endDate
     );
+    request.then((data) => {
+      const wordCount = (data as Response).map(([text, value]) => ({
+        text,
+        value,
+      }));
+      setWords(wordCount);
+      setLoaded(true);
+    });
+    return () => {
+      request?.cancel();
+    };
   }, [startDate, endDate]);
 
   return (

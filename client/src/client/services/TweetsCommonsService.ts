@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { PredictionOutput } from '../models/PredictionOutput';
+import type { YoutubeScrapeResponse } from '../models/YoutubeScrapeResponse';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -53,6 +54,33 @@ export class TweetsCommonsService {
             errors: {
                 422: `Validation Error`,
                 503: `Could not connect to model.`,
+            },
+        });
+    }
+
+    /**
+     * Scrape Youtube
+     * @param videoQuery
+     * @param maxVideoResults
+     * @param maxCommentResults
+     * @returns YoutubeScrapeResponse Successful Response
+     * @throws ApiError
+     */
+    public static tweetsCommonsScrapeYoutube(
+        videoQuery: string,
+        maxVideoResults: number = 2,
+        maxCommentResults: number = 2,
+    ): CancelablePromise<Array<YoutubeScrapeResponse>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/tweets_commons/scrape_youtube',
+            query: {
+                'video_query': videoQuery,
+                'max_video_results': maxVideoResults,
+                'max_comment_results': maxCommentResults,
+            },
+            errors: {
+                422: `Validation Error`,
             },
         });
     }

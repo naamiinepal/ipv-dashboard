@@ -1,3 +1,4 @@
+import { memo } from "react";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -8,15 +9,17 @@ const DataSection = () => {
   const [tweetCount, setTweetCount] = useState(0);
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetCount(true).then((data) => {
-      setTweetCount(data.total);
-    });
+    const request = PseudoTweetsService.pseudoTweetsGetCount(true);
+    request.then(({ total }) => setTweetCount(total));
+    return () => {
+      request?.cancel();
+    };
   }, []);
 
   return (
     <Paper className="w-1/12 mt-2 p-2">
       <Title text="Data"></Title>
-      <div className=" text-primary">
+      <div className="text-primary">
         <CampaignIcon fontSize="large" /> <b>{tweetCount}</b>
         <div className="text-black">Tweets Analysed</div>
       </div>

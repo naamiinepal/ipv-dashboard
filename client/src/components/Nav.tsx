@@ -3,7 +3,6 @@ import type { To } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import ChildSafeNetLogo from "../images/childsafenetlogo.jpg";
 import NaamiiLogo from "../images/naamii-logo.png";
-import Name from "./Name";
 
 interface CustomNavLinkProps {
   to: To;
@@ -25,9 +24,11 @@ const Nav = () => (
   <div>
     <div className="border-t-2 bg-white px-16 py-2 flex items-center justify-between">
       <div className="font-bold w-20">
-        <img alt="TU-Logo" src={ChildSafeNetLogo} />
+        <img alt="ChildSafeNet-Logo" src={ChildSafeNetLogo} />
       </div>
-      <Name />
+      <div className="font-bold text-primary ml-3 text-2xl">
+        Online IPV Detection System
+      </div>
       <div className="w-14">
         <img alt="NAAMII-Logo" src={NaamiiLogo} />
       </div>

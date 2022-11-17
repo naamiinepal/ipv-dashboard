@@ -15,24 +15,20 @@ const signin =
     callback();
   };
 
-const signout = () => "Signed Out";
-
 interface AuthProviderValue {
   user: ReturnType<typeof loggedInOrNot>;
   signin: ReturnType<typeof signin> | (() => void);
-  signout: typeof signout;
 }
 
 const AuthContext = createContext<AuthProviderValue>({
   user: loggedInOrNot(),
   signin: () => {},
-  signout,
 });
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState(loggedInOrNot);
 
-  const value = { user, signin: signin(setUser), signout };
+  const value = { user, signin: signin(setUser) };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

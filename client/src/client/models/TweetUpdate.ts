@@ -5,5 +5,6 @@
 export type TweetUpdate = {
     is_abuse?: boolean;
     sexual_score?: number;
+    aspects_anno?: Array<Array<any>>;
 };
 

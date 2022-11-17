@@ -61,9 +61,7 @@ const Tweet = ({ tweet }: Props) => {
         )}
         <Button
           sx={{ marginLeft: "auto" }}
-          onClick={() => {
-            setIsEditOpen(true);
-          }}
+          onClick={() => setIsEditOpen(true)}
         >
           Edit
         </Button>

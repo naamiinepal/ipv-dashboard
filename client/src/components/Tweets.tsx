@@ -20,26 +20,31 @@ const Tweets = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    TweetsService.tweetsReadTweets(offset, 10, startDate, endDate).then(
-      (data) => {
-        // Removes duplicates
-        const tempDataList: TweetObj = {};
-        for (const tweet of data) {
-          tempDataList[tweet.id] = tweet;
-        }
-        setDataList((dl) => ({ ...dl, ...tempDataList }));
-      }
+    const request = TweetsService.tweetsReadTweets(
+      offset,
+      10,
+      startDate,
+      endDate
     );
+    request.then((data) => {
+      // Removes duplicates
+      const tempDataList: TweetObj = {};
+      for (const tweet of data) {
+        tempDataList[tweet.id] = tweet;
+      }
+      setDataList((dl) => ({ ...dl, ...tempDataList }));
+    });
+    return () => {
+      request?.cancel();
+    };
   }, [offset, startDate, endDate]);
-
-  const fetchData = () => setOffset(offset + 10);
 
   return (
     <div className="flex w-11/12 mx-auto">
       <div className="w-1/2 items-stretch flex flex-col justify-between overflow-y-auto">
         <InfiniteScroll
           dataLength={Object.keys(dataList).length} //This is important field to render the next data
-          next={fetchData}
+          next={() => setOffset(offset + 10)}
           height={384}
           hasMore={true}
           loader={<h4>Loading...</h4>}

@@ -28,15 +28,14 @@ const useTweetModifications = ({
     intent: "success",
   });
 
-  const handleClose = () => {
-    console.log("Closed");
-    setSnackOpen({ ...snackOpen, display: false });
-  };
+  const handleClose = () => setSnackOpen((snackOpen) => ({ ...snackOpen, display: false }));
 
   const handleChange = (
     value: Exclude<ValueOf<TweetUpdate>, undefined>,
     column: keyof TweetUpdate
-  ) => setCurrentRow({ ...currentRow, [column]: value });
+  ) => setCurrentRow((currentRow) => ({ ...currentRow, [column]: value }));
+
+
 
   const modifySubmit = () =>
     serviceFunc(row.id, getChangedColumns())

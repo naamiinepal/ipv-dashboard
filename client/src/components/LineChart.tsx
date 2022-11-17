@@ -104,18 +104,21 @@ const LineChart = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetPseudoOverview(
+    const request = PseudoTweetsService.pseudoTweetsGetPseudoOverview(
       true,
       startDate,
       endDate
-    ).then((data) => {
+    );
+    request.then((response_data) => {
       const dataArrays = {
-        is_abuse: data.map(({ is_abuse }) => is_abuse),
-        sexual_score: data.map(({ sexual_score }) => sexual_score ?? null),
+        is_abuse: response_data.map(({ is_abuse }) => is_abuse),
+        sexual_score: response_data.map(
+          ({ sexual_score }) => sexual_score ?? null
+        ),
       };
 
       const finalData = {
-        labels: data.map(({ created_date }) => created_date),
+        labels: response_data.map(({ created_date }) => created_date),
         datasets: predictionColumns.map(({ field, areaColor }) => ({
           data: dataArrays[field as keyof typeof dataArrays],
           label: toTitleCase(field),
@@ -125,11 +128,12 @@ const LineChart = () => {
         })),
       };
 
-      console.log(finalData);
-
       setData(finalData);
       setLoaded(true);
     });
+    return () => {
+      request?.cancel();
+    };
   }, [startDate, endDate]);
 
   return (

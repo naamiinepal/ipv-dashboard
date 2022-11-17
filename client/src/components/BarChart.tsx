@@ -32,21 +32,27 @@ const BarChart = () => {
   const { startDate, endDate } = useFilter();
 
   useEffect(() => {
-    PseudoTweetsService.pseudoTweetsGetCount(true, startDate, endDate).then(
-      (data) => {
-        setData({
-          labels: Object.keys(data).map(toTitleCase),
-          datasets: [
-            {
-              label: "Number of abusive texts in given range",
-              data: Object.values(data),
-              backgroundColor: "#247881",
-            },
-          ],
-        });
-        setLoaded(true);
-      }
+    const request = PseudoTweetsService.pseudoTweetsGetCount(
+      true,
+      startDate,
+      endDate
     );
+    request.then((response_data) => {
+      setData({
+        labels: Object.keys(response_data).map(toTitleCase),
+        datasets: [
+          {
+            label: "Number of abusive texts in given range",
+            data: Object.values(response_data),
+            backgroundColor: "#247881",
+          },
+        ],
+      });
+      setLoaded(true);
+    });
+    return () => {
+      request?.cancel();
+    };
   }, [startDate, endDate]);
 
   return (
