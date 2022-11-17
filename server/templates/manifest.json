@@ -1,25 +1,42 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
-    },
-    {
-      "src": "logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "src/images/childsafenetlogo.jpg": {
+    "file": "assets/childsafenetlogo.187966c1.jpg",
+    "src": "src/images/childsafenetlogo.jpg"
+  },
+  "src/images/naamii-logo.png": {
+    "file": "assets/naamii-logo.4e467dd1.png",
+    "src": "src/images/naamii-logo.png"
+  },
+  "src/svgs/nepal.svg": {
+    "file": "assets/nepal.54f81b62.svg",
+    "src": "src/svgs/nepal.svg"
+  },
+  "index.html": {
+    "file": "assets/index.cbe871b6.js",
+    "src": "index.html",
+    "isEntry": true,
+    "dynamicImports": [
+      "src/components/Admin/TweetCollectionAdminPanel.tsx"
+    ],
+    "css": [
+      "assets/index.c71e2f09.css"
+    ],
+    "assets": [
+      "assets/childsafenetlogo.187966c1.jpg",
+      "assets/naamii-logo.4e467dd1.png",
+      "assets/nepal.54f81b62.svg"
+    ]
+  },
+  "src/components/Admin/TweetCollectionAdminPanel.tsx": {
+    "file": "assets/TweetCollectionAdminPanel.6655d6b6.js",
+    "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "index.html"
+    ]
+  },
+  "index.css": {
+    "file": "assets/index.c71e2f09.css",
+    "src": "index.css"
+  }
 }
