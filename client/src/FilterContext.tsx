@@ -1,6 +1,6 @@
 import moment from "moment";
 import type { Dispatch, SetStateAction } from "react";
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
 interface FilterProviderValue {
   startDate: string;
@@ -19,22 +19,5 @@ const FilterContext = createContext<FilterProviderValue>({
   setEndDate: () => {},
 });
 
-interface Props {
-  children: React.ReactNode;
-}
-
-const FilterProvider = ({ children }: Props) => {
-  const [startDate, setStartDate] = useState(defaultStartDate);
-  const [endDate, setEndDate] = useState(defaultEndDate);
-
-  return (
-    <FilterContext.Provider
-      value={{ startDate, endDate, setStartDate, setEndDate }}
-    >
-      {children}
-    </FilterContext.Provider>
-  );
-};
-
-export default FilterProvider;
-export { FilterContext };
+export default FilterContext;
+export { defaultStartDate, defaultEndDate };

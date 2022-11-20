@@ -1,4 +1,10 @@
+import { OpenAPI } from "./client";
+
 type AccessToken = string | null;
+
+const getAccessToken = async () => sessionStorage.getItem("accessToken") || "";
+
+OpenAPI.TOKEN = getAccessToken;
 
 const loggedInOrNot = (provided_token: AccessToken = null) => {
   let accessToken: AccessToken;
@@ -43,7 +49,6 @@ const parseJwt = (token: string): JWT => {
     if (Date.now() > parsedJwt.exp * 1000) {
       throw new Error("Token expired");
     }
-
     return { ...parsedJwt, invalid: false };
   } catch {
     return { invalid: true };

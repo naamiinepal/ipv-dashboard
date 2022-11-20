@@ -18,7 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
 import { predictionColumns } from "../constants";
-import { FilterContext } from "../contexts/FilterProvider";
+import FilterContext from "../FilterContext";
 import { toTitleCase } from "../utility";
 import BarChart from "./BarChart";
 

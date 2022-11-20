@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CancelError, TweetRead, TweetsService } from "../client";
-import { FilterContext } from "../contexts/FilterProvider";
+import FilterContext from "../FilterContext";
 import Tweet from "./Tweet";
 import WordCloud from "./WordCloud";
 

@@ -1,9 +1,9 @@
 import { Card } from "@mui/material";
-import { useContext, useEffect, useState, memo } from "react";
+import { memo, useContext, useEffect, useState } from "react";
 import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
 import { CancelError, TweetsCommonsService } from "../client";
-import { FilterContext } from "../contexts/FilterProvider";
+import FilterContext from "../FilterContext";
 import Title from "./Title";
 
 const options: OptionsProp = {
