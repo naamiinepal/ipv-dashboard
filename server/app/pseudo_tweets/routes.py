@@ -127,13 +127,13 @@ def verify_pseudo_tweet(
         },
     )
 
-    # Save verified tweet and refresh it to get the new id
-    save_and_refresh(session, verified_tweet)
-
     # Delete pseudo tweet
     session.delete(db_pseudo_tweet)
 
-    return db_pseudo_tweet
+    # Save verified tweet and refresh it to get the new id
+    save_and_refresh(session, verified_tweet)
+
+    return verified_tweet
 
 
 @router.delete(
