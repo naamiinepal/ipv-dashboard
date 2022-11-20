@@ -12,7 +12,7 @@
     "src": "src/svgs/nepal.svg"
   },
   "index.html": {
-    "file": "assets/index.cbe871b6.js",
+    "file": "assets/index.9da24581.js",
     "src": "index.html",
     "isEntry": true,
     "dynamicImports": [
@@ -28,7 +28,7 @@
     ]
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.6655d6b6.js",
+    "file": "assets/TweetCollectionAdminPanel.b0e9e502.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
