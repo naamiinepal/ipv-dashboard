@@ -29,7 +29,7 @@ async def validation_exception_handler(request: Request, exc: ValidationError):
     return JSONResponse({"detail": exc.errors()}, status_code=422)
 
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 
 @app.on_event("startup")

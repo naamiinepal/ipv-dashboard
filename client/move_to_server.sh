@@ -1,7 +1,7 @@
 #! /bin/sh
 
 SERVER_DIR="../server"
-STATIC_DIR="$SERVER_DIR/static"
+STATIC_DIR="$SERVER_DIR/assets"
 TEMPLATES_DIR="$SERVER_DIR/templates"
 
 # Load outer files
