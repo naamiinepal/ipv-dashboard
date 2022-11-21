@@ -12,14 +12,19 @@
     "src": "src/svgs/nepal.svg"
   },
   "index.html": {
-    "file": "assets/index.9da24581.js",
+    "file": "assets/index.c2b73278.js",
     "src": "index.html",
     "isEntry": true,
+    "imports": [
+      "_react.4f0cd3ad.js",
+      "_mui.5c906c20.js",
+      "_chart_js.24276de0.js"
+    ],
     "dynamicImports": [
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
     ],
     "css": [
-      "assets/index.c71e2f09.css"
+      "assets/index.97c67fa9.css"
     ],
     "assets": [
       "assets/childsafenetlogo.187966c1.jpg",
@@ -27,16 +32,35 @@
       "assets/nepal.54f81b62.svg"
     ]
   },
+  "_react.4f0cd3ad.js": {
+    "file": "assets/react.4f0cd3ad.js"
+  },
+  "_mui.5c906c20.js": {
+    "file": "assets/mui.5c906c20.js",
+    "imports": [
+      "_react.4f0cd3ad.js"
+    ]
+  },
+  "_chart_js.24276de0.js": {
+    "file": "assets/chart_js.24276de0.js",
+    "imports": [
+      "_react.4f0cd3ad.js",
+      "_mui.5c906c20.js"
+    ]
+  },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.b0e9e502.js",
+    "file": "assets/TweetCollectionAdminPanel.51d28a3c.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "index.html"
+      "_react.4f0cd3ad.js",
+      "index.html",
+      "_mui.5c906c20.js",
+      "_chart_js.24276de0.js"
     ]
   },
   "index.css": {
-    "file": "assets/index.c71e2f09.css",
+    "file": "assets/index.97c67fa9.css",
     "src": "index.css"
   }
 }
