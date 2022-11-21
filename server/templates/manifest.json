@@ -1,4 +1,8 @@
 {
+  "src/svgs/nepal.svg": {
+    "file": "assets/nepal.54f81b62.svg",
+    "src": "src/svgs/nepal.svg"
+  },
   "src/images/childsafenetlogo.jpg": {
     "file": "assets/childsafenetlogo.187966c1.jpg",
     "src": "src/images/childsafenetlogo.jpg"
@@ -7,18 +11,14 @@
     "file": "assets/naamii-logo.4e467dd1.png",
     "src": "src/images/naamii-logo.png"
   },
-  "src/svgs/nepal.svg": {
-    "file": "assets/nepal.54f81b62.svg",
-    "src": "src/svgs/nepal.svg"
-  },
   "index.html": {
-    "file": "assets/index.c2b73278.js",
+    "file": "assets/index.6a4b6f66.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_react.4f0cd3ad.js",
-      "_mui.5c906c20.js",
-      "_chart_js.24276de0.js"
+      "_react.6fe56dd3.js",
+      "_mui.4fc2b5b1.js",
+      "_chart_js.2a3a23de.js"
     ],
     "dynamicImports": [
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
@@ -32,31 +32,31 @@
       "assets/nepal.54f81b62.svg"
     ]
   },
-  "_react.4f0cd3ad.js": {
-    "file": "assets/react.4f0cd3ad.js"
+  "_react.6fe56dd3.js": {
+    "file": "assets/react.6fe56dd3.js"
   },
-  "_mui.5c906c20.js": {
-    "file": "assets/mui.5c906c20.js",
+  "_mui.4fc2b5b1.js": {
+    "file": "assets/mui.4fc2b5b1.js",
     "imports": [
-      "_react.4f0cd3ad.js"
+      "_react.6fe56dd3.js"
     ]
   },
-  "_chart_js.24276de0.js": {
-    "file": "assets/chart_js.24276de0.js",
+  "_chart_js.2a3a23de.js": {
+    "file": "assets/chart_js.2a3a23de.js",
     "imports": [
-      "_react.4f0cd3ad.js",
-      "_mui.5c906c20.js"
+      "_react.6fe56dd3.js",
+      "_mui.4fc2b5b1.js"
     ]
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.51d28a3c.js",
+    "file": "assets/TweetCollectionAdminPanel.1a20c182.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
-      "_react.4f0cd3ad.js",
+      "_react.6fe56dd3.js",
       "index.html",
-      "_mui.5c906c20.js",
-      "_chart_js.24276de0.js"
+      "_mui.4fc2b5b1.js",
+      "_chart_js.2a3a23de.js"
     ]
   },
   "index.css": {
