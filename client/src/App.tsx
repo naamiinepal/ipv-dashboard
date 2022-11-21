@@ -2,7 +2,6 @@ import { lazy, Suspense, useState } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import Admin from "./components/Admin";
-import PhraseAnnotation from "./components/Admin/PhraseAnnotation";
 import EndUser from "./components/EndUser";
 import Login from "./components/Login";
 import NoMatch from "./components/NoMatch";
@@ -52,10 +51,6 @@ const App = () => {
                   <TweetCollectionAdminPanel action="modify" />
                 </Suspense>
               }
-            />
-            <Route
-              path="phrase"
-              element={<PhraseAnnotation action="verify" />}
             />
           </Route>
           <Route path="*" element={<NoMatch />} />

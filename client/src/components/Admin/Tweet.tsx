@@ -1,41 +1,94 @@
 import {
-  Alert,
   Button,
   Checkbox,
-  Snackbar,
   TableCell,
   TableRow,
   TextField,
 } from "@mui/material";
-import { useState } from "react";
-import type { TweetRead } from "../../client";
-import { PseudoTweetsService, TweetsService } from "../../client";
-import { useTweetModifications } from "../../hooks";
+import { useMemo, useReducer } from "react";
+import type { TweetRead, TweetUpdate } from "../../client";
+import { PseudoTweetsService } from "../../client";
+import type { ValueOf } from "../../utility";
+import { nestedArraysEqual } from "../../utility";
+import annotationsReducer, {
+  ActionEnum,
+  defaultSingleAnnotation,
+} from "./AnnotationReducer";
+import ModifierButton from "./ModifierButton";
+import TweetTextAnno from "./TweetTextAnno";
 
-interface Props {
+interface TweetProps {
   row: TweetRead;
   action: "verify" | "modify";
 }
 
-const Tweet = ({ row, action }: Props) => {
-  const {
-    getChangedColumns,
-    currentRow,
-    handleChange,
-    snackOpen,
-    handleClose,
-    modifySubmit,
-  } = useTweetModifications({
-    row,
-    serviceFunc: TweetsService.tweetsUpdateTweet,
+// Compare two arrays of (start, end, aspect) arrays
+const compareFn = (
+  [startA, endA, aspectA]: number[],
+  [startB, endB, aspectB]: number[]
+) => startA - startB || endA - endB || aspectA - aspectB;
+
+const Tweet = ({ row, action }: TweetProps) => {
+  const [state, dispatch] = useReducer(annotationsReducer, {
+    ...row,
+    isVerified: false,
+    aspects_anno:
+      row.aspects_anno?.map(([start, end, aspect]) => ({
+        ...defaultSingleAnnotation,
+        start,
+        end,
+        aspect,
+      })) || [],
   });
-  const [isVerified, setIsVerified] = useState(false);
+
+  const handleChange = (
+    value: NonNullable<ValueOf<TweetUpdate>>,
+    column: Exclude<keyof TweetUpdate, "aspects_anno">
+  ) =>
+    dispatch({
+      type: ActionEnum.ChangeSentenceAnnotaion,
+      payload: { value, column },
+    });
+
+  const getChangedColumns = () => {
+    const toSubmit: TweetUpdate = {};
+
+    if (row.is_abuse !== state.is_abuse) {
+      toSubmit.is_abuse = state.is_abuse;
+    }
+    if (row.sexual_score !== state.sexual_score) {
+      toSubmit.sexual_score = state.sexual_score;
+    }
+
+    const aspects_anno = state.aspects_anno
+      .map(({ start, end, aspect }) => [start, end, aspect])
+      .sort(compareFn);
+
+    const oldAspectsAnno: number[][] = [...(row.aspects_anno || [])].sort(
+      compareFn
+    );
+
+    if (!nestedArraysEqual(aspects_anno, oldAspectsAnno)) {
+      toSubmit.aspects_anno = aspects_anno;
+    }
+
+    return toSubmit;
+  };
+
+  const isPhraseAnnotationValid = useMemo(
+    () => state.aspects_anno.every(({ hasErrorOccurred }) => !hasErrorOccurred),
+    [state.aspects_anno]
+  );
 
   const verifySubmit = () => {
-    PseudoTweetsService.pseudoTweetsVerifyPseudoTweet(
-      row.id,
-      getChangedColumns()
-    ).then(() => setIsVerified(true));
+    if (isPhraseAnnotationValid) {
+      PseudoTweetsService.pseudoTweetsVerifyPseudoTweet(
+        row.id,
+        getChangedColumns()
+      ).then(() => dispatch({ type: ActionEnum.Verify }));
+    } else {
+      console.error("Error in phrase annotaion");
+    }
   };
 
   return (
@@ -45,12 +98,17 @@ const Tweet = ({ row, action }: Props) => {
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
-      <TableCell sx={{ fontSize: "1rem" }} align="left">
-        {row.text}
+      <TableCell sx={{ fontSize: "1rem", paddingTop: "0px" }} align="left">
+        <p className="mb-1.5">{row.text}</p>
+        <TweetTextAnno
+          aspects_anno={state.aspects_anno}
+          dispatch={dispatch}
+          isDisabled={action === "verify" && state.isVerified}
+        />
       </TableCell>
       <TableCell align="center">
         <Checkbox
-          checked={currentRow.is_abuse}
+          checked={state.is_abuse}
           onChange={({ target: { checked } }) => {
             handleChange(checked, "is_abuse");
           }}
@@ -59,7 +117,7 @@ const Tweet = ({ row, action }: Props) => {
       <TableCell align="center">
         <TextField
           inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
-          value={currentRow.sexual_score}
+          value={state.sexual_score}
           onChange={({ target: { value } }) => {
             handleChange(parseInt(value), "sexual_score");
           }}
@@ -68,37 +126,27 @@ const Tweet = ({ row, action }: Props) => {
       </TableCell>
       <TableCell align="right">
         {action === "modify" ? (
-          <>
-            <Snackbar
-              open={snackOpen.display}
-              autoHideDuration={3000}
-              onClose={handleClose}
-            >
-              <Alert
-                onClose={handleClose}
-                severity={snackOpen.intent}
-                sx={{ width: "100%" }}
-              >
-                {snackOpen.message}
-              </Alert>
-            </Snackbar>
-            <Button variant="contained" onClick={modifySubmit}>
-              Modify
-            </Button>
-          </>
+          <ModifierButton
+            tweetId={row.id}
+            getChangedColumns={getChangedColumns}
+            disabled={!isPhraseAnnotationValid}
+          />
         ) : (
           <>
-            {isVerified ? (
+            {state.isVerified ? (
               <Button
                 color="success"
-                disabled={action === "verify"}
-                // variant="contained"
+                disabled={action === "verify" || !isPhraseAnnotationValid}
                 onClick={verifySubmit}
               >
                 Verified
               </Button>
             ) : (
-              <Button variant="contained" onClick={verifySubmit}>
+              <Button
+                variant="contained"
+                onClick={verifySubmit}
+                disabled={!isPhraseAnnotationValid}
+              >
                 Verify
               </Button>
             )}

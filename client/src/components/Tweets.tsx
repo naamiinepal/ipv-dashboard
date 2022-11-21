@@ -15,7 +15,7 @@ const Tweets = () => {
   const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
-    setDataList([]);
+    setDataList({});
   }, [startDate, endDate]);
 
   useEffect(() => {

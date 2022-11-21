@@ -1,20 +1,32 @@
+import type { TweetRead, TweetUpdate } from "../../client";
+import type { ValueOf } from "../../utility";
+
 enum ActionEnum {
-  New,
+  NewPhrase,
   ChangeStart,
   ChangeEnd,
   ChangeAspect,
-  Delete,
+  DeletePhrase,
+  Verify,
+  ChangeSentenceAnnotaion,
 }
-
 type ActionInterface =
-  | { type: ActionEnum.New }
+  | { type: ActionEnum.NewPhrase }
   | { type: ActionEnum.ChangeStart; payload: { index: number; start: number } }
   | { type: ActionEnum.ChangeEnd; payload: { index: number; end: number } }
   | {
       type: ActionEnum.ChangeAspect;
       payload: { index: number; aspect: number };
     }
-  | { type: ActionEnum.Delete; payload: { index: number } };
+  | { type: ActionEnum.DeletePhrase; payload: { index: number } }
+  | { type: ActionEnum.Verify }
+  | {
+      type: ActionEnum.ChangeSentenceAnnotaion;
+      payload: {
+        value: NonNullable<ValueOf<TweetUpdate>>;
+        column: Exclude<keyof TweetUpdate, "aspects_anno">;
+      };
+    };
 
 interface SingleAnnotationType {
   start: number;
@@ -25,7 +37,10 @@ interface SingleAnnotationType {
   aspect: number;
 }
 
-type AnnotationType = SingleAnnotationType[];
+interface TweetStateInterface extends Omit<TweetRead, "aspects_anno"> {
+  isVerified: boolean;
+  aspects_anno: SingleAnnotationType[];
+}
 
 const Aspects = [
   "others",
@@ -48,7 +63,6 @@ const defaultSingleAnnotation: SingleAnnotationType = {
 
 const getUpdatedSingleAnno = (
   currentSingleAnno: SingleAnnotationType,
-  index: number,
   start: number,
   end: number
 ): SingleAnnotationType => {
@@ -69,62 +83,76 @@ const getUpdatedSingleAnno = (
 };
 
 const annotationsReducer = (
-  state: AnnotationType,
+  state: TweetStateInterface,
   action: ActionInterface
-): AnnotationType => {
+): TweetStateInterface => {
   switch (action.type) {
-    case ActionEnum.New:
-      return [...state, defaultSingleAnnotation];
+    case ActionEnum.NewPhrase:
+      return {
+        ...state,
+        aspects_anno: [...state.aspects_anno, defaultSingleAnnotation],
+      };
     case ActionEnum.ChangeStart: {
-      const { index, start } = action.payload!;
+      const { index, start } = action.payload;
 
-      const newState = [...state];
-      const currentSingleAnno = newState[index];
+      const aspects_anno = [...state.aspects_anno];
+      const currentSingleAnno = aspects_anno[index];
 
       const newSingleAnno = getUpdatedSingleAnno(
         currentSingleAnno,
-        index,
         start,
         currentSingleAnno.end
       );
 
-      newState[index] = newSingleAnno;
-      return newState;
+      aspects_anno[index] = newSingleAnno;
+      return { ...state, aspects_anno };
     }
     case ActionEnum.ChangeEnd: {
-      const { index, end } = action.payload!;
+      const { index, end } = action.payload;
 
-      const newState = [...state];
-      const currentSingleAnno = newState[index];
+      const aspects_anno = [...state.aspects_anno];
+      const currentSingleAnno = aspects_anno[index];
 
       const newSingleAnno = getUpdatedSingleAnno(
         currentSingleAnno,
-        index,
         currentSingleAnno.start,
         end
       );
 
-      newState[index] = newSingleAnno;
-      return newState;
+      aspects_anno[index] = newSingleAnno;
+      return { ...state, aspects_anno };
     }
     case ActionEnum.ChangeAspect: {
-      const { index, aspect } = action.payload!;
-      const newState = [...state];
-      const currentSingleAnno = newState[index];
+      const { index, aspect } = action.payload;
 
-      newState[index] = { ...currentSingleAnno, aspect };
-      return newState;
+      const aspects_anno = [...state.aspects_anno];
+      const currentSingleAnno = aspects_anno[index];
+
+      aspects_anno[index] = { ...currentSingleAnno, aspect };
+      return { ...state, aspects_anno };
     }
-    case ActionEnum.Delete: {
-      const { index } = action.payload!;
-      const newState = [...state];
-      newState.splice(index, 1);
-      return newState;
+    case ActionEnum.DeletePhrase: {
+      const { index } = action.payload;
+      const aspects_anno = [...state.aspects_anno];
+      aspects_anno.splice(index, 1);
+      return { ...state, aspects_anno };
     }
+    case ActionEnum.Verify:
+      return { ...state, isVerified: true };
+    case ActionEnum.ChangeSentenceAnnotaion:
+      return {
+        ...state,
+        [action.payload.column]: action.payload.value,
+      };
     default:
       return state;
   }
 };
 
 export default annotationsReducer;
-export { Aspects, ActionEnum };
+export { Aspects, ActionEnum, defaultSingleAnnotation };
+export type {
+  TweetStateInterface as TweetState,
+  SingleAnnotationType,
+  ActionInterface,
+};

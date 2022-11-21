@@ -39,8 +39,9 @@ const FilteredContainer = () => {
   const [selectedEndDate, setSelectedEndDate] = useState(new Date(endDate));
 
   const submitFilter = () => {
-    setStartDate(moment(selectedStartDate).format("YYYY-MM-DD"));
-    setEndDate(moment(selectedEndDate).format("YYYY-MM-DD"));
+    setStartDate &&
+      setStartDate(moment(selectedStartDate).format("YYYY-MM-DD"));
+    setEndDate && setEndDate(moment(selectedEndDate).format("YYYY-MM-DD"));
   };
 
   return (

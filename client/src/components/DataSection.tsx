@@ -1,4 +1,3 @@
-import { memo } from "react";
 import CampaignIcon from "@mui/icons-material/Campaign";
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";

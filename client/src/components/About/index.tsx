@@ -12,9 +12,9 @@ const About = () => (
         extensive data for Natural Language Processing tasks, many of which
         solve some of the contemporary issues of the world. An abundance of
         these NLP tasks focuses on widely spoken languages like English.
-        Moreover, researchers haven't exploited the true potential of NLP and
-        the available data to extract a solution for prominent issues like the
-        COVID-19 epidemic. We, through this project, present a COVID tweets
+        Moreover, researchers haven&apos;t exploited the true potential of NLP
+        and the available data to extract a solution for prominent issues like
+        the COVID-19 epidemic. We, through this project, present a COVID tweets
         analysis platform that allows health decision-makers to view a real-time
         analysis of narratives of tweets, particularly in Nepali and Devanagari
         scripts. Our method enables stakeholders to look into the public

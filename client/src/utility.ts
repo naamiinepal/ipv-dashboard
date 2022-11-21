@@ -64,4 +64,31 @@ const toTitleCase = (str: string) =>
 
 const signout = () => sessionStorage.removeItem("accessToken");
 
-export { loggedInOrNot, parseJwt, toTitleCase, signout };
+const arraysEqual = (a: number[], b: number[]) => {
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  return true;
+};
+
+const nestedArraysEqual = (arr1: number[][], arr2: number[][]) => {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; ++i) {
+    if (!arraysEqual(arr1[i], arr2[i])) return true;
+  }
+  return true;
+};
+
+type ValueOf<T> = T[keyof T];
+
+export {
+  loggedInOrNot,
+  parseJwt,
+  toTitleCase,
+  signout,
+  arraysEqual,
+  nestedArraysEqual,
+};
+
+export type { ValueOf };
