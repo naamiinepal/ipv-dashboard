@@ -11,8 +11,12 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ["react", "react-dom"],
-          mui: ["@mui/material", "@mui/icons-material", "@mui/x-date-pickers"],
-          chart_js: ["react-chartjs-2", "chartjs-plugin-zoom"],
+          react_router: ["react-router", "react-router-dom"],
+          mui_material: ["@mui/material"],
+          mui_extras: ["@mui/icons-material", "@mui/x-date-pickers", "moment"],
+          chart_js: ["react-chartjs-2"],
+          chart_js_extras: ["chartjs-plugin-zoom"],
+          client: ["./src/client"],
         },
       },
     },
