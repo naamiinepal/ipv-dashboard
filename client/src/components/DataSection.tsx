@@ -22,12 +22,14 @@ const DataSection = () => {
   }, []);
 
   return (
-    <Paper className="w-1/12 mt-2 p-2">
-      <Title element={<h2>Data</h2>} />
-      <div className="text-primary">
-        <CampaignIcon fontSize="large" />{" "}
-        <b>{tweetCount.toLocaleString("hi")}</b>
-        <div className="text-black">Tweets Analysed</div>
+    <Paper className="w-1.5/12 mt-2 p-2">
+      <div className="mt-3">
+        <Title element={<h2>Data</h2>} />
+        <div className="text-primary mt-3">
+          <CampaignIcon fontSize="large" />{" "}
+          <b>{tweetCount.toLocaleString("hi")}</b>
+          <div className="text-black">Tweets Analysed</div>
+        </div>
       </div>
     </Paper>
   );

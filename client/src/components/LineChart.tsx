@@ -51,10 +51,13 @@ const options: ChartOptions<"line"> = {
     zoom: {
       zoom: {
         wheel: {
-          enabled: false,
+          enabled: true,
         },
         drag: {
-          enabled: false,
+          enabled: true,
+        },
+        pinch: {
+          enabled: true,
         },
         mode: "x",
       },
@@ -71,7 +74,7 @@ const options: ChartOptions<"line"> = {
       // stacked: true,
       title: {
         display: true,
-        text: "Tweet Count per day",
+        text: "Tweet Count and Average Sexual Score per day ",
       },
     },
   },
@@ -95,12 +98,19 @@ const optionsPie: ChartOptions<"pie"> = {
   },
 };
 
+interface LineChartStateInterface {
+  data: ChartData<"line">;
+  loaded: boolean;
+}
+
 const LineChart = () => {
-  const [data, setData] = useState<ChartData<"line">>({
-    labels: [],
-    datasets: [],
+  const [state, setState] = useState<LineChartStateInterface>({
+    data: {
+      labels: [],
+      datasets: [],
+    },
+    loaded: false,
   });
-  const [loaded, setLoaded] = useState(false);
   const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
@@ -118,19 +128,18 @@ const LineChart = () => {
           ),
         };
 
-        const finalData = {
+        const data: ChartData<"line"> = {
           labels: response_data.map(({ created_date }) => created_date),
           datasets: predictionColumns.map(({ field, areaColor }) => ({
             data: dataArrays[field as keyof typeof dataArrays],
             label: toTitleCase(field),
-            fill: true,
             borderColor: areaColor,
             backgroundColor: areaColor,
+            cubicInterpolationMode: "monotone",
+            tension: 0.4,
           })),
         };
-
-        setData(finalData);
-        setLoaded(true);
+        setState({ data, loaded: true });
       })
       .catch((err) => {
         if (err instanceof CancelError) {
@@ -144,10 +153,10 @@ const LineChart = () => {
 
   return (
     <div className="flex w-11/12 my-3 mx-16">
-      {loaded && (
+      {state.loaded && (
         <Card className="flex-1">
           {/* <Button onClick={resetZoom}>Zoom Out</Button> */}
-          <Line options={options} data={data} />
+          <Line options={options} data={state.data} />
         </Card>
       )}
       <BarChart />

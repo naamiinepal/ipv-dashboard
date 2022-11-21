@@ -64,7 +64,7 @@ const WordCloud = () => {
     <div>
       {loaded && (
         <Card className="h-96 ml-2">
-          <Title element={<h2>Trending Words</h2>} />
+          <Title element={<h2 className="ml-3">Trending Words</h2>} />
           <ReactWordcloud options={options} words={words} />
         </Card>
       )}
