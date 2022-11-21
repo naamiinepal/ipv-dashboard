@@ -24,15 +24,19 @@ const options: OptionsProp = {
 
 type Response = [string, number][];
 
-interface Word {
-  text: string;
-  value: number;
+interface WordCloudStateInterface {
+  words: {
+    text: string;
+    value: number;
+  }[];
+  loaded: boolean;
 }
 
 const WordCloud = () => {
-  const [words, setWords] = useState<Word[]>([]);
-  // const [counts, setCounts] = useState([]);
-  const [loaded, setLoaded] = useState(false);
+  const [state, setState] = useState<WordCloudStateInterface>({
+    words: [],
+    loaded: false,
+  });
 
   const { startDate, endDate } = useContext(FilterContext);
 
@@ -43,12 +47,11 @@ const WordCloud = () => {
     );
     request
       .then((data) => {
-        const wordCount = (data as Response).map(([text, value]) => ({
+        const words = (data as Response).map(([text, value]) => ({
           text,
           value,
         }));
-        setWords(wordCount);
-        setLoaded(true);
+        setState({ words, loaded: true });
       })
       .catch((err) => {
         if (err instanceof CancelError) {
@@ -62,10 +65,10 @@ const WordCloud = () => {
 
   return (
     <div>
-      {loaded && (
+      {state.loaded && (
         <Card className="h-96 ml-2">
           <Title element={<h2 className="ml-3">Trending Words</h2>} />
-          <ReactWordcloud options={options} words={words} />
+          <ReactWordcloud options={options} words={state.words} />
         </Card>
       )}
     </div>

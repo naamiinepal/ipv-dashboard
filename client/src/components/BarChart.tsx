@@ -23,12 +23,20 @@ const optionsBar: ChartOptions<"bar"> = {
   },
 };
 
+interface BarChartStateInterface {
+  data: ChartData<"bar">;
+  loaded: boolean;
+}
+
 const BarChart = () => {
-  const [data, setData] = useState<ChartData<"bar">>({
-    labels: [],
-    datasets: [],
+  const [state, setState] = useState<BarChartStateInterface>({
+    data: {
+      labels: [],
+      datasets: [],
+    },
+    loaded: false,
   });
-  const [loaded, setLoaded] = useState(false);
+
   const { startDate, endDate } = useContext(FilterContext);
 
   useEffect(() => {
@@ -39,7 +47,7 @@ const BarChart = () => {
     );
     request
       .then((response_data) => {
-        setData({
+        const data = {
           labels: Object.keys(response_data).map(toTitleCase),
           datasets: [
             {
@@ -48,8 +56,8 @@ const BarChart = () => {
               backgroundColor: "#247881",
             },
           ],
-        });
-        setLoaded(true);
+        };
+        setState({ data, loaded: true });
       })
       .catch((err) => {
         if (err instanceof CancelError) {
@@ -63,9 +71,9 @@ const BarChart = () => {
 
   return (
     <>
-      {loaded && (
+      {state.loaded && (
         <Card className="w-1/3 ml-3">
-          <Bar options={optionsBar} data={data} />
+          <Bar options={optionsBar} data={state.data} />
         </Card>
       )}
     </>
