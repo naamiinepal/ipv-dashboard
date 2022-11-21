@@ -25,7 +25,8 @@ const DataSection = () => {
     <Paper className="w-1/12 mt-2 p-2">
       <Title element={<h2>Data</h2>} />
       <div className="text-primary">
-        <CampaignIcon fontSize="large" /> <b>{tweetCount}</b>
+        <CampaignIcon fontSize="large" />{" "}
+        <b>{tweetCount.toLocaleString("hi")}</b>
         <div className="text-black">Tweets Analysed</div>
       </div>
     </Paper>
