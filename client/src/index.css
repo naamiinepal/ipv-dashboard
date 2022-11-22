@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* For highlighting the phrases */
+.highlighted {
+  background-color: yellow;
+}

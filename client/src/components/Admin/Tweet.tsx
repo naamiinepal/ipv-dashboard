@@ -18,8 +18,6 @@ import ModifierButton from "./ModifierButton";
 import TweetTextAnno from "./TweetTextAnno";
 import { InteractiveHighlighter } from "react-interactive-highlighter";
 
-import "./highlight.css";
-
 interface TweetProps {
   row: TweetRead;
   action: "verify" | "modify";
