@@ -31,7 +31,7 @@ const Login = () => {
 
   return (
     <Card className="w-1/3 mx-auto mt-10 p-4">
-      <DialogTitle className="text-center">EpiSuS Login</DialogTitle>
+      <DialogTitle className="text-center">Login</DialogTitle>
       <form className=" flex flex-col items-center" onSubmit={handleSubmit}>
         <div className="my-2">
           <TextField
