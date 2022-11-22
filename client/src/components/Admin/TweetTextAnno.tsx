@@ -11,12 +11,14 @@ interface TweetTextInterface {
   aspects_anno: SingleAnnotationType[];
   dispatch: Dispatch<ActionInterface>;
   isDisabled: boolean;
+  textLength: number;
 }
 
 const TweetTextAnno = ({
   aspects_anno,
   dispatch,
   isDisabled,
+  textLength,
 }: TweetTextInterface) => {
   return (
     <>
@@ -34,25 +36,27 @@ const TweetTextAnno = ({
         ) => (
           <div key={index}>
             <TextField
-              inputProps={{ inputMode: "numeric", step: 1 }}
+              inputProps={{ min: 0, max: end - 1 < 0 ? 0 : end - 1 }}
+              type="number"
               value={start}
               error={hasErrorOccurred}
               onChange={({ target: { value } }) =>
                 dispatch({
                   type: ActionEnum.ChangeStart,
-                  payload: { index, start: parseInt(value) },
+                  payload: { index, start: parseInt(value) || 0 },
                 })
               }
               helperText={startHelperText}
             />
             <TextField
-              inputProps={{ inputMode: "numeric", step: 1 }}
+              inputProps={{ min: start + 1, max: textLength }}
+              type="number"
               value={end}
               error={hasErrorOccurred}
               onChange={({ target: { value } }) =>
                 dispatch({
                   type: ActionEnum.ChangeEnd,
-                  payload: { index, end: parseInt(value) },
+                  payload: { index, end: parseInt(value) || 0 },
                 })
               }
               helperText={endHelperText}

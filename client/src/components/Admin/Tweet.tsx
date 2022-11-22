@@ -16,6 +16,9 @@ import annotationsReducer, {
 } from "./AnnotationReducer";
 import ModifierButton from "./ModifierButton";
 import TweetTextAnno from "./TweetTextAnno";
+import { InteractiveHighlighter } from "react-interactive-highlighter";
+
+import "./highlight.css";
 
 interface TweetProps {
   row: TweetRead;
@@ -80,10 +83,19 @@ const Tweet = ({ row, action }: TweetProps) => {
     [state.aspects_anno]
   );
 
+  const highlights = useMemo(
+    () =>
+      state.aspects_anno.map(({ start, end }) => ({
+        startIndex: start,
+        numChars: end - start,
+      })),
+    [state.aspects_anno]
+  );
+
   const verifySubmit = () => {
     if (isPhraseAnnotationValid) {
       PseudoTweetsService.pseudoTweetsVerifyPseudoTweet(
-        row.id,
+        state.id,
         getChangedColumns()
       ).then(() => dispatch({ type: ActionEnum.Verify }));
     } else {
@@ -93,17 +105,21 @@ const Tweet = ({ row, action }: TweetProps) => {
 
   return (
     <TableRow
-      key={row.id}
       sx={{
         "&:last-child td, &:last-child th": { border: 0 },
       }}
     >
       <TableCell sx={{ fontSize: "1rem", paddingTop: "0px" }} align="left">
-        <p className="mb-1.5">{row.text}</p>
+        <InteractiveHighlighter
+          text={state.text}
+          highlights={highlights}
+          customClass="highlighted"
+        />
         <TweetTextAnno
           aspects_anno={state.aspects_anno}
           dispatch={dispatch}
           isDisabled={action === "verify" && state.isVerified}
+          textLength={state.text.length}
         />
       </TableCell>
       <TableCell align="center">
@@ -116,18 +132,19 @@ const Tweet = ({ row, action }: TweetProps) => {
       </TableCell>
       <TableCell align="center">
         <TextField
-          inputProps={{ inputMode: "numeric", pattern: "[1-9]|10" }}
+          inputProps={{ min: 1, max: 10 }}
+          type="number"
           value={state.sexual_score}
-          onChange={({ target: { value } }) => {
-            handleChange(parseInt(value), "sexual_score");
-          }}
+          onChange={({ target: { value } }) =>
+            handleChange(parseInt(value) || 1, "sexual_score")
+          }
           helperText="1-10"
         />
       </TableCell>
       <TableCell align="right">
         {action === "modify" ? (
           <ModifierButton
-            tweetId={row.id}
+            tweetId={state.id}
             getChangedColumns={getChangedColumns}
             disabled={!isPhraseAnnotationValid}
           />
