@@ -1,13 +1,15 @@
+from ast import literal_eval
 from csv import DictReader
 from datetime import datetime
 from random import randrange
-from typing import List, Mapping, Union
+from typing import List, Mapping, Tuple, Union
 
 from sqlmodel import Session, select
 
 from app.auth.models import User
 from app.database import get_session
 from app.tweets_common.models import Tweet
+from app.tweets_common.types import AspectEnum
 
 
 def get_random_time():
@@ -30,7 +32,7 @@ def get_random_time():
 
 
 def load_database(write_session: Session):
-    with open("utils/sent_combined.csv") as csvfile:
+    with open("utils/labeled_sent_word_combined.csv") as csvfile:
         tweets: List[Tweet] = []
         username2id: Mapping[str, int] = {}
 
@@ -68,7 +70,23 @@ def load_database(write_session: Session):
                 # And update the cache
                 username2id[verifier_username] = verifier_id
 
-            username = row.get("username", "John Doe")
+            username = row["username"]
+
+            # If username is empty in the csv, use a random one
+            if not username:
+                username = "John Doe"
+
+            aspects_anno = row["aspects_anno"]
+
+            # If the aspects_anno is empty in the csv, use None
+            # Else evaluate the expression to get the list of aspects
+            if not aspects_anno:
+                aspects_anno = None
+            else:
+                aspects_anno: List[Tuple[int, int, str]] = literal_eval(aspects_anno)
+
+                for i, (start, end, aspect) in enumerate(aspects_anno):
+                    aspects_anno[i] = (start, end, AspectEnum[aspect.lower()])
 
             sexual_score = row["sexual_score"]
 
@@ -76,13 +94,16 @@ def load_database(write_session: Session):
                 **row,
                 "is_abuse": bool(float(is_abuse)),
                 "sexual_score": int(float(sexual_score)) if sexual_score else None,
-                "username": username,
                 "created_at": created_at,
+                "username": username,
+                "aspects_anno": aspects_anno,
                 "verifier_id": verifier_id,
                 "verified_at": get_random_time(),
             }
 
-            tweets.append(Tweet(**kwargs))
+            tweet = Tweet(**kwargs)
+
+            tweets.append(tweet)
 
     write_session.bulk_save_objects(tweets)
     write_session.commit()

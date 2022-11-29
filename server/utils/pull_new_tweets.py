@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Set
 
 import pandas as pd
@@ -5,30 +6,23 @@ from sqlmodel import select, union
 
 from app.database import get_session
 from app.tweets_common.models import PseudoTweet, Tweet
-
-from datetime import date
-
 from utils.load_pseudo_labels import load_database
 
 predictions = pd.read_csv(
-    "/mnt/SSD0/rabin/IPV-detection/lightning_modules/"
-    "datasets/raw/combined_with_info.csv"
+    "/mnt/SSD0/rabin/IPV-detection/lightning_modules/datasets/word_sent_combined.csv"
 )
 
-all_tweets = set(map(tuple, predictions[["text", "created_at"]].values))
+all_tweets = set(predictions[["text", "created_at"]].itertuples(index=False))
 
 session = next(get_session())
 
 existing_tweets: Set[str] = set(
-    map(
-        tuple,
-        session.exec(
-            union(
-                select(Tweet.text, Tweet.created_at),
-                select(PseudoTweet.text, PseudoTweet.created_at),
-            ).limit(10)
-        ).all(),
-    )
+    session.exec(
+        union(
+            select(Tweet.text, Tweet.created_at),
+            select(PseudoTweet.text, PseudoTweet.created_at),
+        )
+    ).all()
 )
 
 new_tweets = all_tweets - existing_tweets

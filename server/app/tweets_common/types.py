@@ -15,9 +15,12 @@ class AspectEnum(IntEnum):
     profanity = 1
     physical_threat = 2
     rape_threat = 3
-    ethnic_racism = 4
-    religion_racism = 5
-    sexism = 6
+    general_threat = 4
+    ethnic_violence = 5
+    religion_violence = 6
+    religion_racism = 7
+    sexism = 8
+    character_assasination = 9
 
 
 AspectAnnoType = List[Tuple[NonNegativeInt, PositiveInt, AspectEnum]]
