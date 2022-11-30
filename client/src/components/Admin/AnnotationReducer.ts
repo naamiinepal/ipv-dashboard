@@ -47,9 +47,12 @@ const Aspects = [
   "profanity",
   "physical_threat",
   "rape_threat",
-  "ethnic_racism",
+  "general_threat",
+  "ethnic_violence",
+  "religion_violence",
   "religion_racism",
   "sexism",
+  "character_assasination",
 ];
 
 const defaultSingleAnnotation: SingleAnnotationType = {
