@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from fastapi import Depends, HTTPException
 from pydantic import NonNegativeInt, PositiveInt, conint
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select, text
 
 from ..auth.dependencies import get_current_user
 from ..auth.models import User
@@ -15,7 +15,13 @@ from ..tweets_common.helper_functions import (
     get_filtered_count,
     get_selection_filter,
 )
-from ..tweets_common.models import Overview, Tweet, TweetCount, TweetRead, TweetUpdate
+from ..tweets_common.models import (
+    Overview,
+    Tweet,
+    TweetCount,
+    TweetRead,
+    TweetUpdate,
+)
 from . import router
 
 
@@ -29,8 +35,20 @@ def get_tweet_overview(
     """
     Get overview by grouping on created_at
     """
+    SentenceModel = Tweet
 
-    return get_db_overview(Tweet, start_date, end_date, session)
+    PhraseModel = (
+        (
+            select(
+                func.unnest(text("tweet.aspects_anno[:][3:]")).label("asp"),
+                Tweet.created_at,
+            ),
+        )
+        .subquery()
+        .c
+    )
+
+    return get_db_overview(SentenceModel, PhraseModel, start_date, end_date, session)
 
 
 @router.get("/count", response_model=TweetCount)

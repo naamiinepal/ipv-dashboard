@@ -3,7 +3,7 @@ from typing import List, Optional
 
 from fastapi import Depends
 from pydantic import NonNegativeInt, PositiveInt, conint
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select, text, union_all
 
 from ..auth.dependencies import get_current_user, get_username_from_token
 from ..auth.models import User
@@ -38,10 +38,26 @@ def get_pseudo_overview(
     """
     Get overview by grouping on created_at
     """
+    phrase_selection = select(
+        func.unnest(text("pseudo_tweet.aspects_anno[:][3:]")).label("asp"),
+        PseudoTweet.created_at,
+    )
 
-    Model = get_combined_model() if all else PseudoTweet
+    if all:
+        SentenceModel = get_combined_model()
+        phrase_selection = union_all(
+            select(
+                func.unnest(text("tweet.aspects_anno[:][3:]")).label("asp"),
+                Tweet.created_at,
+            ),
+            phrase_selection,
+        )
+    else:
+        SentenceModel = PseudoTweet
 
-    return get_db_overview(Model, start_date, end_date, session)
+    PhraseModel = phrase_selection.subquery().c
+
+    return get_db_overview(SentenceModel, PhraseModel, start_date, end_date, session)
 
 
 @router.get("/count", response_model=TweetCount)

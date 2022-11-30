@@ -1,5 +1,5 @@
 from datetime import date, datetime, timezone
-from typing import TYPE_CHECKING, List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Mapping, Optional, Tuple
 
 from pydantic import BaseModel, PositiveInt, confloat, validator
 from sqlmodel import (
@@ -13,7 +13,7 @@ from sqlmodel import (
     func,
 )
 
-from .types import AspectAnnoType, sexual_score_int, sexual_score_kwargs
+from .types import AspectAnnoType, AspectEnum, sexual_score_int, sexual_score_kwargs
 
 if TYPE_CHECKING:
     from app.auth.models import User
@@ -33,6 +33,8 @@ class Overview(BaseModel):
     # Can be float due to averaging
     sexual_score: Optional[confloat(**sexual_score_kwargs)]
     total: int
+    # No aspect is returned if the number is not positive
+    aspects_anno: Mapping[AspectEnum, PositiveInt]
 
 
 class TweetUpdate(BaseModel):

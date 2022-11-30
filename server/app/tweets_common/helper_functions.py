@@ -1,3 +1,4 @@
+from collections import defaultdict
 from datetime import date
 from typing import List, Optional, TypeVar
 
@@ -5,8 +6,9 @@ from fastapi import HTTPException
 from pydantic import PositiveInt
 from sqlmodel import Integer, Session, cast, func, select, text, union_all
 from sqlmodel.sql.expression import Select
+from sqlalchemy.sql.base import ImmutableColumnCollection
 
-from .models import PseudoTweet, Tweet
+from .models import Overview, PseudoTweet, Tweet
 
 # Make a Generic Type to get the original type completion back
 # Moving to the types file will create a circular import
@@ -55,33 +57,64 @@ def assert_not_null(tweet: Optional[ModelType], id: PositiveInt, Model: ModelTyp
 
 
 def get_db_overview(
-    Model: ModelType,
+    SentenceModel: ModelType,
+    PhraseModel: ImmutableColumnCollection,
     start_date: Optional[date],
     end_date: Optional[date],
     session: Session,
-) -> List[tuple]:
+) -> List[Overview]:
     """
-    Get overview of the database for the given Model
+    Get sentence and phrase overview of the database
+    for the given SentenceModel and PhraseModel respectively
     """
 
     created_date_label = "created_date"
-    created_date = func.date(Model.created_at).label(created_date_label)
-
-    selection = get_selection_filter(
-        Model,
+    sentence_selection = get_selection_filter(
+        SentenceModel,
         start_date,
         end_date,
         select(
-            func.sum(cast(Model.is_abuse, type_=Integer)).label("is_abuse"),
-            func.avg(Model.sexual_score).label("sexual_score"),
-            created_date,
+            func.sum(cast(SentenceModel.is_abuse, type_=Integer)).label("is_abuse"),
+            func.avg(SentenceModel.sexual_score).label("sexual_score"),
+            func.date(SentenceModel.created_at).label(created_date_label),
             func.count().label("total"),
         ),
     )
 
-    return session.exec(
-        selection.group_by(text(created_date_label))  # Created_date is already defined
+    sentence_overview = session.exec(
+        sentence_selection.group_by(
+            text(created_date_label)
+        )  # Created_date is already defined
     ).all()
+
+    phrase_selection = get_selection_filter(
+        PhraseModel,
+        start_date,
+        end_date,
+        select(
+            func.date(PhraseModel.created_at).label(created_date_label),
+            PhraseModel.asp,
+            func.count().label("count"),
+        ),
+    )
+
+    phrase_overview = session.exec(
+        phrase_selection.group_by(
+            text(created_date_label), PhraseModel.asp
+        )  # Created_date is already defined
+    ).all()
+
+    phrase_date_grouped = defaultdict(dict)
+
+    for phrase in phrase_overview:
+        phrase_date_grouped[phrase.created_date][phrase.asp] = phrase.count
+
+    combined_overview = [
+        Overview(**sentence, aspects_anno=phrase_date_grouped[sentence.created_date])
+        for sentence in sentence_overview
+    ]
+
+    return combined_overview
 
 
 def get_combined_model():
