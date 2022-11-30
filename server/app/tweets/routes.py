@@ -78,7 +78,7 @@ def read_tweets(
     selection = get_selection_filter(Tweet, start_date, end_date, select(Tweet))
 
     return session.exec(
-        selection.order_by(Tweet.id.desc()).offset(offset).limit(limit)
+        selection.order_by(Tweet.created_at.desc()).offset(offset).limit(limit)
     ).all()
 
 

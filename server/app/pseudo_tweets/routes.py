@@ -92,7 +92,7 @@ def read_pseudo_tweets(
     )
 
     return session.exec(
-        selection.order_by(PseudoTweet.id.desc()).offset(offset).limit(limit)
+        selection.order_by(PseudoTweet.created_at.desc()).offset(offset).limit(limit)
     ).all()
 
 
