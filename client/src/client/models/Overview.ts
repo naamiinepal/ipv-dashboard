@@ -7,5 +7,6 @@ export type Overview = {
     is_abuse: number;
     sexual_score?: number;
     total: number;
+    aspects_anno: Record<string, number>;
 };
 
