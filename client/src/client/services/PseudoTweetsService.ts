@@ -46,6 +46,7 @@ export class PseudoTweetsService {
      * @param all
      * @param startDate
      * @param endDate
+     * @param getPhraseCount
      * @returns TweetCount Successful Response
      * @throws ApiError
      */
@@ -53,6 +54,7 @@ export class PseudoTweetsService {
         all: boolean = false,
         startDate?: string,
         endDate?: string,
+        getPhraseCount: boolean = false,
     ): CancelablePromise<TweetCount> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -61,6 +63,7 @@ export class PseudoTweetsService {
                 'all': all,
                 'start_date': startDate,
                 'end_date': endDate,
+                'get_phrase_count': getPhraseCount,
             },
             errors: {
                 422: `Validation Error`,

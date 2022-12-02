@@ -42,12 +42,14 @@ export class TweetsService {
      * Get the count of tweets for the given filters
      * @param startDate
      * @param endDate
+     * @param getPhraseCount
      * @returns TweetCount Successful Response
      * @throws ApiError
      */
     public static tweetsGetCount(
         startDate?: string,
         endDate?: string,
+        getPhraseCount: boolean = false,
     ): CancelablePromise<TweetCount> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -55,6 +57,7 @@ export class TweetsService {
             query: {
                 'start_date': startDate,
                 'end_date': endDate,
+                'get_phrase_count': getPhraseCount,
             },
             errors: {
                 422: `Validation Error`,
