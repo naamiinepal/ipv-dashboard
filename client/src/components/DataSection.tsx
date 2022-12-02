@@ -2,15 +2,31 @@ import CampaignIcon from "@mui/icons-material/Campaign";
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CancelError, PseudoTweetsService } from "../client";
+import type { TweetCount } from "../client";
 import Title from "./Title";
 
+const storageKey = "totalCount";
+
+type TotalType = TweetCount["total"];
+
+const storeTotal = (total: TotalType) =>
+  localStorage.setItem(storageKey, total.toString());
+
+const getStorageTotal = (): TotalType => {
+  const item = localStorage.getItem(storageKey);
+  return item ? parseInt(item) : 0;
+};
+
 const DataSection = () => {
-  const [tweetCount, setTweetCount] = useState(0);
+  const [tweetCount, setTweetCount] = useState(getStorageTotal);
 
   useEffect(() => {
     const request = PseudoTweetsService.pseudoTweetsGetCount(true);
     request
-      .then(({ total }) => setTweetCount(total))
+      .then(({ total }) => {
+        setTweetCount(total);
+        storeTotal(total);
+      })
       .catch((err) => {
         if (err instanceof CancelError) {
           console.log("DataSection umounted");
