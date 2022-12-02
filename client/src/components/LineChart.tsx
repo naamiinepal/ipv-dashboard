@@ -17,9 +17,9 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
-import { predictionColumns } from "../constants";
+import { combinedColumns } from "../constants";
 import FilterContext from "../FilterContext";
-import { toTitleCase } from "../utility";
+import { Aspects, toTitleCase } from "../utility";
 import BarChart from "./BarChart";
 
 ChartJS.register(
@@ -121,17 +121,32 @@ const LineChart = () => {
     );
     request
       .then((response_data) => {
-        const dataArrays = {
+        const phraseAnnotation: {
+          [key: string]: number[];
+        } = {};
+        response_data.forEach(({ aspects_anno }) => {
+          Aspects.forEach((asp, index) => {
+            const key = `Phrase: ${asp}`;
+            const anno = phraseAnnotation[key] || [];
+            anno.push(aspects_anno[index] || 0);
+            phraseAnnotation[key] = anno;
+          });
+        });
+
+        const dataArrays: {
+          [key: string]: (number | null)[];
+        } = {
           is_abuse: response_data.map(({ is_abuse }) => is_abuse),
           sexual_score: response_data.map(
             ({ sexual_score }) => sexual_score ?? null
           ),
+          ...phraseAnnotation,
         };
 
         const data: ChartData<"line"> = {
           labels: response_data.map(({ created_date }) => created_date),
-          datasets: predictionColumns.map(({ field, areaColor }) => ({
-            data: dataArrays[field as keyof typeof dataArrays],
+          datasets: combinedColumns.map(({ field, areaColor }) => ({
+            data: dataArrays[field],
             label: toTitleCase(field),
             borderColor: areaColor,
             backgroundColor: areaColor,

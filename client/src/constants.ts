@@ -1,3 +1,5 @@
+import { Aspects } from "./utility";
+
 const months = [
   "January",
   "February",
@@ -13,6 +15,25 @@ const months = [
   "December",
 ];
 
+// Generated from `sns.color_palette("husl", 9)`
+const colorPalette = [
+  "#f77189",
+  "#dc8932",
+  "#ae9d31",
+  "#77ab31",
+  "#33b07a",
+  "#36ada4",
+  "#38a9c5",
+  "#6e9bf4",
+  "#cc7af4",
+  "#f565cc",
+];
+
+const phraseColumns = Aspects.map((asp, index) => ({
+  field: `Phrase: ${asp}`,
+  areaColor: colorPalette[index],
+}));
+
 const predictionColumns = [
   {
     field: "is_abuse",
@@ -24,6 +45,6 @@ const predictionColumns = [
   },
 ];
 
-const displayColumns = ["text", "action"];
+const combinedColumns = [...phraseColumns, ...predictionColumns];
 
-export { predictionColumns, displayColumns, months };
+export { predictionColumns, months, combinedColumns };

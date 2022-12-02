@@ -42,19 +42,6 @@ interface TweetStateInterface extends Omit<TweetRead, "aspects_anno"> {
   aspects_anno: SingleAnnotationType[];
 }
 
-const Aspects = [
-  "others",
-  "profanity",
-  "physical_threat",
-  "rape_threat",
-  "general_threat",
-  "ethnic_violence",
-  "religion_violence",
-  "religion_racism",
-  "sexism",
-  "character_assasination",
-];
-
 const defaultSingleAnnotation: SingleAnnotationType = {
   start: 0,
   startHelperText: "Start Offset (inclusive)",
@@ -153,7 +140,7 @@ const annotationsReducer = (
 };
 
 export default annotationsReducer;
-export { Aspects, ActionEnum, defaultSingleAnnotation };
+export { ActionEnum, defaultSingleAnnotation };
 export type {
   TweetStateInterface as TweetState,
   SingleAnnotationType,
