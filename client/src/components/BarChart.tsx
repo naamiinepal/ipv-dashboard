@@ -3,8 +3,9 @@ import type { ChartData, ChartOptions } from "chart.js";
 import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
+import { phraseColumns, sentenceColumns } from "../constants";
 import FilterContext from "../FilterContext";
-import { toTitleCase } from "../utility";
+import { Aspects, toTitleCase } from "../utility";
 
 const optionsBar: ChartOptions<"bar"> = {
   responsive: true,
@@ -13,12 +14,25 @@ const optionsBar: ChartOptions<"bar"> = {
   // barThickness: 6,
   plugins: {
     legend: {
-      // position: 'top',
-      // display: true,
+      display: false,
     },
     title: {
       display: true,
       text: "Bar Graph",
+    },
+    zoom: {
+      zoom: {
+        wheel: {
+          enabled: true,
+        },
+        drag: {
+          enabled: true,
+        },
+        pinch: {
+          enabled: true,
+        },
+        mode: "x",
+      },
     },
   },
 };
@@ -43,17 +57,31 @@ const BarChart = () => {
     const request = PseudoTweetsService.pseudoTweetsGetCount(
       true,
       startDate,
-      endDate
+      endDate,
+      true
     );
     request
       .then((response_data) => {
+        const { aspects, ...restResponse } = response_data;
+        const phraseCount = Object.fromEntries(
+          Aspects.map((asp, index) => [`Phrase: ${asp}`, aspects![index] || 0])
+        );
+
+        const normalizedData = {
+          ...phraseCount,
+          ...restResponse,
+        };
+
         const data = {
-          labels: Object.keys(response_data).map(toTitleCase),
+          labels: Object.keys(normalizedData).map(toTitleCase),
           datasets: [
             {
               label: "Number of abusive texts in given range",
-              data: Object.values(response_data),
-              backgroundColor: "#247881",
+              data: Object.values(normalizedData),
+              backgroundColor: [
+                ...phraseColumns.map(({ areaColor }) => areaColor),
+                ...sentenceColumns.map(({ areaColor }) => areaColor),
+              ],
             },
           ],
         };

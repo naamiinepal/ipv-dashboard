@@ -34,7 +34,7 @@ const phraseColumns = Aspects.map((asp, index) => ({
   areaColor: colorPalette[index],
 }));
 
-const predictionColumns = [
+const sentenceColumns = [
   {
     field: "is_abuse",
     areaColor: "#e5c185",
@@ -45,6 +45,6 @@ const predictionColumns = [
   },
 ];
 
-const combinedColumns = [...phraseColumns, ...predictionColumns];
+const combinedColumns = [...phraseColumns, ...sentenceColumns];
 
-export { predictionColumns, months, combinedColumns };
+export { months, sentenceColumns, combinedColumns, phraseColumns };

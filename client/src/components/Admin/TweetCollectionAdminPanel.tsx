@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import type { TweetRead } from "../../client";
 import { CancelError, PseudoTweetsService, TweetsService } from "../../client";
-import { predictionColumns } from "../../constants";
+import { sentenceColumns } from "../../constants";
 import { toTitleCase } from "../../utility";
 import SelectionAdmin from "./SelectionAdmin";
 import Tweet from "./Tweet";
@@ -65,7 +65,7 @@ const TweetCollectionAdminPanel = ({ action }: Props) => {
           </colgroup>
           <TableHead>
             <TableRow>
-              {["Text", ...predictionColumns.map(({ field }) => field)]
+              {["Text", ...sentenceColumns.map(({ field }) => field)]
                 .map(toTitleCase)
                 .map((titleColumn, index) => (
                   <TableCell
