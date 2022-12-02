@@ -27,7 +27,7 @@ const Nav = () => (
         <img alt="ChildSafeNet-Logo" src={ChildSafeNetLogo} />
       </div>
       <h1 className="font-bold text-primary ml-3 text-2xl">
-        Online Abusive Text Detection System
+        Online Abusive Text Detection System for IPV
       </h1>
       <div className="w-14">
         <img alt="NAAMII-Logo" src={NaamiiLogo} />
