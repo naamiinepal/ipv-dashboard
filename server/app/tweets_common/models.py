@@ -13,7 +13,12 @@ from sqlmodel import (
     func,
 )
 
-from .types import AspectAnnoType, AspectEnum, sexual_score_int, sexual_score_kwargs
+from .custom_types import (
+    AspectAnnoType,
+    AspectEnum,
+    sexual_score_int,
+    sexual_score_kwargs,
+)
 
 if TYPE_CHECKING:
     from app.auth.models import User
@@ -25,6 +30,7 @@ if TYPE_CHECKING:
 class TweetCount(BaseModel):
     is_abuse: int
     total: int
+    aspects: Mapping[AspectEnum, PositiveInt] = {}
 
 
 class Overview(BaseModel):

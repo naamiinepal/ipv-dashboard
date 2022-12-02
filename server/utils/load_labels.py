@@ -9,7 +9,7 @@ from sqlmodel import Session, select
 from app.auth.models import User
 from app.database import get_session
 from app.tweets_common.models import Tweet
-from app.tweets_common.types import AspectEnum
+from app.tweets_common.custom_types import AspectEnum
 
 
 def get_random_time():

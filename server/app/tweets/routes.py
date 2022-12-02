@@ -55,13 +55,32 @@ def get_tweet_overview(
 def get_count(
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
+    get_phrase_count: bool = False,
     session: Session = Depends(get_session),
 ):
     """
     Get the count of tweets for the given filters
     """
 
-    return get_filtered_count(Tweet, start_date, end_date, session)
+    phrase_selection = (
+        get_selection_filter(
+            Tweet,
+            start_date,
+            end_date,
+            select(
+                func.count().label("total"),
+                func.unnest(text(f"{Tweet.__tablename__}.aspects_anno[:][3:]")).label(
+                    "asp"
+                ),
+            ).select_from(Tweet),
+        )
+        if get_phrase_count
+        else None
+    )
+
+    return get_filtered_count(
+        Tweet, phrase_selection, start_date, end_date, get_phrase_count, session
+    )
 
 
 @router.get("/", response_model=List[TweetRead])

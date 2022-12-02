@@ -8,7 +8,7 @@ from sqlmodel import Integer, Session, cast, func, select, text, union_all
 from sqlmodel.sql.expression import Select
 from sqlalchemy.sql.base import ImmutableColumnCollection
 
-from .models import Overview, PseudoTweet, Tweet
+from .models import Overview, PseudoTweet, Tweet, TweetCount
 
 # Make a Generic Type to get the original type completion back
 # Moving to the types file will create a circular import
@@ -134,29 +134,50 @@ def get_combined_model():
             Model.created_at,
         )
 
-    all_model = (
+    return (
         union_all(get_overview_selection(Tweet), get_overview_selection(PseudoTweet))
         .subquery()
         .c
     )
-    return all_model
 
 
 def get_filtered_count(
-    Model: ModelType,
+    SentenceModel: ModelType,
+    phrase_selection: Optional[Select[tuple]],
     start_date: Optional[date],
     end_date: Optional[date],
+    get_phrase_count: bool,
     session: Session,
-):
+) -> TweetCount:
 
-    selection = select(
-        func.sum(cast(Model.is_abuse, type_=Integer)).label("is_abuse"),
-        func.count().label("total"),
+    """
+    Get the count of the filtered tweets
+    If get_phrase_count is True, get the count of the phrases
+        Some aspects may not be present in the given date range
+    """
+
+    sentence_selection = get_selection_filter(
+        SentenceModel,
+        start_date,
+        end_date,
+        select(
+            func.sum(cast(SentenceModel.is_abuse, type_=Integer)).label("is_abuse"),
+            func.count().label("total"),
+        ),
     )
 
-    selection = get_selection_filter(Model, start_date, end_date, selection)
+    sentence_count = session.exec(sentence_selection).one()
 
-    return session.exec(selection).one()
+    tweet_count = TweetCount(**sentence_count)
+
+    if not get_phrase_count:
+        return tweet_count
+
+    phrase_count = session.exec(phrase_selection.group_by(text("asp"))).all()
+
+    tweet_count.aspects = {phrase.asp: phrase.total for phrase in phrase_count}
+
+    return tweet_count
 
 
 def get_abusive_tweets(

@@ -17,7 +17,7 @@ from .scrape_youtube import (
     youtube_comment_scraper,
     youtube_video_scraper,
 )
-from .types import MaxResultsType
+from .custom_types import MaxResultsType
 from .word_cloud_helper import get_word_count_distribution
 
 CACHE_TIMEOUT = 6 * 60 * 60  # 6 hours

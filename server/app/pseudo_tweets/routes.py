@@ -65,15 +65,51 @@ def get_count(
     all: bool = False,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
+    get_phrase_count: bool = False,
     session: Session = Depends(get_session),
 ):
     """
     Get the count of pseudo tweets for the given filters
     """
 
-    Model = get_combined_model() if all else PseudoTweet
+    SentenceModel = get_combined_model() if all else PseudoTweet
 
-    return get_filtered_count(Model, start_date, end_date, session)
+    if get_phrase_count:
+        if all:
+            combined_aspects_anno = union_all(
+                select(Tweet.aspects_anno), select(PseudoTweet.aspects_anno)
+            ).subquery()
+
+            phrase_selection = get_selection_filter(
+                SentenceModel,
+                start_date,
+                end_date,
+                select(
+                    func.count().label("total"),
+                    func.unnest(
+                        text(f"{combined_aspects_anno.c.aspects_anno}[:][3:]")
+                    ).label("asp"),
+                ).select_from(combined_aspects_anno),
+            )
+
+        else:
+            phrase_selection = get_selection_filter(
+                PseudoTweet,
+                start_date,
+                end_date,
+                select(
+                    func.count().label("total"),
+                    func.unnest(
+                        text(f"{PseudoTweet.__tablename__}.aspects_anno[:][3:]")
+                    ).label("asp"),
+                ).select_from(PseudoTweet),
+            )
+    else:
+        phrase_selection = None
+
+    return get_filtered_count(
+        SentenceModel, phrase_selection, start_date, end_date, get_phrase_count, session
+    )
 
 
 @router.get("/", response_model=List[TweetRead])

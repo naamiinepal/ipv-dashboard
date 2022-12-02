@@ -6,7 +6,7 @@ from typing import List, Mapping, Tuple, Union
 from sqlmodel import Session
 
 from app.tweets_common.models import PseudoTweet
-from app.tweets_common.types import AspectEnum
+from app.tweets_common.custom_types import AspectEnum
 
 
 def load_database(

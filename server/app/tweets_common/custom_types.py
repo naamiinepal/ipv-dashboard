@@ -18,9 +18,8 @@ class AspectEnum(IntEnum):
     general_threat = 4
     ethnic_violence = 5
     religion_violence = 6
-    religion_racism = 7
-    sexism = 8
-    character_assasination = 9
+    sexism = 7
+    character_assasination = 8
 
 
 AspectAnnoType = List[Tuple[NonNegativeInt, PositiveInt, AspectEnum]]
