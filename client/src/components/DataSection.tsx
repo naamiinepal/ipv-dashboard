@@ -1,4 +1,4 @@
-import CampaignIcon from "@mui/icons-material/Campaign";
+import { Campaign, Category } from "@mui/icons-material";
 import { Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { CancelError, PseudoTweetsService } from "../client";
@@ -38,13 +38,18 @@ const DataSection = () => {
   }, []);
 
   return (
-    <Paper className="w-1.5/12 mt-2 p-2">
-      <div className="mt-3">
-        <Title element={<h2>Data</h2>} />
-        <div className="text-primary mt-3">
-          <CampaignIcon fontSize="large" />{" "}
+    <Paper className="w-3/12 p-2">
+      <Title element={<h2>Data</h2>} />
+      <div className="flex justify-between text-primary items-center h-24">
+        <div>
+          <Campaign fontSize="large" />
           <b>{tweetCount.toLocaleString("hi")}</b>
-          <div className="text-black">Tweets Analysed</div>
+          <div className="text-black">Sentences Analysed</div>
+        </div>
+        <div>
+          <Category fontSize="large" />
+          <b>9</b>
+          <div className="text-black">Phrases Analysed</div>
         </div>
       </div>
     </Paper>
