@@ -8,10 +8,10 @@ const Purpose = () => (
     <Paper className="w-4/12 mt-2 p-2">
       <Title element={<h2>An Idea Behind</h2>} />
       <p>
-        Detecting the Intimate Partner Violence (IPV) is a hard task due to
-        unavailability of conversations of intimate partners. We aim to find the
-        abusive texts from the social media platforms which could have
-        potentially used for IPV.
+        Detecting Intimate Partner Violence (IPV) is arduous due to the
+        unavailability of conversations between intimate partners. We aim to
+        find abusive texts from social media platforms that could have
+        potentially been used for IPV.
       </p>
     </Paper>
     <img alt="NAAMII-Logo" src={Nepal} width="100" />
