@@ -3,9 +3,9 @@ import type { ChartData, ChartOptions } from "chart.js";
 import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
-import { phraseColumns, sentenceColumns } from "../constants";
+import { Aspects, phraseColumns, sentenceColumns } from "../constants";
 import FilterContext from "../FilterContext";
-import { Aspects, toTitleCase } from "../utility";
+import { toTitleCase } from "../utility";
 
 const optionsBar: ChartOptions<"bar"> = {
   responsive: true,

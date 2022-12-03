@@ -80,18 +80,6 @@ const nestedArraysEqual = (arr1: number[][], arr2: number[][]) => {
   return true;
 };
 
-const Aspects = [
-  "others",
-  "profanity",
-  "physical_threat",
-  "rape_threat",
-  "general_threat",
-  "ethnic_violence",
-  "religion_violence",
-  "sexism",
-  "character_assasination",
-];
-
 type ValueOf<T> = T[keyof T];
 
 export {
@@ -101,7 +89,6 @@ export {
   signout,
   arraysEqual,
   nestedArraysEqual,
-  Aspects,
 };
 
 export type { ValueOf };

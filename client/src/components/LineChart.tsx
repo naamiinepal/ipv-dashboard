@@ -17,9 +17,9 @@ import zoomPlugin from "chartjs-plugin-zoom";
 import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
-import { combinedColumns } from "../constants";
+import { Aspects, combinedColumns } from "../constants";
 import FilterContext from "../FilterContext";
-import { Aspects, toTitleCase } from "../utility";
+import { toTitleCase } from "../utility";
 import BarChart from "./BarChart";
 
 ChartJS.register(

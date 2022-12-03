@@ -1,6 +1,7 @@
 import { Button, MenuItem, Select, TextField } from "@mui/material";
 import type { Dispatch } from "react";
-import { toTitleCase, Aspects } from "../../utility";
+import { Aspects } from "../../constants";
+import { toTitleCase } from "../../utility";
 import type {
   ActionInterface,
   SingleAnnotationType,

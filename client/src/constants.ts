@@ -1,5 +1,3 @@
-import { Aspects } from "./utility";
-
 const months = [
   "January",
   "February",
@@ -29,6 +27,18 @@ const colorPalette = [
   "#f565cc",
 ];
 
+const Aspects = [
+  "others",
+  "profanity",
+  "physical_threat",
+  "rape_threat",
+  "general_threat",
+  "ethnic_violence",
+  "religion_violence",
+  "sexism",
+  "character_assasination",
+];
+
 const phraseColumns = Aspects.map((asp, index) => ({
   field: `Phrase: ${asp}`,
   areaColor: colorPalette[index],
@@ -47,4 +57,4 @@ const sentenceColumns = [
 
 const combinedColumns = [...phraseColumns, ...sentenceColumns];
 
-export { months, sentenceColumns, combinedColumns, phraseColumns };
+export { months, sentenceColumns, combinedColumns, phraseColumns, Aspects };
