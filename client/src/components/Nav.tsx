@@ -1,17 +1,13 @@
-import type { ReactNode } from "react";
-import type { To } from "react-router-dom";
+import type { ComponentPropsWithoutRef, FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
 import ChildSafeNetLogo from "../images/childsafenetlogo.jpg";
 import NaamiiLogo from "../images/naamii-logo.png";
 
-interface CustomNavLinkProps {
-  to: To;
-  children: ReactNode;
-}
-
-const CustomNavLink = ({ to, children }: CustomNavLinkProps) => (
+const CustomNavLink: FunctionComponent<
+  ComponentPropsWithoutRef<typeof NavLink>
+> = ({ children, ...props }) => (
   <NavLink
-    to={to}
+    {...props}
     className={({ isActive }) =>
       isActive ? "text-primary underline" : "text-primary"
     }
@@ -20,7 +16,7 @@ const CustomNavLink = ({ to, children }: CustomNavLinkProps) => (
   </NavLink>
 );
 
-const Nav = () => (
+const Nav: FunctionComponent = () => (
   <nav>
     <div className="border-t-2 bg-white px-16 py-2 flex items-center justify-between">
       <div className="font-bold w-20">

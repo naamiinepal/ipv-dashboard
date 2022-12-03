@@ -1,6 +1,7 @@
 import { Card } from "@mui/material";
 import type { ChartData, ChartOptions } from "chart.js";
 import { useContext, useEffect, useState } from "react";
+import type { FunctionComponent } from "react";
 import { Bar } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
 import { Aspects, phraseColumns, sentenceColumns } from "../constants";
@@ -42,7 +43,7 @@ interface BarChartStateInterface {
   loaded: boolean;
 }
 
-const BarChart = () => {
+const BarChart: FunctionComponent = () => {
   const [state, setState] = useState<BarChartStateInterface>({
     data: {
       labels: [],

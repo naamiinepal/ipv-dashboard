@@ -1,3 +1,4 @@
+import type { FunctionComponent } from "react";
 import { useContext, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { CancelError, TweetRead, TweetsService } from "../client";
@@ -9,7 +10,7 @@ interface TweetObj {
   [id: number]: TweetRead;
 }
 
-const Tweets = () => {
+const Tweets: FunctionComponent = () => {
   const [dataList, setDataList] = useState<TweetObj>({});
   const [offset, setOffset] = useState(0);
   const { startDate, endDate } = useContext(FilterContext);

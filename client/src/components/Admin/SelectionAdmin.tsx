@@ -1,14 +1,19 @@
 import { Button, TextField } from "@mui/material";
 import type { Dispatch, SetStateAction } from "react";
+import type { FunctionComponent } from "react";
 import { useState } from "react";
 
-interface Props {
+interface SelectionAdminProps {
   offset: number;
   setOffset: Dispatch<SetStateAction<number>>;
   toggleReload: () => void;
 }
 
-const SelectionAdmin = ({ offset, setOffset, toggleReload }: Props) => {
+const SelectionAdmin: FunctionComponent<SelectionAdminProps> = ({
+  offset,
+  setOffset,
+  toggleReload,
+}) => {
   const [offsetTemp, setOffsetTemp] = useState(offset);
 
   return (

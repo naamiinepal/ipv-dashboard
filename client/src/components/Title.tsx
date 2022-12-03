@@ -1,7 +1,11 @@
-import type { ReactNode } from "react";
+import type { ReactNode, FunctionComponent } from "react";
 
-const Title = ({ element }: { element: ReactNode }) => (
-  <div className="text-2xl font-bold text-primary">{element}</div>
+interface TitleProps {
+  children: NonNullable<ReactNode>;
+}
+
+const Title: FunctionComponent<TitleProps> = ({ children }) => (
+  <div className="text-2xl font-bold text-primary">{children}</div>
 );
 
 export default Title;

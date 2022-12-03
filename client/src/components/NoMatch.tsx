@@ -1,7 +1,8 @@
+import type { FunctionComponent } from "react";
 import { Link } from "react-router-dom";
 import Nav from "./Nav";
 
-const NoMatch = () => (
+const NoMatch: FunctionComponent = () => (
   <>
     <Nav />
     <div className="flex flex-col items-center mt-16">

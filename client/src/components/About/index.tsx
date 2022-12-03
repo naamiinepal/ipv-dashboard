@@ -1,12 +1,15 @@
+import type { FunctionComponent } from "react";
 import Nav from "../Nav";
 import Title from "../Title";
 import Teams from "./Teams";
 
-const About = () => (
+const About: FunctionComponent = () => (
   <>
     <Nav />
     <div className="ml-16 mt-3 w-11/12 text-center">
-      <Title element={<h2>Abstract</h2>} />
+      <Title>
+        <h2> Abstract</h2>
+      </Title>
       <div className="text-justify mt-3">
         The escalation in social media usage amid the pandemic has gathered
         extensive data for Natural Language Processing tasks, many of which

@@ -1,18 +1,18 @@
 import { Button, Card, TextField } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
-import type { FormEvent } from "react";
+import type { FormEventHandler, FunctionComponent } from "react";
 import { useState } from "react";
 import type { To } from "react-router";
 import { useLocation, useNavigate } from "react-router";
 import { AuthService } from "../client";
 
-const Login = () => {
+const Login: FunctionComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const { access_token } = await AuthService.authLogin({
       username,
@@ -27,7 +27,7 @@ const Login = () => {
     // user experience.
     const from: To = location.state?.from?.pathname || "/";
     navigate(from, { replace: true });
-  }
+  };
 
   return (
     <Card className="w-1/3 mx-auto mt-10 p-4">

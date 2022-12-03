@@ -1,5 +1,6 @@
 import type { AlertColor } from "@mui/material";
 import { Alert, Button, Snackbar } from "@mui/material";
+import type { FunctionComponent } from "react";
 import { useState } from "react";
 import type { TweetUpdate } from "../../client";
 import { TweetsService } from "../../client";
@@ -15,11 +16,12 @@ interface SnackProps {
   message: string;
   intent: AlertColor;
 }
-const ModifierButton = ({
+
+const ModifierButton: FunctionComponent<ModifierButtonProps> = ({
   tweetId,
   getChangedColumns,
   disabled,
-}: ModifierButtonProps) => {
+}) => {
   const [snackOpen, setSnackOpen] = useState<SnackProps>({
     display: false,
     message: "",

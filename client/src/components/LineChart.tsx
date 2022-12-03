@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from "chart.js";
 import zoomPlugin from "chartjs-plugin-zoom";
+import type { FunctionComponent } from "react";
 import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
 import { CancelError, PseudoTweetsService } from "../client";
@@ -103,7 +104,7 @@ interface LineChartStateInterface {
   loaded: boolean;
 }
 
-const LineChart = () => {
+const LineChart: FunctionComponent = () => {
   const [state, setState] = useState<LineChartStateInterface>({
     data: {
       labels: [],

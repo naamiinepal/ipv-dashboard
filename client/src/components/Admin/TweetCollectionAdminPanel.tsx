@@ -7,6 +7,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import type { TweetRead } from "../../client";
 import { CancelError, PseudoTweetsService, TweetsService } from "../../client";
@@ -15,11 +16,13 @@ import { toTitleCase } from "../../utility";
 import SelectionAdmin from "./SelectionAdmin";
 import Tweet from "./Tweet";
 
-interface Props {
+interface TweetCollectionAdminPanelProps {
   action: "verify" | "modify";
 }
 
-const TweetCollectionAdminPanel = ({ action }: Props) => {
+const TweetCollectionAdminPanel: FunctionComponent<
+  TweetCollectionAdminPanelProps
+> = ({ action }) => {
   const [dataList, setDataList] = useState<TweetRead[]>([]);
   const [offset, setOffset] = useState(0);
   const [reload, setReload] = useState(false);

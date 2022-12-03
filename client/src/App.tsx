@@ -1,3 +1,4 @@
+import type { FunctionComponent } from "react";
 import { lazy, Suspense, useState } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
@@ -16,7 +17,7 @@ const TweetCollectionAdminPanel = lazy(
   () => import("./components/Admin/TweetCollectionAdminPanel")
 );
 
-const App = () => {
+const App: FunctionComponent = () => {
   const [startDate, setStartDate] = useState(defaultStartDate);
   const [endDate, setEndDate] = useState(defaultEndDate);
 
