@@ -1,6 +1,8 @@
-# Epidemiological Surveillance System (EpiSuS)
+# Detecting Online Intimate Partner Violence using AI
 
-It is a final year undergraduate project by @QuizzerNirajan, @rabinadk1, @samipism, and @thapaliya19 for IOE, Pulchowk Campus in collaboration with NAAMII.
+Detecting Intimate Partner Violence (IPV) is arduous due to the unavailability of conversations between intimate partners.
+We aim to find abusive texts from social media platforms that could have potentially been used for IPV.
+Website currently deployed at: https://online-ipv.naamii.org.np/
 
 Refer to the respective folders for Analysis, Client, and Server codes
 
