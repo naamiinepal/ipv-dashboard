@@ -12,23 +12,23 @@
     "src": "src/svgs/nepal.svg"
   },
   "index.html": {
-    "file": "assets/index.abc30d3a.js",
+    "file": "assets/index.c6a51dde.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_react.4f0cd3ad.js",
       "_react_router.1cf934e0.js",
-      "_mui_extras.b976686b.js",
+      "_mui_extras.d724d465.js",
+      "_mui_material.2a86edaf.js",
       "_chart_js.170025e6.js",
       "_chart_js_extras.81c15501.js",
-      "_client.035c4e8e.js",
-      "_mui_material.a755af34.js"
+      "_client.035c4e8e.js"
     ],
     "dynamicImports": [
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
     ],
     "css": [
-      "assets/index.bee81144.css"
+      "assets/index.06f04c3a.css"
     ],
     "assets": [
       "assets/childsafenetlogo.187966c1.jpg",
@@ -45,19 +45,19 @@
       "_react.4f0cd3ad.js"
     ]
   },
-  "_mui_material.a755af34.js": {
-    "file": "assets/mui_material.a755af34.js",
+  "_mui_material.2a86edaf.js": {
+    "file": "assets/mui_material.2a86edaf.js",
     "imports": [
       "_react.4f0cd3ad.js",
       "_react_router.1cf934e0.js"
     ]
   },
-  "_mui_extras.b976686b.js": {
-    "file": "assets/mui_extras.b976686b.js",
+  "_mui_extras.d724d465.js": {
+    "file": "assets/mui_extras.d724d465.js",
     "imports": [
       "_react.4f0cd3ad.js",
       "_react_router.1cf934e0.js",
-      "_mui_material.a755af34.js"
+      "_mui_material.2a86edaf.js"
     ]
   },
   "_chart_js.170025e6.js": {
@@ -77,7 +77,7 @@
     "file": "assets/client.035c4e8e.js"
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.97cc525d.js",
+    "file": "assets/TweetCollectionAdminPanel.366d8150.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
@@ -85,14 +85,14 @@
       "_client.035c4e8e.js",
       "index.html",
       "_react_router.1cf934e0.js",
-      "_mui_material.a755af34.js",
-      "_mui_extras.b976686b.js",
+      "_mui_material.2a86edaf.js",
+      "_mui_extras.d724d465.js",
       "_chart_js.170025e6.js",
       "_chart_js_extras.81c15501.js"
     ]
   },
   "index.css": {
-    "file": "assets/index.bee81144.css",
+    "file": "assets/index.06f04c3a.css",
     "src": "index.css"
   }
 }
