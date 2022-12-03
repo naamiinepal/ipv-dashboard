@@ -76,14 +76,12 @@ def get_count(
 
     if get_phrase_count:
         if all:
-            CombinedAspectsModel = (
-                union_all(
-                    select(Tweet.aspects_anno, Tweet.created_at),
-                    select(PseudoTweet.aspects_anno, PseudoTweet.created_at),
-                )
-                .subquery()
-                .c
-            )
+            combined_aspects_query = union_all(
+                select(Tweet.aspects_anno, Tweet.created_at),
+                select(PseudoTweet.aspects_anno, PseudoTweet.created_at),
+            ).subquery()
+
+            CombinedAspectsModel = combined_aspects_query.c
 
             phrase_selection = get_selection_filter(
                 CombinedAspectsModel,
@@ -94,7 +92,7 @@ def get_count(
                     func.unnest(
                         text(f"{CombinedAspectsModel.aspects_anno}[:][3:]")
                     ).label("asp"),
-                ),
+                ).select_from(combined_aspects_query),
             )
 
         else:
