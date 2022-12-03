@@ -4,8 +4,6 @@ Detecting Intimate Partner Violence (IPV) is arduous due to the unavailability o
 We aim to find abusive texts from social media platforms that could have potentially been used for IPV.
 Website currently deployed at: https://online-ipv.naamii.org.np/
 
-Refer to the respective folders for Analysis, Client, and Server codes
-
 ## Build Status
 
 ### Client Side
