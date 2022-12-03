@@ -1,47 +1,14 @@
-import type { ReactNode } from "react";
+import type { FunctionComponent } from "react";
 import Samip from "../../images/4.jpg";
 import AmanSir from "../../images/AmanSir.jpeg";
 import BisheshSir from "../../images/BisheshSir.jpeg";
 import Nirajan from "../../images/Nirajan.jpg";
 import Rabin from "../../images/Rabin.jpg";
 import Safal from "../../images/Safal.png";
-import Title from "../Title";
+import Team from "./Team";
+import TeamCollection from "./TeamCollection";
 
-type NonNullReactNode = NonNullable<ReactNode>;
-
-interface TeamProps {
-  src: string;
-  alt: string;
-  name: NonNullReactNode;
-  institution?: NonNullReactNode;
-}
-
-const Team = ({
-  src,
-  alt,
-  name,
-  institution = "IOE, Pulchowk Campus",
-}: TeamProps) => (
-  <div className="text-center">
-    <img src={src} alt={alt} width="100" className="rounded-full mx-auto" />
-    <div>{name}</div>
-    <div>{institution}</div>
-  </div>
-);
-
-interface TeamCollectionProps {
-  title: NonNullReactNode;
-  children: NonNullReactNode;
-}
-
-const TeamCollection = ({ title, children }: TeamCollectionProps) => (
-  <>
-    <Title element={<h2>{title}</h2>} />
-    <div className="flex justify-around my-6 items-center">{children}</div>
-  </>
-);
-
-const Teams = () => (
+const Teams: FunctionComponent = () => (
   <div className="text-center">
     <TeamCollection title="Our Team">
       <Team src={Nirajan} alt="Nirajan" name="Nirajan Basnet" />
