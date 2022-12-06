@@ -1,11 +1,11 @@
 {
-  "src/images/childsafenetlogo.jpg": {
-    "file": "assets/childsafenetlogo.187966c1.jpg",
-    "src": "src/images/childsafenetlogo.jpg"
-  },
   "src/images/naamii-logo.png": {
     "file": "assets/naamii-logo.4e467dd1.png",
     "src": "src/images/naamii-logo.png"
+  },
+  "src/images/childsafenetlogo.jpg": {
+    "file": "assets/childsafenetlogo.187966c1.jpg",
+    "src": "src/images/childsafenetlogo.jpg"
   },
   "src/svgs/nepal.svg": {
     "file": "assets/nepal.54f81b62.svg",
