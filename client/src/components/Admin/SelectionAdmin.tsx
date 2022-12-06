@@ -1,7 +1,8 @@
 import { Button, TextField } from "@mui/material";
-import type { Dispatch, SetStateAction } from "react";
-import type { FunctionComponent } from "react";
+import type { Dispatch, FunctionComponent, SetStateAction } from "react";
 import { useState } from "react";
+import SourceSelection, { allSources } from "../SourceSelection";
+import TopicSelection, { allTopics } from "../TopicSelection";
 
 interface SelectionAdminProps {
   offset: number;
@@ -15,9 +16,13 @@ const SelectionAdmin: FunctionComponent<SelectionAdminProps> = ({
   toggleReload,
 }) => {
   const [offsetTemp, setOffsetTemp] = useState(offset);
+  const [topics, setTopics] = useState(allTopics);
+  const [sources, setSources] = useState(allSources);
 
   return (
-    <div className="w-5/12 flex items-end mb-3">
+    <div className="flex justify-between">
+      <TopicSelection topics={topics} setTopics={setTopics} />
+      <SourceSelection sources={sources} setSources={setSources} />
       <TextField
         label="Offset"
         value={offsetTemp}

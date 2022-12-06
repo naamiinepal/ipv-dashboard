@@ -18,10 +18,12 @@ const TweetTextAnno: FunctionComponent<TweetTextInterface> = (props) => {
   const { aspects_anno, ...restProps } = props;
   const { dispatch, isDisabled } = restProps;
   return (
-    <>
-      {aspects_anno.map((anno, index) => (
-        <SingleAnno {...restProps} {...anno} index={index} key={index} />
-      ))}
+    <div className="items-start mt-0.5">
+      <div className="flex flex-col">
+        {aspects_anno.map((anno, index) => (
+          <SingleAnno {...restProps} {...anno} index={index} key={index} />
+        ))}
+      </div>
       <Button
         variant="contained"
         color="secondary"
@@ -30,7 +32,7 @@ const TweetTextAnno: FunctionComponent<TweetTextInterface> = (props) => {
       >
         Add New Phrase Annotation
       </Button>
-    </>
+    </div>
   );
 };
 

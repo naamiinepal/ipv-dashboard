@@ -29,7 +29,7 @@ const SingleAnno: FunctionComponent<SingleAnnoInterface> = ({
   aspect,
   isDisabled,
 }) => (
-  <>
+  <div className="flex items-start justify-between">
     <TextField
       inputProps={{ min: 0, max: end - 1 < 0 ? 0 : end - 1 }}
       type="number"
@@ -82,10 +82,11 @@ const SingleAnno: FunctionComponent<SingleAnnoInterface> = ({
         })
       }
       disabled={isDisabled}
+      sx={{ marginTop: "0.5rem" }}
     >
       Delete Annotation
     </Button>
-  </>
+  </div>
 );
 
 export default SingleAnno;

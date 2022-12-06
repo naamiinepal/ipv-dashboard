@@ -109,17 +109,19 @@ const Tweet: FunctionComponent<TweetProps> = ({ row, action }) => {
       }}
     >
       <TableCell sx={{ fontSize: "1rem", paddingTop: "0px" }} align="left">
-        <InteractiveHighlighter
-          text={state.text}
-          highlights={highlights}
-          customClass="highlighted"
-        />
-        <TweetTextAnno
-          aspects_anno={state.aspects_anno}
-          dispatch={dispatch}
-          isDisabled={action === "verify" && state.isVerified}
-          textLength={state.text.length}
-        />
+        <div className="flex flex-col">
+          <InteractiveHighlighter
+            text={state.text}
+            highlights={highlights}
+            customClass="highlighted"
+          />
+          <TweetTextAnno
+            aspects_anno={state.aspects_anno}
+            dispatch={dispatch}
+            isDisabled={action === "verify" && state.isVerified}
+            textLength={state.text.length}
+          />
+        </div>
       </TableCell>
       <TableCell align="center">
         <Checkbox
