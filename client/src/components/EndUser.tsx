@@ -1,9 +1,8 @@
-import type { FunctionComponent } from "react";
 import FilteredContainer from "./FilteredContainer";
 import Nav from "./Nav";
 import Purpose from "./Purpose";
 
-const EndUser: FunctionComponent = () => (
+const EndUser: React.FunctionComponent = () => (
   <>
     <Nav />
     <div className="bg-blue-50">

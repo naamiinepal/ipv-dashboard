@@ -1,5 +1,4 @@
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
-import { FunctionComponent } from "react";
 import { toTitleCase } from "../../utility";
 import SelectorHOC, {
   WrappedComponentProps,
@@ -8,7 +7,7 @@ import SelectorHOC, {
 
 const allSources = ["simulation", "twitter", "youtube"];
 
-const SourceSelection: FunctionComponent<WrappedComponentProps> = ({
+const SourceSelection: React.FunctionComponent<WrappedComponentProps> = ({
   filters,
   setFilters,
   ...restProps

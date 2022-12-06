@@ -1,6 +1,4 @@
-import type { ReactNode } from "react";
-
-type NonNullReactNode = NonNullable<ReactNode>;
+type NonNullReactNode = NonNullable<React.ReactNode>;
 
 interface TeamProps {
   src: string;

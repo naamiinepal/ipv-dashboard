@@ -1,10 +1,8 @@
-import type { ReactNode, FunctionComponent } from "react";
-
 interface TitleProps {
-  children: NonNullable<ReactNode>;
+  children: NonNullable<React.ReactNode>;
 }
 
-const Title: FunctionComponent<TitleProps> = ({ children }) => (
+const Title: React.FunctionComponent<TitleProps> = ({ children }) => (
   <div className="text-2xl font-bold text-primary">{children}</div>
 );
 

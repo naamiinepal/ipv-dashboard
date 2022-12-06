@@ -1,8 +1,7 @@
-import type { FunctionComponent } from "react";
 import { Outlet } from "react-router";
 import Nav from "../Nav";
 
-const Admin: FunctionComponent = () => (
+const Admin: React.FunctionComponent = () => (
   <>
     <Nav />
     {/* <TweetCollectionAdminPanel action="verify" /> */}

@@ -1,13 +1,12 @@
 import { Button } from "@mui/material";
 import moment from "moment";
-import type { FunctionComponent } from "react";
 import { useContext, useState } from "react";
 import FilterContext from "../FilterContext";
 import CustomDatePicker from "./CustomDatePicker";
 import LineChart from "./LineChart";
 import Tweets from "./Tweets";
 
-const FilteredContainer: FunctionComponent = () => {
+const FilteredContainer: React.FunctionComponent = () => {
   const { startDate, setStartDate, endDate, setEndDate } =
     useContext(FilterContext);
 

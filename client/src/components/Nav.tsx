@@ -1,10 +1,9 @@
-import type { ComponentPropsWithoutRef, FunctionComponent } from "react";
 import { NavLink } from "react-router-dom";
 import ChildSafeNetLogo from "../images/childsafenetlogo.jpg";
 import NaamiiLogo from "../images/naamii-logo.png";
 
-const CustomNavLink: FunctionComponent<
-  ComponentPropsWithoutRef<typeof NavLink>
+const CustomNavLink: React.FunctionComponent<
+  React.ComponentPropsWithoutRef<typeof NavLink>
 > = ({ children, ...props }) => (
   <NavLink
     {...props}
@@ -16,7 +15,7 @@ const CustomNavLink: FunctionComponent<
   </NavLink>
 );
 
-const Nav: FunctionComponent = () => (
+const Nav: React.FunctionComponent = () => (
   <nav>
     <div className="border-t-2 bg-white px-16 py-2 flex items-center justify-between">
       <div className="font-bold w-20">

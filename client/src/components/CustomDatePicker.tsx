@@ -1,18 +1,13 @@
 import { TextField } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import type {
-  ComponentPropsWithoutRef,
-  FunctionComponent,
-  ReactNode,
-} from "react";
 
 interface CustomDatePickerProps
-  extends Omit<ComponentPropsWithoutRef<typeof DatePicker>, "renderInput"> {
-  textLabel: ReactNode;
+  extends Omit<React.ComponentPropsWithoutRef<typeof DatePicker>, "renderInput"> {
+  textLabel: React.ReactNode;
 }
 
-const CustomDatePicker: FunctionComponent<CustomDatePickerProps> = ({
+const CustomDatePicker: React.FunctionComponent<CustomDatePickerProps> = ({
   textLabel,
   ...props
 }) => (

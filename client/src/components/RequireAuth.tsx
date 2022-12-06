@@ -1,13 +1,14 @@
 import { useEffect } from "react";
-import type { FunctionComponent, ReactElement } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { loggedInOrNot } from "../utility";
 
 interface RequireAuthProps {
-  children: ReactElement;
+  children: React.ReactElement;
 }
 
-const RequireAuth: FunctionComponent<RequireAuthProps> = ({ children }) => {
+const RequireAuth: React.FunctionComponent<RequireAuthProps> = ({
+  children,
+}) => {
   const location = useLocation();
   const navigate = useNavigate();
 

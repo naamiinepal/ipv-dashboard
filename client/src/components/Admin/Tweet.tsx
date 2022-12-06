@@ -6,7 +6,6 @@ import {
   TextField,
 } from "@mui/material";
 import { useMemo, useReducer } from "react";
-import type { FunctionComponent } from "react";
 import type { TweetRead, TweetUpdate } from "../../client";
 import { PseudoTweetsService } from "../../client";
 import type { ValueOf } from "../../utility";
@@ -30,7 +29,7 @@ const compareFn = (
   [startB, endB, aspectB]: number[]
 ) => startA - startB || endA - endB || aspectA - aspectB;
 
-const Tweet: FunctionComponent<TweetProps> = ({ row, action }) => {
+const Tweet: React.FunctionComponent<TweetProps> = ({ row, action }) => {
   const [state, dispatch] = useReducer(annotationsReducer, {
     ...row,
     isVerified: false,

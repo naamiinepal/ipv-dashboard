@@ -1,8 +1,7 @@
-import type { FunctionComponent } from "react";
 import Title from "../Title";
 import type { TeamCollectionProps } from "./types";
 
-const TeamCollection: FunctionComponent<TeamCollectionProps> = ({
+const TeamCollection: React.FunctionComponent<TeamCollectionProps> = ({
   title,
   children,
 }) => (

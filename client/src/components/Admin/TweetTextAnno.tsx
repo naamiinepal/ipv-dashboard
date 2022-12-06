@@ -1,5 +1,4 @@
 import { Button } from "@mui/material";
-import type { Dispatch, FunctionComponent } from "react";
 import type {
   ActionInterface,
   SingleAnnotationType,
@@ -9,12 +8,12 @@ import SingleAnno from "./SingleAnno";
 
 interface TweetTextInterface {
   aspects_anno: SingleAnnotationType[];
-  dispatch: Dispatch<ActionInterface>;
+  dispatch: React.Dispatch<ActionInterface>;
   isDisabled: boolean;
   textLength: number;
 }
 
-const TweetTextAnno: FunctionComponent<TweetTextInterface> = (props) => {
+const TweetTextAnno: React.FunctionComponent<TweetTextInterface> = (props) => {
   const { aspects_anno, ...restProps } = props;
   const { dispatch, isDisabled } = restProps;
   return (

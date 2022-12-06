@@ -5,10 +5,9 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import type { FunctionComponent } from "react";
 import Samip from "../images/4.jpg";
 
-const Team: FunctionComponent = () => (
+const Team: React.FunctionComponent = () => (
   <div>
     <Typography variant="h3">Our Team</Typography>
     <Card sx={{ maxWidth: 200 }}>

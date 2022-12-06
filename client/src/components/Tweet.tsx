@@ -1,6 +1,5 @@
 import PersonIcon from "@mui/icons-material/Person";
 import { Card, Chip } from "@mui/material";
-import type { FunctionComponent } from "react";
 import { useMemo } from "react";
 import type { TweetRead } from "../client";
 import { months } from "../constants";
@@ -9,7 +8,7 @@ interface TweetProps {
   tweet: TweetRead;
 }
 
-const Tweet: FunctionComponent<TweetProps> = ({ tweet }) => {
+const Tweet: React.FunctionComponent<TweetProps> = ({ tweet }) => {
   const created_date = useMemo(
     () => new Date(tweet.created_at),
     [tweet.created_at]

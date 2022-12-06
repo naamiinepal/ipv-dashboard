@@ -1,6 +1,5 @@
 import { Campaign, Category } from "@mui/icons-material";
 import { Paper } from "@mui/material";
-import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import type { TweetCount } from "../client";
 import { CancelError, PseudoTweetsService } from "../client";
@@ -18,7 +17,7 @@ const getStorageTotal = (): TotalType => {
   return item ? parseInt(item) : 0;
 };
 
-const DataSection: FunctionComponent = () => {
+const DataSection: React.FunctionComponent = () => {
   const [tweetCount, setTweetCount] = useState(getStorageTotal);
 
   useEffect(() => {

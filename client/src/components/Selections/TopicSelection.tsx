@@ -5,7 +5,6 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { FunctionComponent } from "react";
 import { phraseColumns } from "../../constants";
 import { toTitleCase } from "../../utility";
 import SelectorHOC, {
@@ -19,7 +18,7 @@ const phraseTopicNames = phraseColumns.map(({ field }) =>
   field.substring(phrasePrefixLength)
 );
 
-const TopicSelection: FunctionComponent<WrappedComponentProps> = ({
+const TopicSelection: React.FunctionComponent<WrappedComponentProps> = ({
   filters,
   setFilters,
   ...restProps

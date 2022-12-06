@@ -7,7 +7,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import type { FunctionComponent } from "react";
 import { useEffect, useState } from "react";
 import type { TweetRead } from "../../client";
 import { CancelError, PseudoTweetsService, TweetsService } from "../../client";
@@ -20,7 +19,7 @@ interface TweetCollectionAdminPanelProps {
   action: "verify" | "modify";
 }
 
-const TweetCollectionAdminPanel: FunctionComponent<
+const TweetCollectionAdminPanel: React.FunctionComponent<
   TweetCollectionAdminPanelProps
 > = ({ action }) => {
   const [dataList, setDataList] = useState<TweetRead[]>([]);

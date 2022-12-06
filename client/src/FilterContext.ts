@@ -1,8 +1,7 @@
 import moment from "moment";
-import type { Dispatch, SetStateAction } from "react";
 import { createContext } from "react";
 
-type StateSetter = Dispatch<SetStateAction<string>> | null;
+type StateSetter = React.Dispatch<React.SetStateAction<string>> | null;
 
 interface FilterProviderValue {
   startDate: string;

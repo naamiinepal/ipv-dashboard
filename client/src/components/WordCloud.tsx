@@ -1,5 +1,4 @@
 import { Card } from "@mui/material";
-import type { FunctionComponent } from "react";
 import { memo, useContext, useEffect, useState } from "react";
 import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
@@ -33,7 +32,7 @@ interface WordCloudStateInterface {
   loaded: boolean;
 }
 
-const WordCloud: FunctionComponent = () => {
+const WordCloud: React.FunctionComponent = () => {
   const [state, setState] = useState<WordCloudStateInterface>({
     words: [],
     loaded: false,

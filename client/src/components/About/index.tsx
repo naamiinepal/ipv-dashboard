@@ -1,9 +1,8 @@
-import type { FunctionComponent } from "react";
 import Nav from "../Nav";
 import Title from "../Title";
 import Teams from "./Teams";
 
-const About: FunctionComponent = () => (
+const About: React.FunctionComponent = () => (
   <>
     <Nav />
     <div className="ml-16 mt-3 w-11/12 text-center">

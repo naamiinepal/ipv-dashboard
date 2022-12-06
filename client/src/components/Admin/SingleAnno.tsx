@@ -1,5 +1,4 @@
 import { Button, MenuItem, Select, TextField } from "@mui/material";
-import type { Dispatch, FunctionComponent } from "react";
 import { Aspects } from "../../constants";
 import { toTitleCase } from "../../utility";
 import type { ActionInterface } from "./AnnotationReducer";
@@ -10,14 +9,14 @@ interface SingleAnnoInterface {
   end: number;
   start: number;
   hasErrorOccurred: boolean;
-  dispatch: Dispatch<ActionInterface>;
+  dispatch: React.Dispatch<ActionInterface>;
   startHelperText: string;
   textLength: number;
   endHelperText: string;
   aspect: number;
   isDisabled: boolean;
 }
-const SingleAnno: FunctionComponent<SingleAnnoInterface> = ({
+const SingleAnno: React.FunctionComponent<SingleAnnoInterface> = ({
   index,
   end,
   start,

@@ -1,4 +1,3 @@
-import type { FunctionComponent } from "react";
 import Samip from "../../images/4.jpg";
 import AmanSir from "../../images/AmanSir.jpeg";
 import BisheshSir from "../../images/BisheshSir.jpeg";
@@ -8,7 +7,7 @@ import Safal from "../../images/Safal.png";
 import Team from "./Team";
 import TeamCollection from "./TeamCollection";
 
-const Teams: FunctionComponent = () => (
+const Teams: React.FunctionComponent = () => (
   <div className="text-center">
     <TeamCollection title="Our Team">
       <Team src={Nirajan} alt="Nirajan" name="Nirajan Basnet" />

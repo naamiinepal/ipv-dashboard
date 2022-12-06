@@ -1,10 +1,9 @@
 import { Paper } from "@mui/material";
-import type { FunctionComponent } from "react";
 import Nepal from "../svgs/nepal.svg";
 import DataSection from "./DataSection";
 import Title from "./Title";
 
-const Purpose: FunctionComponent = () => (
+const Purpose: React.FunctionComponent = () => (
   <div className="ml-16 w-11/12 flex justify-between">
     <Paper className="w-4/12 mt-2 p-2">
       <Title>

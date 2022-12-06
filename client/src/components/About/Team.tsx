@@ -1,7 +1,6 @@
-import type { FunctionComponent } from "react";
 import type { TeamProps } from "./types";
 
-const Team: FunctionComponent<TeamProps> = ({
+const Team: React.FunctionComponent<TeamProps> = ({
   src,
   alt,
   name,

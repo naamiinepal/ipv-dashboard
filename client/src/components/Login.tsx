@@ -1,18 +1,17 @@
 import { Button, Card, TextField } from "@mui/material";
 import DialogTitle from "@mui/material/DialogTitle";
-import type { FormEventHandler, FunctionComponent } from "react";
 import { useState } from "react";
 import type { To } from "react-router";
 import { useLocation, useNavigate } from "react-router";
 import { AuthService } from "../client";
 
-const Login: FunctionComponent = () => {
+const Login: React.FunctionComponent = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const { access_token } = await AuthService.authLogin({
       username,

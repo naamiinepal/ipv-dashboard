@@ -1,17 +1,16 @@
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import { Button, Select } from "@mui/material";
-import type { ComponentPropsWithoutRef } from "react";
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-interface SelectionProps extends ComponentPropsWithoutRef<typeof Select> {
+interface SelectionProps extends React.ComponentPropsWithoutRef<typeof Select> {
   isWhite?: boolean;
 }
 
 type FilterArrayType = string[];
 
 interface WrappedComponentProps
-  extends ComponentPropsWithoutRef<typeof Select> {
+  extends React.ComponentPropsWithoutRef<typeof Select> {
   filters: FilterArrayType;
   setFilters: React.Dispatch<React.SetStateAction<FilterArrayType>>;
 }
