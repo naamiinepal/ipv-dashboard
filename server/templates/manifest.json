@@ -12,23 +12,23 @@
     "src": "src/svgs/nepal.svg"
   },
   "index.html": {
-    "file": "assets/index.c6a51dde.js",
+    "file": "assets/index.3828f01c.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_react.4f0cd3ad.js",
-      "_react_router.1cf934e0.js",
-      "_mui_extras.d724d465.js",
-      "_mui_material.2a86edaf.js",
-      "_chart_js.170025e6.js",
-      "_chart_js_extras.81c15501.js",
+      "_react_router.2b2d0837.js",
+      "_mui_extras.00dd99db.js",
+      "_mui_material.427e12d6.js",
+      "_chart_js.6d5078ef.js",
+      "_chart_js_extras.b09e0112.js",
       "_client.035c4e8e.js"
     ],
     "dynamicImports": [
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
     ],
     "css": [
-      "assets/index.06f04c3a.css"
+      "assets/index.bd0eec0d.css"
     ],
     "assets": [
       "assets/childsafenetlogo.187966c1.jpg",
@@ -39,60 +39,60 @@
   "_react.4f0cd3ad.js": {
     "file": "assets/react.4f0cd3ad.js"
   },
-  "_react_router.1cf934e0.js": {
-    "file": "assets/react_router.1cf934e0.js",
+  "_react_router.2b2d0837.js": {
+    "file": "assets/react_router.2b2d0837.js",
     "imports": [
       "_react.4f0cd3ad.js"
     ]
   },
-  "_mui_material.2a86edaf.js": {
-    "file": "assets/mui_material.2a86edaf.js",
+  "_mui_material.427e12d6.js": {
+    "file": "assets/mui_material.427e12d6.js",
     "imports": [
       "_react.4f0cd3ad.js",
-      "_react_router.1cf934e0.js"
+      "_react_router.2b2d0837.js"
     ]
   },
-  "_mui_extras.d724d465.js": {
-    "file": "assets/mui_extras.d724d465.js",
+  "_mui_extras.00dd99db.js": {
+    "file": "assets/mui_extras.00dd99db.js",
     "imports": [
       "_react.4f0cd3ad.js",
-      "_react_router.1cf934e0.js",
-      "_mui_material.2a86edaf.js"
+      "_react_router.2b2d0837.js",
+      "_mui_material.427e12d6.js"
     ]
   },
-  "_chart_js.170025e6.js": {
-    "file": "assets/chart_js.170025e6.js",
+  "_chart_js.6d5078ef.js": {
+    "file": "assets/chart_js.6d5078ef.js",
     "imports": [
       "_react.4f0cd3ad.js",
-      "_react_router.1cf934e0.js"
+      "_react_router.2b2d0837.js"
     ]
   },
-  "_chart_js_extras.81c15501.js": {
-    "file": "assets/chart_js_extras.81c15501.js",
+  "_chart_js_extras.b09e0112.js": {
+    "file": "assets/chart_js_extras.b09e0112.js",
     "imports": [
-      "_chart_js.170025e6.js"
+      "_chart_js.6d5078ef.js"
     ]
   },
   "_client.035c4e8e.js": {
     "file": "assets/client.035c4e8e.js"
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.366d8150.js",
+    "file": "assets/TweetCollectionAdminPanel.666a2bd4.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
       "_react.4f0cd3ad.js",
       "_client.035c4e8e.js",
       "index.html",
-      "_react_router.1cf934e0.js",
-      "_mui_material.2a86edaf.js",
-      "_mui_extras.d724d465.js",
-      "_chart_js.170025e6.js",
-      "_chart_js_extras.81c15501.js"
+      "_react_router.2b2d0837.js",
+      "_mui_material.427e12d6.js",
+      "_mui_extras.00dd99db.js",
+      "_chart_js.6d5078ef.js",
+      "_chart_js_extras.b09e0112.js"
     ]
   },
   "index.css": {
-    "file": "assets/index.06f04c3a.css",
+    "file": "assets/index.bd0eec0d.css",
     "src": "index.css"
   }
 }
