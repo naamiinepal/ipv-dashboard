@@ -12,7 +12,7 @@
     "src": "src/svgs/nepal.svg"
   },
   "index.html": {
-    "file": "assets/index.3828f01c.js",
+    "file": "assets/index.95ea5943.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
@@ -28,7 +28,7 @@
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
     ],
     "css": [
-      "assets/index.bd0eec0d.css"
+      "assets/index.97156338.css"
     ],
     "assets": [
       "assets/childsafenetlogo.187966c1.jpg",
@@ -77,7 +77,7 @@
     "file": "assets/client.035c4e8e.js"
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel.666a2bd4.js",
+    "file": "assets/TweetCollectionAdminPanel.efed498d.js",
     "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
     "isDynamicEntry": true,
     "imports": [
@@ -92,7 +92,7 @@
     ]
   },
   "index.css": {
-    "file": "assets/index.bd0eec0d.css",
+    "file": "assets/index.97156338.css",
     "src": "index.css"
   }
 }
