@@ -52,8 +52,8 @@ const Tweets: React.FunctionComponent = () => {
     <div className="flex w-11/12 mx-auto">
       <div className="w-1/2 items-stretch flex flex-col justify-between ">
         <div className="mb-2 p-2 flex justify-between bg-primary">
-          <TopicSelection isWhite ref={topicsRef} />
-          <SourceSelection isWhite ref={sourceRef} />
+          <TopicSelection isEndUser ref={topicsRef} />
+          <SourceSelection isEndUser ref={sourceRef} />
         </div>
         <div className="overflow-y-auto">
           <InfiniteScroll
