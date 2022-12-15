@@ -4,7 +4,7 @@ import { Button, Select } from "@mui/material";
 import { forwardRef, useImperativeHandle, useState } from "react";
 
 interface SelectionProps extends React.ComponentPropsWithoutRef<typeof Select> {
-  isWhite?: boolean;
+  isEndUser?: boolean;
 }
 
 type FilterArrayType = string[];
@@ -20,27 +20,28 @@ const SelectorHOC = (
   componentName: string,
   allSources: FilterArrayType
 ) =>
-  forwardRef(({ isWhite = false, ...props }: SelectionProps, ref) => {
+  forwardRef(({ isEndUser = false, ...props }: SelectionProps, ref) => {
     const [filters, setFilters] = useState(allSources);
 
     useImperativeHandle(ref, () => ({ filters }), [filters]);
 
     return (
-      <div className="flex justify-between">
+      <div className={`flex justify-between${isEndUser ? " grow mx-1" : ""}`}>
         <div className="mr-3 flex flex-col">
           <span
             className={`${
-              isWhite ? "text-white" : "text-black"
+              isEndUser ? "text-white" : "text-black"
             } text-base font-semibold`}
           >
             Filter by {componentName}:
           </span>
-          <div className="flex justify-between">
+          <div>
             <Button
               variant="contained"
               startIcon={<DoneAllIcon />}
               size="small"
               onClick={() => setFilters(allSources)}
+              sx={{ marginRight: "1rem" }}
             >
               All
             </Button>
