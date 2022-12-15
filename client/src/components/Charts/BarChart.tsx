@@ -1,11 +1,30 @@
-import { Card } from "@mui/material";
 import type { ChartData, ChartOptions } from "chart.js";
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip,
+} from "chart.js";
+import zoomPlugin from "chartjs-plugin-zoom";
 import { useContext, useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { CancelError, PseudoTweetsService } from "../client";
-import { Aspects, phraseColumns, sentenceColumns } from "../constants";
-import FilterContext from "../FilterContext";
-import { toTitleCase } from "../utility";
+import { CancelError, PseudoTweetsService } from "../../client";
+import { Aspects, phraseColumns, sentenceColumns } from "../../constants";
+import FilterContext from "../../FilterContext";
+import { toTitleCase } from "../../utility";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  zoomPlugin
+);
 
 const optionsBar: ChartOptions<"bar"> = {
   responsive: true,
@@ -97,15 +116,9 @@ const BarChart: React.FunctionComponent = () => {
     };
   }, [startDate, endDate]);
 
-  return (
-    <>
-      {state.loaded && (
-        <Card className="w-1/3 ml-3">
-          <Bar options={optionsBar} data={state.data} />
-        </Card>
-      )}
-    </>
-  );
+  return state.loaded ? <Bar options={optionsBar} data={state.data} /> : null;
 };
 
 export default BarChart;
+
+export { optionsBar };

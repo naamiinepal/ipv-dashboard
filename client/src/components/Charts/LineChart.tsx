@@ -1,11 +1,7 @@
-import { Card } from "@mui/material";
 import type { ChartData, ChartOptions } from "chart.js";
 import {
-  ArcElement,
-  BarElement,
   CategoryScale,
   Chart as ChartJS,
-  Filler,
   Legend,
   LinearScale,
   LineElement,
@@ -16,27 +12,23 @@ import {
 import zoomPlugin from "chartjs-plugin-zoom";
 import { useContext, useEffect, useState } from "react";
 import { Line } from "react-chartjs-2";
-import { CancelError, PseudoTweetsService } from "../client";
-import { Aspects, combinedColumns } from "../constants";
-import FilterContext from "../FilterContext";
-import { toTitleCase } from "../utility";
-import BarChart from "./BarChart";
+import { CancelError, PseudoTweetsService } from "../../client";
+import { Aspects, combinedColumns } from "../../constants";
+import FilterContext from "../../FilterContext";
+import { toTitleCase } from "../../utility";
 
 ChartJS.register(
-  ArcElement,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
   Title,
-  BarElement,
-  zoomPlugin,
   Tooltip,
   Legend,
-  Filler
+  zoomPlugin
 );
 
-const options: ChartOptions<"line"> = {
+const optionsChart: ChartOptions<"line"> = {
   responsive: true,
   plugins: {
     legend: {
@@ -76,24 +68,6 @@ const options: ChartOptions<"line"> = {
         display: true,
         text: "Tweet Count and Average Sexual Score per day ",
       },
-    },
-  },
-};
-
-const optionsPie: ChartOptions<"pie"> = {
-  responsive: true,
-  indexAxis: "y",
-  maintainAspectRatio: false,
-
-  // barThickness: 6,
-  plugins: {
-    legend: {
-      // position: 'top',
-      // display: true,
-    },
-    title: {
-      display: true,
-      text: "Bar Graph",
     },
   },
 };
@@ -166,18 +140,11 @@ const LineChart: React.FunctionComponent = () => {
     };
   }, [startDate, endDate]);
 
-  return (
-    <div className="flex w-11/12 my-3 mx-16">
-      {state.loaded && (
-        <Card className="flex-1">
-          {/* <Button onClick={resetZoom}>Zoom Out</Button> */}
-          <Line options={options} data={state.data} />
-        </Card>
-      )}
-      <BarChart />
-    </div>
-  );
+  return state.loaded ? (
+    <Line options={optionsChart} data={state.data} />
+  ) : null;
 };
 
-export { options, optionsPie };
 export default LineChart;
+
+export { optionsChart };
