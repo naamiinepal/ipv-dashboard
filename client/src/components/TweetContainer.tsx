@@ -59,7 +59,7 @@ const TweetContainer: React.FunctionComponent<
         <InfiniteScroll
           dataLength={Object.keys(dataList).length} //This is important field to render the next data
           next={() => setOffset(offset + 10)}
-          height={384}
+          height="65vh"
           hasMore={true}
           loader={<h4>Loading...</h4>}
           endMessage={

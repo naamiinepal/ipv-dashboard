@@ -64,17 +64,19 @@ const WordCloud: React.FunctionComponent = () => {
   }, [startDate, endDate]);
 
   return (
-    <div>
-      {state.loaded && (
-        <Card className="h-96 ml-2">
-          <Title>
-            <h2 className="ml-3">Trending Words</h2>
-          </Title>
-          <ReactWordcloud options={options} words={state.words} />
-        </Card>
+    <Card className="ml-2 grow" style={{ height: "75vh" }}>
+      <Title>
+        <h2 className="ml-3">Trending Words</h2>
+      </Title>
+      {state.loaded ? (
+        <ReactWordcloud options={options} words={state.words} />
+      ) : (
+        <div className="flex justify-center items-center h-5/6 text-xl">
+          Loading
+        </div>
       )}
-    </div>
+    </Card>
   );
 };
 
-export default memo(WordCloud);
+export default WordCloud;

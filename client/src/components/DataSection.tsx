@@ -44,7 +44,7 @@ const DataSection: React.FunctionComponent<
       <Title>
         <h2>Data</h2>
       </Title>
-      <div className="flex justify-between text-primary items-center h-24">
+      <div className="flex justify-between text-primary items-center h-5/6">
         <div>
           <Campaign fontSize="large" />
           <b>{tweetCount.toLocaleString("hi")}</b>
