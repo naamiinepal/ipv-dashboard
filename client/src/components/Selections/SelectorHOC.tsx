@@ -26,7 +26,7 @@ const SelectorHOC = (
     useImperativeHandle(ref, () => ({ filters }), [filters]);
 
     return (
-      <div className={`flex justify-between${isAdmin ? "" : " grow mx-1"}`}>
+      <div className={`flex justify-between${isAdmin ? "" : " flex-1 mx-1"}`}>
         <div className="mr-3 flex flex-col">
           <span
             className={`${isAdmin ? "" : "text-white font-semibold "}text-base`}

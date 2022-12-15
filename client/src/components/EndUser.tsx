@@ -6,8 +6,10 @@ const EndUser: React.FunctionComponent = () => (
   <>
     <Nav />
     <div className="bg-blue-50">
-      <Purpose />
-      <FilteredContainer />
+      <div className="w-11/12 mx-auto">
+        <Purpose />
+        <FilteredContainer />
+      </div>
     </div>
   </>
 );
