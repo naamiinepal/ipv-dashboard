@@ -7,19 +7,18 @@
     "file": "assets/naamii-logo-4e467dd1.png",
     "src": "src/images/naamii-logo.png"
   },
-  "src/svgs/nepal.svg": {
-    "file": "assets/nepal-54f81b62.svg",
-    "src": "src/svgs/nepal.svg"
-  },
   "index.css": {
-    "file": "assets/index-97156338.css",
+    "file": "assets/index-963d13e9.css",
     "src": "index.css"
   },
-  "_react_router-adcaf3b9.js": {
-    "file": "assets/react_router-adcaf3b9.js",
+  "_react_router-41a0819f.js": {
+    "file": "assets/react_router-41a0819f.js",
     "imports": [
       "_react-75fa6e8e.js"
     ]
+  },
+  "_react-75fa6e8e.js": {
+    "file": "assets/react-75fa6e8e.js"
   },
   "_chart_js_extras-05c44e89.js": {
     "file": "assets/chart_js_extras-05c44e89.js",
@@ -30,21 +29,6 @@
   "_client-46a16339.js": {
     "file": "assets/client-46a16339.js"
   },
-  "src/components/Admin/TweetCollectionAdminPanel.tsx": {
-    "file": "assets/TweetCollectionAdminPanel-2c11f952.js",
-    "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
-    "isDynamicEntry": true,
-    "imports": [
-      "_mui_material-e1e597a8.js",
-      "_react-75fa6e8e.js",
-      "_client-46a16339.js",
-      "index.html",
-      "_react_router-adcaf3b9.js",
-      "_mui_extras-ef4ab4e7.js",
-      "_chart_js-4074cdf3.js",
-      "_chart_js_extras-05c44e89.js"
-    ]
-  },
   "_mui_extras-ef4ab4e7.js": {
     "file": "assets/mui_extras-ef4ab4e7.js",
     "imports": [
@@ -52,17 +36,29 @@
       "_mui_material-e1e597a8.js"
     ]
   },
-  "_react-75fa6e8e.js": {
-    "file": "assets/react-75fa6e8e.js"
+  "src/components/Admin/TweetCollectionAdminPanel.tsx": {
+    "file": "assets/TweetCollectionAdminPanel-7cccb74d.js",
+    "src": "src/components/Admin/TweetCollectionAdminPanel.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_mui_material-e1e597a8.js",
+      "_react-75fa6e8e.js",
+      "_client-46a16339.js",
+      "index.html",
+      "_react_router-41a0819f.js",
+      "_mui_extras-ef4ab4e7.js",
+      "_chart_js-4074cdf3.js",
+      "_chart_js_extras-05c44e89.js"
+    ]
   },
   "index.html": {
-    "file": "assets/index-566644d1.js",
+    "file": "assets/index-f1fbb4ad.js",
     "src": "index.html",
     "isEntry": true,
     "imports": [
       "_mui_material-e1e597a8.js",
       "_react-75fa6e8e.js",
-      "_react_router-adcaf3b9.js",
+      "_react_router-41a0819f.js",
       "_mui_extras-ef4ab4e7.js",
       "_chart_js-4074cdf3.js",
       "_chart_js_extras-05c44e89.js",
@@ -72,22 +68,21 @@
       "src/components/Admin/TweetCollectionAdminPanel.tsx"
     ],
     "css": [
-      "assets/index-97156338.css"
+      "assets/index-963d13e9.css"
     ],
     "assets": [
       "assets/childsafenetlogo-187966c1.jpg",
-      "assets/naamii-logo-4e467dd1.png",
-      "assets/nepal-54f81b62.svg"
-    ]
-  },
-  "_chart_js-4074cdf3.js": {
-    "file": "assets/chart_js-4074cdf3.js",
-    "imports": [
-      "_react-75fa6e8e.js"
+      "assets/naamii-logo-4e467dd1.png"
     ]
   },
   "_mui_material-e1e597a8.js": {
     "file": "assets/mui_material-e1e597a8.js",
+    "imports": [
+      "_react-75fa6e8e.js"
+    ]
+  },
+  "_chart_js-4074cdf3.js": {
+    "file": "assets/chart_js-4074cdf3.js",
     "imports": [
       "_react-75fa6e8e.js"
     ]
