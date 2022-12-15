@@ -26,11 +26,13 @@ const TweetCollectionAdminPanel: React.FunctionComponent<
   const [offset, setOffset] = useState(0);
   const [reload, setReload] = useState(false);
 
+  const isVerify = action === "verify";
+
+  const tweetFetcher = isVerify
+    ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
+    : TweetsService.tweetsReadTweets;
+
   useEffect(() => {
-    const tweetFetcher =
-      action === "verify"
-        ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
-        : TweetsService.tweetsReadTweets;
     const request = tweetFetcher(offset, 10);
     request
       .then((data) => setDataList(data))
@@ -47,7 +49,10 @@ const TweetCollectionAdminPanel: React.FunctionComponent<
   const toggleReload = () => setReload(!reload);
 
   return (
-    <div className="mt-10 w-11/12 mx-auto ">
+    <div className="w-11/12 mx-auto">
+      <h1 className="my-5 text-xl font-bold text-cyan-700 text-center">
+        {isVerify ? "Verify Model's Predictions" : "Modify Verifications"}
+      </h1>
       <SelectionAdmin
         offset={offset}
         setOffset={setOffset}
