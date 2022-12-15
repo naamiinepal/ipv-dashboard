@@ -1,4 +1,4 @@
-import ChildSafeNetLogo from "../../images/childsafenetlogo.jpg";
+import ChildSafeNetLogo from "../../images/childsafenetlogo.png";
 import NaamiiLogo from "../../images/naamii-logo.png";
 import CustomNavLink from "./CustomNavLink";
 import RightNavLink from "./RightNavLink";
