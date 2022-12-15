@@ -20,8 +20,8 @@ const SelectionAdmin: React.FunctionComponent<SelectionAdminProps> = ({
 
   return (
     <div className="flex justify-between">
-      <TopicSelection ref={topicsRef} />
-      <SourceSelection ref={sourceRef} />
+      <TopicSelection ref={topicsRef} isAdmin />
+      <SourceSelection ref={sourceRef} isAdmin />
       <TextField
         label="Offset"
         value={offsetTemp}
