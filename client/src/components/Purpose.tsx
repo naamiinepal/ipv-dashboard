@@ -1,11 +1,11 @@
 import { Paper } from "@mui/material";
-import Nepal from "../svgs/nepal.svg";
+import Nepal from "../svgs/Nepal";
 import DataSection from "./DataSection";
 import Title from "./Title";
 
 const Purpose: React.FunctionComponent = () => (
   <div className="ml-16 w-11/12 flex justify-between">
-    <Paper className="w-4/12 mt-2 p-2">
+    <Paper className="w-5/12 mt-2 p-2">
       <Title>
         <h2>An Idea Behind</h2>
       </Title>
@@ -16,8 +16,8 @@ const Purpose: React.FunctionComponent = () => (
         potentially been used for IPV.
       </p>
     </Paper>
-    <img alt="NAAMII-Logo" src={Nepal} width="100" />
-    <DataSection />
+    <Nepal className="w-24" />
+    <DataSection className="w-4/12 p-3" />
   </div>
 );
 

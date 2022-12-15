@@ -17,7 +17,9 @@ const getStorageTotal = (): TotalType => {
   return item ? parseInt(item) : 0;
 };
 
-const DataSection: React.FunctionComponent = () => {
+const DataSection: React.FunctionComponent<
+  React.ComponentPropsWithoutRef<typeof Paper>
+> = (props) => {
   const [tweetCount, setTweetCount] = useState(getStorageTotal);
 
   useEffect(() => {
@@ -38,7 +40,7 @@ const DataSection: React.FunctionComponent = () => {
   }, []);
 
   return (
-    <Paper className="w-3/12 p-2">
+    <Paper {...props}>
       <Title>
         <h2>Data</h2>
       </Title>
@@ -46,12 +48,12 @@ const DataSection: React.FunctionComponent = () => {
         <div>
           <Campaign fontSize="large" />
           <b>{tweetCount.toLocaleString("hi")}</b>
-          <div className="text-black">Sentences Analysed</div>
+          <div className="text-black mt-1">Sentences Analysed</div>
         </div>
         <div>
           <Category fontSize="large" />
           <b>9</b>
-          <div className="text-black">Phrases Analysed</div>
+          <div className="text-black mt-1">Phrases Analysed</div>
         </div>
       </div>
     </Paper>
