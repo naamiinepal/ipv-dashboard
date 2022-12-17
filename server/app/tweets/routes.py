@@ -1,13 +1,15 @@
 from datetime import date
 from typing import List, Optional
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Query
 from pydantic import NonNegativeInt, PositiveInt, conint
+from sqlalchemy.dialects.postgresql import array
 from sqlmodel import Session, func, select, text
 
 from ..auth.dependencies import get_current_user
 from ..auth.models import User
 from ..database import get_session, save_and_refresh
+from ..tweets_common.custom_types import AspectEnum, source_str
 from ..tweets_common.helper_functions import (
     assert_not_null,
     get_a_tweet,
@@ -15,13 +17,7 @@ from ..tweets_common.helper_functions import (
     get_filtered_count,
     get_selection_filter,
 )
-from ..tweets_common.models import (
-    Overview,
-    Tweet,
-    TweetCount,
-    TweetRead,
-    TweetUpdate,
-)
+from ..tweets_common.models import Overview, Tweet, TweetCount, TweetRead, TweetUpdate
 from . import router
 
 
@@ -40,8 +36,10 @@ def get_tweet_overview(
     PhraseModel = (
         (
             select(
-                func.unnest(text("tweet.aspects_anno[:][3:]")).label("asp"),
-                Tweet.created_at,
+                func.unnest(
+                    text(f"{SentenceModel.__tablename__}.aspects_anno[:][3:]")
+                ).label("asp"),
+                SentenceModel.created_at,
             ),
         )
         .subquery()
@@ -85,6 +83,8 @@ def get_count(
 
 @router.get("/", response_model=List[TweetRead])
 def read_tweets(
+    sources: Optional[List[source_str]] = Query(default=None),
+    aspects: Optional[List[AspectEnum]] = Query(default=None),
     offset: NonNegativeInt = 0,
     limit: conint(le=10, gt=0) = 10,
     start_date: Optional[date] = None,
@@ -94,7 +94,38 @@ def read_tweets(
     """
     Read tweets within the offset and limit
     """
-    selection = get_selection_filter(Tweet, start_date, end_date, select(Tweet))
+
+    base_selection = select(Tweet)
+
+    if sources:
+        base_selection = base_selection.where(Tweet.source.in_(sources))
+
+    if aspects:
+        # SELECT id, array_agg(d) @> ARRAY[1,2,8] as asp from tweet,
+        #   LATERAL unnest(aspects_anno[:][3:]) as d group by id
+        unnest_label = "unnest_anno"
+        unnest_anno = select(
+            Tweet.id, func.unnest(text("aspects_anno[:][3:]")).label(unnest_label)
+        ).subquery()
+
+        asp_label = "contains_asp"
+        flat_asp = (
+            select(
+                Tweet.id,
+                array(aspects)
+                .contained_by(func.array_agg(getattr(unnest_anno.c, unnest_label)))
+                .label(asp_label),
+            )
+            .join(unnest_anno, unnest_anno.c.id == Tweet.id)
+            .group_by(Tweet.id)
+            .subquery()
+        )
+
+        base_selection = base_selection.join(flat_asp, flat_asp.c.id == Tweet.id).where(
+            getattr(flat_asp.c, asp_label)
+        )
+
+    selection = get_selection_filter(Tweet, start_date, end_date, base_selection)
 
     return session.exec(
         selection.order_by(Tweet.created_at.desc()).offset(offset).limit(limit)

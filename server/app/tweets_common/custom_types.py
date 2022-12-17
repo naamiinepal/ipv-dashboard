@@ -1,13 +1,15 @@
 from enum import IntEnum
 from typing import List, Optional, Tuple
 
-from pydantic import NonNegativeInt, PositiveInt, conint
+from pydantic import NonNegativeInt, PositiveInt, conint, constr
 
 # Sexual score is in the range of 1 to 10
 sexual_score_kwargs = {"ge": 1, "le": 10}
 
 # Becomes null if the tweet is not sexual
 sexual_score_int = Optional[conint(**sexual_score_kwargs)]
+
+source_str = constr(strip_whitespace=True, to_lower=True, min_length=1)
 
 
 class AspectEnum(IntEnum):

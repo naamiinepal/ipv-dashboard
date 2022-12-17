@@ -4,9 +4,9 @@ from typing import List, Optional, TypeVar
 
 from fastapi import HTTPException
 from pydantic import PositiveInt
+from sqlalchemy.sql.base import ImmutableColumnCollection
 from sqlmodel import Integer, Session, cast, func, select, text, union_all
 from sqlmodel.sql.expression import Select
-from sqlalchemy.sql.base import ImmutableColumnCollection
 
 from .models import Overview, PseudoTweet, Tweet, TweetCount
 

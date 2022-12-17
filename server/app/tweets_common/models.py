@@ -18,6 +18,7 @@ from .custom_types import (
     AspectEnum,
     sexual_score_int,
     sexual_score_kwargs,
+    source_str,
 )
 
 if TYPE_CHECKING:
@@ -71,6 +72,8 @@ class TweetRead(SQLModel):
             ARRAY(Integer, dimensions=2),
         ),
     )
+
+    source: source_str
 
     @validator("aspects_anno")
     def validate_aspects_anno(cls, v: Optional[AspectAnnoType]):

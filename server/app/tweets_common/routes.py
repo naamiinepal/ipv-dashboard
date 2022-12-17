@@ -9,6 +9,7 @@ from sqlmodel import Session, select, union_all
 from ..config import settings
 from ..database import get_session
 from . import router
+from .custom_types import MaxResultsType
 from .decorators import timed_lru_cache
 from .helper_functions import get_abusive_tweets
 from .models import PredictionOutput, PseudoTweet, Tweet
@@ -17,7 +18,6 @@ from .scrape_youtube import (
     youtube_comment_scraper,
     youtube_video_scraper,
 )
-from .custom_types import MaxResultsType
 from .word_cloud_helper import get_word_count_distribution
 
 CACHE_TIMEOUT = 6 * 60 * 60  # 6 hours
