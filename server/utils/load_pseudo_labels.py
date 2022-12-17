@@ -5,8 +5,8 @@ from typing import List, Mapping, Tuple, Union
 
 from sqlmodel import Session
 
-from app.tweets_common.models import PseudoTweet
 from app.tweets_common.custom_types import AspectEnum
+from app.tweets_common.models import PseudoTweet
 
 
 def load_database(
@@ -38,6 +38,7 @@ def load_database(
                 "sexual_score": max(min(round(float(row["sexual_score"])), 10), 1),
                 "aspects_anno": aspects_anno,
                 "created_at": created_at,
+                "source": row.get("source", "twitter"),
             }
             pseudo_tweets.append(PseudoTweet(**kwargs))
 
