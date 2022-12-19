@@ -13,5 +13,6 @@ export type TweetRead = {
      * List of aspects in the tweet
      */
     aspects_anno?: Array<Array<any>>;
+    source: string;
 };
 

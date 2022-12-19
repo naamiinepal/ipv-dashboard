@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AspectEnum } from '../models/AspectEnum';
 import type { Overview } from '../models/Overview';
 import type { TweetCount } from '../models/TweetCount';
 import type { TweetRead } from '../models/TweetRead';
@@ -68,6 +69,9 @@ export class TweetsService {
     /**
      * Read Tweets
      * Read tweets within the offset and limit
+     * @param isAbuse
+     * @param sources
+     * @param aspects
      * @param offset
      * @param limit
      * @param startDate
@@ -76,6 +80,9 @@ export class TweetsService {
      * @throws ApiError
      */
     public static tweetsReadTweets(
+        isAbuse?: boolean,
+        sources?: Array<string>,
+        aspects?: Array<AspectEnum>,
         offset?: number,
         limit: number = 10,
         startDate?: string,
@@ -85,6 +92,9 @@ export class TweetsService {
             method: 'GET',
             url: '/tweets/',
             query: {
+                'is_abuse': isAbuse,
+                'sources': sources,
+                'aspects': aspects,
                 'offset': offset,
                 'limit': limit,
                 'start_date': startDate,
