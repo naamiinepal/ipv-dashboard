@@ -64,7 +64,7 @@ const WordCloud: React.FunctionComponent = () => {
   }, [startDate, endDate]);
 
   return (
-    <Card className="ml-2 grow" style={{ height: "75vh" }}>
+    <Card className="ml-2" style={{ height: "75vh" }}>
       <Title>
         <h2 className="ml-3">Trending Words</h2>
       </Title>
