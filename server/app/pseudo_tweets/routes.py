@@ -123,6 +123,7 @@ def get_count(
 
 @router.get("/", response_model=List[TweetRead])
 def read_pseudo_tweets(
+    is_abuse: Optional[bool] = None,
     sources: Optional[List[source_str]] = Query(default=None),
     aspects: Optional[List[AspectEnum]] = Query(default=None),
     offset: NonNegativeInt = 0,
@@ -136,6 +137,9 @@ def read_pseudo_tweets(
     """
 
     base_selection = select(PseudoTweet)
+
+    if is_abuse is not None:
+        base_selection = base_selection.where(PseudoTweet.is_abuse == is_abuse)
 
     if sources:
         base_selection = base_selection.where(PseudoTweet.source.in_(sources))
