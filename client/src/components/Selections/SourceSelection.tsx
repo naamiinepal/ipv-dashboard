@@ -1,22 +1,22 @@
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
 import { toTitleCase } from "../../utility";
-import SelectorHOC, {
-  WrappedComponentProps,
-  FilterArrayType,
-} from "./SelectorHOC";
+import type { FilterArrayType, WrappedComponentProps } from "./SelectorHOC";
+import SelectorHOC from "./SelectorHOC";
 
-const allSources = ["simulation", "twitter", "youtube"];
+type ValueType = string;
 
-const SourceSelection: React.FunctionComponent<WrappedComponentProps> = ({
-  filters,
-  setFilters,
-  ...restProps
-}) => (
+const allSources: ValueType[] = ["simulation", "twitter", "youtube"];
+
+const SourceSelection: React.FunctionComponent<
+  WrappedComponentProps<ValueType>
+> = ({ filters, setFilters, ...restProps }) => (
   <Select
     sx={{ backgroundColor: "white" }}
     value={filters}
     label="SourceSelection"
-    onChange={({ target: { value } }) => setFilters(value as FilterArrayType)}
+    onChange={({ target: { value } }) =>
+      setFilters(value as FilterArrayType<ValueType>)
+    }
     multiple
     {...restProps}
   >
@@ -29,4 +29,11 @@ const SourceSelection: React.FunctionComponent<WrappedComponentProps> = ({
   </Select>
 );
 
-export default SelectorHOC(SourceSelection, "Source", allSources);
+export default SelectorHOC<ValueType>(
+  SourceSelection,
+  "Source",
+  allSources,
+  false
+);
+
+export { allSources, type ValueType };

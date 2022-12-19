@@ -1,31 +1,28 @@
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import RemoveDoneIcon from "@mui/icons-material/RemoveDone";
 import { Button, Select } from "@mui/material";
-import { forwardRef, useImperativeHandle, useState } from "react";
 
-interface SelectionProps extends React.ComponentPropsWithoutRef<typeof Select> {
+type FilterArrayType<T> = T[];
+
+interface WrappedComponentProps<T>
+  extends React.ComponentPropsWithoutRef<typeof Select> {
+  filters: FilterArrayType<T>;
+  setFilters: React.Dispatch<React.SetStateAction<FilterArrayType<T>>>;
+}
+
+interface SelectionProps<T> extends WrappedComponentProps<T> {
   isAdmin?: boolean;
 }
 
-type FilterArrayType = string[];
-
-interface WrappedComponentProps
-  extends React.ComponentPropsWithoutRef<typeof Select> {
-  filters: FilterArrayType;
-  setFilters: React.Dispatch<React.SetStateAction<FilterArrayType>>;
-}
-
-const SelectorHOC = (
-  WrappedComponent: React.ComponentType<WrappedComponentProps>,
-  componentName: string,
-  allSources: FilterArrayType
-) =>
-  forwardRef(({ isAdmin = false, ...props }: SelectionProps, ref) => {
-    const [filters, setFilters] = useState(allSources);
-
-    useImperativeHandle(ref, () => ({ filters }), [filters]);
-
-    return (
+const SelectorHOC =
+  <T,>(
+    WrappedComponent: React.ComponentType<WrappedComponentProps<T>>,
+    componentName: string,
+    allFilters: FilterArrayType<T>,
+    displayNoneButton: boolean = true
+  ) =>
+  ({ isAdmin = false, ...props }: SelectionProps<T>) =>
+    (
       <div className={`flex justify-between${isAdmin ? "" : " flex-1 mx-1"}`}>
         <div className="mr-3 flex flex-col">
           <span
@@ -38,31 +35,28 @@ const SelectorHOC = (
               variant="contained"
               startIcon={<DoneAllIcon />}
               size="small"
-              onClick={() => setFilters(allSources)}
+              onClick={() => props.setFilters(allFilters)}
               sx={{ marginRight: "1rem" }}
             >
               All
             </Button>
-            <Button
-              variant="contained"
-              startIcon={<RemoveDoneIcon />}
-              size="small"
-              color="warning"
-              onClick={() => setFilters([])}
-            >
-              None
-            </Button>
+            {displayNoneButton && (
+              <Button
+                variant="contained"
+                startIcon={<RemoveDoneIcon />}
+                size="small"
+                color="warning"
+                onClick={() => props.setFilters([])}
+              >
+                None
+              </Button>
+            )}
           </div>
         </div>
-        <WrappedComponent
-          {...props}
-          filters={filters}
-          setFilters={setFilters}
-        />
+        <WrappedComponent {...props} />
       </div>
     );
-  });
 
 export default SelectorHOC;
 
-export type { FilterArrayType, WrappedComponentProps };
+export type { FilterArrayType, WrappedComponentProps, SelectionProps };

@@ -1,27 +1,26 @@
 import { Button, TextField } from "@mui/material";
-import { useRef, useState } from "react";
-import { SourceSelection, TopicSelection } from "../Selections";
+import { useState } from "react";
+import { CombinedSelection, useCombinedSelection } from "../Selections";
+import { CombinedSelectionProps } from "../Selections/CombinedSelection";
 
 interface SelectionAdminProps {
   offset: number;
   setOffset: React.Dispatch<React.SetStateAction<number>>;
   toggleReload: () => void;
+  combinedProps: CombinedSelectionProps;
 }
 
 const SelectionAdmin: React.FunctionComponent<SelectionAdminProps> = ({
   offset,
   setOffset,
   toggleReload,
+  combinedProps,
 }) => {
   const [offsetTemp, setOffsetTemp] = useState(offset);
 
-  const topicsRef = useRef(null);
-  const sourceRef = useRef(null);
-
   return (
     <div className="flex justify-between">
-      <TopicSelection ref={topicsRef} isAdmin />
-      <SourceSelection ref={sourceRef} isAdmin />
+      <CombinedSelection {...combinedProps} isAdmin />
       <TextField
         label="Offset"
         value={offsetTemp}

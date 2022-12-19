@@ -5,48 +5,45 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
-import { phraseColumns } from "../../constants";
+import { Aspects } from "../../constants";
 import { toTitleCase } from "../../utility";
-import SelectorHOC, {
-  WrappedComponentProps,
-  FilterArrayType,
-} from "./SelectorHOC";
+import type { WrappedComponentProps } from "./SelectorHOC";
+import SelectorHOC from "./SelectorHOC";
 
-const phrasePrefixLength = "phrase: ".length;
+type ValueType = number;
 
-const phraseTopicNames = phraseColumns.map(({ field }) =>
-  field.substring(phrasePrefixLength)
-);
+const titleAspects = Aspects.map(toTitleCase);
 
-const TopicSelection: React.FunctionComponent<WrappedComponentProps> = ({
-  filters,
-  setFilters,
-  ...restProps
-}) => (
+const TopicSelection: React.FunctionComponent<
+  WrappedComponentProps<ValueType>
+> = ({ filters, setFilters, ...restProps }) => (
   <Select
     sx={{ backgroundColor: "white" }}
     value={filters}
     label="TopicSelection"
-    onChange={({ target: { value } }) => setFilters(value as FilterArrayType)}
+    onChange={({ target: { value } }) => setFilters(value as ValueType[])}
     multiple
     {...restProps}
   >
     <ListSubheader>Sentence Label</ListSubheader>
 
-    <MenuItem value="is_abuse">
-      <Checkbox checked={filters.indexOf("is_abuse") > -1} />
+    <MenuItem value={-1}>
+      <Checkbox checked={filters.indexOf(-1) > -1} />
       <ListItemText primary="Is Abuse" />
     </MenuItem>
     <ListSubheader>Phrases</ListSubheader>
-    {phraseTopicNames.map((field) => (
-      <MenuItem key={field} value={field}>
-        <Checkbox checked={filters.indexOf(field) > -1} />
-        <ListItemText primary={toTitleCase(field)} />
+    {titleAspects.map((field, index) => (
+      <MenuItem key={field} value={index}>
+        <Checkbox checked={filters.indexOf(index) > -1} />
+        <ListItemText primary={field} />
       </MenuItem>
     ))}
   </Select>
 );
 
-const allTopics = [...phraseTopicNames, "is_abuse"];
+// -1 is for is_abuse category
+const allTopics = [...Array(titleAspects.length).keys()];
 
 export default SelectorHOC(TopicSelection, "Topic", allTopics);
+
+export { allTopics, type ValueType };
