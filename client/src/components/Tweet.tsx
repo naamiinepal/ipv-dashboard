@@ -64,7 +64,10 @@ const Tweet: React.FunctionComponent<TweetProps> = ({ tweet }) => {
               <Chip
                 key={asp}
                 className="mr-1"
-                label={`${toTitleCase(Aspects[asp])} from ${start} to ${end}`}
+                label={`${toTitleCase(Aspects[asp])}: ${tweet.text.slice(
+                  start,
+                  end
+                )}`}
                 color="info"
               />
             ))}
