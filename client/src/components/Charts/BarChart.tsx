@@ -83,7 +83,7 @@ const BarChart: React.FunctionComponent = () => {
       .then((response_data) => {
         const { aspects, ...restResponse } = response_data;
         const phraseCount = Object.fromEntries(
-          Aspects.map((asp, index) => [`Phrase: ${asp}`, aspects![index] || 0])
+          Aspects.map((asp, index) => [`Phrase: ${asp}`, aspects?.[index] || 0])
         );
 
         const normalizedData = {

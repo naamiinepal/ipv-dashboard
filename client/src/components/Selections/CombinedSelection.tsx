@@ -1,5 +1,4 @@
 import { Select } from "@mui/material";
-import type { FilterArrayType, SelectionProps } from "./SelectorHOC";
 import SourceSelection from "./SourceSelection";
 import TopicSelection from "./TopicSelection";
 import useCombinedSelection from "./useCombinedSelection";

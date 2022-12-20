@@ -14,48 +14,52 @@ interface SelectionProps<T> extends WrappedComponentProps<T> {
   isAdmin?: boolean;
 }
 
-const SelectorHOC =
-  <T,>(
-    WrappedComponent: React.ComponentType<WrappedComponentProps<T>>,
-    componentName: string,
-    allFilters: FilterArrayType<T>,
-    displayNoneButton: boolean = true
-  ) =>
-  ({ isAdmin = false, ...props }: SelectionProps<T>) =>
-    (
-      <div className={`flex justify-between${isAdmin ? "" : " flex-1 mx-1"}`}>
-        <div className="mr-3 flex flex-col">
-          <span
-            className={`${isAdmin ? "" : "text-white font-semibold "}text-base`}
+const SelectorHOC = <T,>(
+  WrappedComponent: React.ComponentType<WrappedComponentProps<T>>,
+  componentName: string,
+  allFilters: FilterArrayType<T>,
+  displayNoneButton = true
+) => {
+  const NewComponent: React.FunctionComponent<SelectionProps<T>> = ({
+    isAdmin = false,
+    ...props
+  }) => (
+    <div className={`flex justify-between${isAdmin ? "" : " flex-1 mx-1"}`}>
+      <div className="mr-3 flex flex-col">
+        <span
+          className={`${isAdmin ? "" : "text-white font-semibold "}text-base`}
+        >
+          Filter by {componentName}:
+        </span>
+        <div>
+          <Button
+            variant="contained"
+            startIcon={<DoneAllIcon />}
+            size="small"
+            onClick={() => props.setFilters(allFilters)}
+            sx={{ marginRight: "1rem" }}
           >
-            Filter by {componentName}:
-          </span>
-          <div>
+            All
+          </Button>
+          {displayNoneButton && (
             <Button
               variant="contained"
-              startIcon={<DoneAllIcon />}
+              startIcon={<RemoveDoneIcon />}
               size="small"
-              onClick={() => props.setFilters(allFilters)}
-              sx={{ marginRight: "1rem" }}
+              color="warning"
+              onClick={() => props.setFilters([])}
             >
-              All
+              None
             </Button>
-            {displayNoneButton && (
-              <Button
-                variant="contained"
-                startIcon={<RemoveDoneIcon />}
-                size="small"
-                color="warning"
-                onClick={() => props.setFilters([])}
-              >
-                None
-              </Button>
-            )}
-          </div>
+          )}
         </div>
-        <WrappedComponent {...props} />
       </div>
-    );
+      <WrappedComponent {...props} />
+    </div>
+  );
+  NewComponent.displayName = componentName;
+  return NewComponent;
+};
 
 export default SelectorHOC;
 

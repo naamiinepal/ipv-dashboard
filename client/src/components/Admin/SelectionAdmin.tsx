@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { CombinedSelection, useCombinedSelection } from "../Selections";
+import { CombinedSelection } from "../Selections";
 import { CombinedSelectionProps } from "../Selections/CombinedSelection";
 
 interface SelectionAdminProps {

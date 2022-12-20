@@ -1,5 +1,5 @@
 import { Card } from "@mui/material";
-import { memo, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import type { OptionsProp } from "react-wordcloud";
 import ReactWordcloud from "react-wordcloud";
 import { CancelError, TweetsCommonsService } from "../client";
