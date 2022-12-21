@@ -6,7 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export { AspectEnum } from './models/AspectEnum';
+export type { AspectEnum } from './models/AspectEnum';
 export type { Body_auth_login } from './models/Body_auth_login';
 export type { CommentResponse } from './models/CommentResponse';
 export type { HTTPValidationError } from './models/HTTPValidationError';
