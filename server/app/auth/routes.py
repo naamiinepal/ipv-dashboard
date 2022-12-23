@@ -6,7 +6,7 @@ from sqlmodel import Session, or_, select
 
 from ..database import get_session, save_and_refresh
 from . import router
-from .dependencies import get_current_user, get_username_from_token
+from .dependencies import get_current_user
 from .helper_functions import (
     authenticate_user,
     create_access_token_from_username,
@@ -54,9 +54,7 @@ def login(
 )
 def register(
     user: UserCreate,
-    _: User = Depends(
-        get_username_from_token
-    ),  # Avoid accessing the database since it is not used anywhere
+    db_user: User = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
     """
@@ -85,7 +83,9 @@ def register(
         raise HTTPException(status_code=400, detail=f"The {detail} already exists.")
 
     hashed_password = get_password_hash(user.password)
-    db_user = User.from_orm(user, {"hashed_password": hashed_password})
+    db_user = User.from_orm(
+        user, {"hashed_password": hashed_password, "creator_id": db_user.id}
+    )
 
     # Save user to database but now db_user has expired and doesn't contain anything
     save_and_refresh(session, db_user, refresh=False)

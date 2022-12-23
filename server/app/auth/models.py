@@ -72,3 +72,11 @@ class User(UserBase, table=True):
         back_populates="verifier",
         sa_relationship_kwargs={"primaryjoin": "User.id==Tweet.verifier_id"},
     )
+
+    # Who created the user
+    creator_id: Optional[PositiveInt] = Field(default=None, foreign_key="user.id")
+    creator: Optional["User"] = Relationship(
+        back_populates="creations", sa_relationship_kwargs={"remote_side": "User.id"}
+    )
+
+    creations: List["User"] = Relationship(back_populates="creator")
