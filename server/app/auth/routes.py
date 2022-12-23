@@ -46,7 +46,6 @@ def login(
     return create_access_token_from_username(user.username)
 
 
-# TODO: Store verifier somewhere
 @router.post(
     "/register",
     response_model=Token,
@@ -74,12 +73,14 @@ def register(
                 username_match = True
             if u.email == user.email:
                 email_match = True
-        if username_match and email_match:
-            detail = f"username: {user.username} and the email: {user.email}"
-        elif username_match:
+
+        email_detail = f"email: {user.email}"
+        if username_match:
             detail = f"username: {user.username}"
+            if email_match:
+                detail += f" and the {email_detail}"
         else:
-            detail = f"email: {user.email}"
+            detail = email_detail
         raise HTTPException(status_code=400, detail=f"The {detail} already exists.")
 
     hashed_password = get_password_hash(user.password)
