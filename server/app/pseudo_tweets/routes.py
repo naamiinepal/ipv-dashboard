@@ -14,10 +14,10 @@ from ..tweets_common.helper_functions import (
     assert_not_null,
     get_a_tweet,
     get_combined_model,
+    get_common_fields,
     get_db_overview,
     get_filtered_count,
     get_selection_filter,
-    get_common_fields,
 )
 from ..tweets_common.models import (
     Overview,
@@ -25,8 +25,8 @@ from ..tweets_common.models import (
     Tweet,
     TweetCount,
     TweetRead,
-    TweetUpdate,
     TweetReadExtraInfo,
+    TweetUpdate,
 )
 from . import router
 

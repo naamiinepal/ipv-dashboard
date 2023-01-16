@@ -1,5 +1,7 @@
+import json
+import os.path
+import time
 from datetime import date
-from functools import lru_cache
 from typing import List, Optional, Tuple
 
 import requests
@@ -82,7 +84,7 @@ def get_prediction(text: str):
 
 
 @router.get("/scrape_youtube", response_model=List[YoutubeScrapeResponse])
-@lru_cache(maxsize=16)
+@timed_lru_cache(seconds=5, maxsize=16)
 def scrape_youtube(
     video_query: str,
     max_video_results: MaxResultsType = 2,
@@ -121,5 +123,13 @@ def scrape_youtube(
         )
 
         response.append({"video_id": video_id, "comments": comment_snippets})
+
+    # Replace the dot in the floating point with underscore for better file name
+    timestamp = str(time.time()).replace(".", "_", 1)
+
+    # Store to a random file location
+    with open(os.path.join("youtube_queries", f"{timestamp}.json"), "a") as f:
+        json_str = json.dumps(response, ensure_ascii=False, skipkeys=True)
+        f.write(json_str + "\n")
 
     return response
