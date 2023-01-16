@@ -52,6 +52,19 @@ def get_actual_path(filename: str):
 
 @app.get("/{file_path:path}", response_class=FileResponse)
 async def index(file_path: str):
+    """
+    Fallback route to get the document needed for client side routing.
+    Fallback is kept since the server doesn't know all the routes
+        needed in the client side.
+    **Please use the file server from the nginx instead of calling
+        this function for each static file.**
+
+    Args:
+        file_path (str): The path to the file inside the templates directory
+
+    Returns:
+        File: The file request if found, else falls back to index.html
+    """
     actual_path = get_actual_path(file_path)
     if os.path.isfile(actual_path):
         return actual_path
