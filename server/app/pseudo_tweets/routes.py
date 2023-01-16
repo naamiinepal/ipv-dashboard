@@ -125,7 +125,6 @@ def get_count(
 
 @router.get("/", response_model=List[TweetReadExtraInfo])
 def read_pseudo_tweets(
-    all: bool = False,
     is_abuse: Optional[bool] = None,
     sources: Optional[List[source_str]] = Query(default=None),
     aspects: Optional[List[AspectEnum]] = Query(default=None),
@@ -133,6 +132,7 @@ def read_pseudo_tweets(
     limit: conint(le=10, gt=0) = 10,
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
+    all: bool = False,
     session: Session = Depends(get_session),
 ):
     """
