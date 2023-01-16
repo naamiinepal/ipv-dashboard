@@ -4,7 +4,7 @@ from typing import List, Optional
 from fastapi import Depends, Query
 from pydantic import NonNegativeInt, PositiveInt, conint
 from sqlalchemy.dialects.postgresql import array
-from sqlmodel import Session, func, select, text, union_all
+from sqlmodel import Session, func, literal_column, select, text, union_all
 
 from ..auth.dependencies import get_current_user, get_username_from_token
 from ..auth.models import User
@@ -17,6 +17,7 @@ from ..tweets_common.helper_functions import (
     get_db_overview,
     get_filtered_count,
     get_selection_filter,
+    get_common_fields,
 )
 from ..tweets_common.models import (
     Overview,
@@ -25,6 +26,7 @@ from ..tweets_common.models import (
     TweetCount,
     TweetRead,
     TweetUpdate,
+    TweetReadExtraInfo,
 )
 from . import router
 
@@ -121,8 +123,9 @@ def get_count(
     )
 
 
-@router.get("/", response_model=List[TweetRead])
+@router.get("/", response_model=List[TweetReadExtraInfo])
 def read_pseudo_tweets(
+    all: bool = False,
     is_abuse: Optional[bool] = None,
     sources: Optional[List[source_str]] = Query(default=None),
     aspects: Optional[List[AspectEnum]] = Query(default=None),
@@ -136,43 +139,60 @@ def read_pseudo_tweets(
     Read pseudo tweets within the offset and limit
     """
 
-    base_selection = select(PseudoTweet)
+    if all:
+        verification_label = "verified"
+        Model = (
+            union_all(
+                select(
+                    *get_common_fields(Tweet),
+                    literal_column("1").label(verification_label),
+                ),
+                select(
+                    *get_common_fields(PseudoTweet),
+                    literal_column("0").label(verification_label),
+                ),
+            )
+            .subquery()
+            .c
+        )
+        base_selection = select(*Model)
+    else:
+        Model = PseudoTweet
+        base_selection = select(PseudoTweet)
 
     if is_abuse is not None:
-        base_selection = base_selection.where(PseudoTweet.is_abuse == is_abuse)
+        base_selection = base_selection.where(Model.is_abuse == is_abuse)
 
     if sources:
-        base_selection = base_selection.where(PseudoTweet.source.in_(sources))
+        base_selection = base_selection.where(Model.source.in_(sources))
 
     if aspects:
-        # SELECT id, array_agg(d) @> ARRAY[1,2,8] as asp from pseudo_tweet,
-        #   LATERAL unnest(aspects_anno[:][3:]) as d group by id
         unnest_label = "unnest_anno"
         unnest_anno = select(
-            PseudoTweet.id, func.unnest(text("aspects_anno[:][3:]")).label(unnest_label)
+            Model.id, func.unnest(text("aspects_anno[:][3:]")).label(unnest_label)
         ).subquery()
 
         asp_label = "contains_asp"
         flat_asp = (
             select(
-                PseudoTweet.id,
+                Model.id,
                 array(aspects)
                 .contained_by(func.array_agg(getattr(unnest_anno.c, unnest_label)))
                 .label(asp_label),
             )
-            .join(unnest_anno, unnest_anno.c.id == PseudoTweet.id)
-            .group_by(PseudoTweet.id)
+            .join(unnest_anno, unnest_anno.c.id == Model.id)
+            .group_by(Model.id)
             .subquery()
         )
 
-        base_selection = base_selection.join(
-            flat_asp, flat_asp.c.id == PseudoTweet.id
-        ).where(getattr(flat_asp.c, asp_label))
+        base_selection = base_selection.join(flat_asp, flat_asp.c.id == Model.id).where(
+            getattr(flat_asp.c, asp_label)
+        )
 
-    selection = get_selection_filter(PseudoTweet, start_date, end_date, base_selection)
+    selection = get_selection_filter(Model, start_date, end_date, base_selection)
 
     return session.exec(
-        selection.order_by(PseudoTweet.created_at.desc()).offset(offset).limit(limit)
+        selection.order_by(Model.created_at.desc()).offset(offset).limit(limit)
     ).all()
 
 

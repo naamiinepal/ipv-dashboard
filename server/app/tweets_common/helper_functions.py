@@ -6,21 +6,24 @@ from fastapi import HTTPException
 from pydantic import PositiveInt
 from sqlalchemy.sql.base import ImmutableColumnCollection
 from sqlmodel import Integer, Session, cast, func, select, text, union_all
-from sqlmodel.sql.expression import Select
+from sqlmodel.sql.expression import Select, SelectOfScalar
 
-from .models import Overview, PseudoTweet, Tweet, TweetCount
+from .models import Overview, PseudoTweet, Tweet, TweetCount, TweetRead
 
 # Make a Generic Type to get the original type completion back
 # Moving to the types file will create a circular import
-ModelType = TypeVar("ModelType", Tweet, PseudoTweet)
+ModelType = TypeVar("ModelType", Tweet, PseudoTweet, ImmutableColumnCollection)
+
+# Select can be a Scalar or a tuple
+GenericSelect = TypeVar("GenericSelect", Select, SelectOfScalar)
 
 
 def get_selection_filter(
     Model: ModelType,
     start_date: Optional[date],
     end_date: Optional[date],
-    selection: Select[tuple],
-):
+    selection: GenericSelect,
+) -> GenericSelect:
     """
     Filter the selection by various dimensions.
     `selection` is the selection before filtering
@@ -117,23 +120,22 @@ def get_db_overview(
     return combined_overview
 
 
-def get_combined_model():
+def get_overview_selection(Model: ModelType) -> Select[tuple]:
+    """
+    Get the selection statement with numeric columns only and created_at
+    """
 
+    return select(
+        Model.is_abuse,
+        Model.sexual_score,
+        Model.created_at,
+    )
+
+
+def get_combined_model():
     """
     Get a combined model with numerics columns and created_at
     """
-
-    def get_overview_selection(Model: ModelType) -> Select[tuple]:
-        """
-        Get the selection statement with numeric columns only and created_at
-        """
-
-        return select(
-            Model.is_abuse,
-            Model.sexual_score,
-            Model.created_at,
-        )
-
     return (
         union_all(get_overview_selection(Tweet), get_overview_selection(PseudoTweet))
         .subquery()
@@ -143,7 +145,7 @@ def get_combined_model():
 
 def get_filtered_count(
     SentenceModel: ModelType,
-    phrase_selection: Optional[Select[tuple]],
+    phrase_selection: Optional[GenericSelect],
     start_date: Optional[date],
     end_date: Optional[date],
     get_phrase_count: bool,
@@ -182,7 +184,30 @@ def get_filtered_count(
 
 def get_abusive_tweets(
     Model: ModelType, start_date: date, end_date: date
-) -> Select[tuple]:
+) -> SelectOfScalar:
+    """Get only the abusive texts of the provided model
+
+    Args:
+        Model (ModelType): The model to get the text from
+        start_date (date): The start date
+        end_date (date): The end date for selection
+
+    Returns:
+        SelectOfScalar: The select statement to return the abusive texts
+            in the provided date range
+    """
     return get_selection_filter(
         Model, start_date, end_date, select(Model.text).where(Model.is_abuse)
     )
+
+
+def get_common_fields(Model: ModelType) -> tuple:
+    """Get all the common fields between Tweet and PseudoTweet
+
+    Args:
+        Model (ModelType): The model to get the attributes from
+
+    Returns:
+        tuple: Multiple attriibutes of the provided model
+    """
+    return tuple(getattr(Model, field) for field in TweetRead.__fields__)

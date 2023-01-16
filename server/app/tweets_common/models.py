@@ -87,6 +87,10 @@ class TweetRead(SQLModel):
         return v
 
 
+class TweetReadExtraInfo(TweetRead):
+    verified: bool = False
+
+
 class DBTweetBase(TweetRead):
 
     __table_args__ = (CheckConstraint("sexual_score >= 1 AND sexual_score <= 10"),)
