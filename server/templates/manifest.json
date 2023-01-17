@@ -11,27 +11,11 @@
     "file": "assets/index-e810c549.css",
     "src": "index.css"
   },
-  "_chart_js_extras-61871ffc.js": {
-    "file": "assets/chart_js_extras-61871ffc.js",
-    "imports": [
-      "_chart_js-00feeec8.js"
-    ]
-  },
   "_react_router-b929a5cd.js": {
     "file": "assets/react_router-b929a5cd.js",
     "imports": [
       "_react-fc2298a4.js"
     ]
-  },
-  "_mui_extras-3914081e.js": {
-    "file": "assets/mui_extras-3914081e.js",
-    "imports": [
-      "_react-fc2298a4.js",
-      "_mui_material-d6a2ca06.js"
-    ]
-  },
-  "_react-fc2298a4.js": {
-    "file": "assets/react-fc2298a4.js"
   },
   "src/components/Admin/TweetCollectionAdminPanel.tsx": {
     "file": "assets/TweetCollectionAdminPanel-074f6adf.js",
@@ -47,6 +31,19 @@
       "_moment-fbc5633a.js",
       "_mui_extras-3914081e.js",
       "_word_cloud-3e26f9b7.js"
+    ]
+  },
+  "_mui_extras-3914081e.js": {
+    "file": "assets/mui_extras-3914081e.js",
+    "imports": [
+      "_react-fc2298a4.js",
+      "_mui_material-d6a2ca06.js"
+    ]
+  },
+  "_mui_material-d6a2ca06.js": {
+    "file": "assets/mui_material-d6a2ca06.js",
+    "imports": [
+      "_react-fc2298a4.js"
     ]
   },
   "index.html": {
@@ -74,17 +71,20 @@
       "assets/naamii-logo-4e467dd1.png"
     ]
   },
-  "_chart_js-00feeec8.js": {
-    "file": "assets/chart_js-00feeec8.js",
-    "imports": [
-      "_react-fc2298a4.js"
-    ]
+  "_react-fc2298a4.js": {
+    "file": "assets/react-fc2298a4.js"
   },
   "_moment-fbc5633a.js": {
     "file": "assets/moment-fbc5633a.js"
   },
-  "_mui_material-d6a2ca06.js": {
-    "file": "assets/mui_material-d6a2ca06.js",
+  "_chart_js_extras-61871ffc.js": {
+    "file": "assets/chart_js_extras-61871ffc.js",
+    "imports": [
+      "_chart_js-00feeec8.js"
+    ]
+  },
+  "_chart_js-00feeec8.js": {
+    "file": "assets/chart_js-00feeec8.js",
     "imports": [
       "_react-fc2298a4.js"
     ]
