@@ -5,7 +5,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import type { AspectEnum, TweetRead } from "../../client";
@@ -65,6 +65,7 @@ const TweetCollectionAdminPanel: React.FunctionComponent<
       offset,
       10
     );
+    setDataList([]);
     request
       .then((data) => setDataList(data))
       .catch((err) => {
@@ -75,7 +76,7 @@ const TweetCollectionAdminPanel: React.FunctionComponent<
     return () => {
       request?.cancel();
     };
-  }, [offset, reload, topics, sources]);
+  }, [isVerify, offset, reload, topics, sources]);
 
   const toggleReload = () => setReload(!reload);
 
