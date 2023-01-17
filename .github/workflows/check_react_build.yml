@@ -23,7 +23,7 @@ jobs:
     - name: Use Node.js LTS
       uses: actions/setup-node@v3.5.1
       with:
-        node-version: lts/gallium
+        node-version: 18 
         cache: yarn
         cache-dependency-path: client/
     - name: Install dependencies
