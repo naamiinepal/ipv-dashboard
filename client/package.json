@@ -25,7 +25,7 @@
     "build": "vite build",
     "serve": "vite preview",
     "build-to-server": "yarn build && ./move_to_server.sh",
-    "generate-client": "openapi --input http://localhost:8001/openapi.json --output ./src/client",
+    "generate-client": "openapi --input http://localhost:8001/openapi.json --output ./src/client --useUnionTypes",
     "lint": "eslint --max-warnings=0 src"
   },
   "devDependencies": {

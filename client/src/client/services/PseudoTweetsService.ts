@@ -5,6 +5,7 @@ import type { AspectEnum } from '../models/AspectEnum';
 import type { Overview } from '../models/Overview';
 import type { TweetCount } from '../models/TweetCount';
 import type { TweetRead } from '../models/TweetRead';
+import type { TweetReadExtraInfo } from '../models/TweetReadExtraInfo';
 import type { TweetUpdate } from '../models/TweetUpdate';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -82,7 +83,8 @@ export class PseudoTweetsService {
      * @param limit
      * @param startDate
      * @param endDate
-     * @returns TweetRead Successful Response
+     * @param all
+     * @returns TweetReadExtraInfo Successful Response
      * @throws ApiError
      */
     public static pseudoTweetsReadPseudoTweets(
@@ -93,7 +95,8 @@ export class PseudoTweetsService {
         limit: number = 10,
         startDate?: string,
         endDate?: string,
-    ): CancelablePromise<Array<TweetRead>> {
+        all: boolean = false,
+    ): CancelablePromise<Array<TweetReadExtraInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/pseudo_tweets/',
@@ -105,6 +108,7 @@ export class PseudoTweetsService {
                 'limit': limit,
                 'start_date': startDate,
                 'end_date': endDate,
+                'all': all,
             },
             errors: {
                 422: `Validation Error`,

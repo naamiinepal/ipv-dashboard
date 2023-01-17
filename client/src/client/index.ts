@@ -15,6 +15,7 @@ export type { PredictionOutput } from './models/PredictionOutput';
 export type { Token } from './models/Token';
 export type { TweetCount } from './models/TweetCount';
 export type { TweetRead } from './models/TweetRead';
+export type { TweetReadExtraInfo } from './models/TweetReadExtraInfo';
 export type { TweetUpdate } from './models/TweetUpdate';
 export type { UserCreate } from './models/UserCreate';
 export type { UserRead } from './models/UserRead';
