@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { CancelError, TweetRead, TweetsService } from "../client";
+import type { AspectEnum, TweetRead } from "../client";
+import { CancelError, PseudoTweetsService } from "../client";
 import FilterContext from "../FilterContext";
 import {
   allSources,
   allTopics,
   CombinedSelection,
-  useCombinedSelection,
+  useCombinedSelection
 } from "./Selections";
 import Tweet from "./Tweet";
 
@@ -50,14 +51,15 @@ const TweetContainer: React.FunctionComponent<
 
     const currSources = sources.length === allSources.length ? [] : sources;
 
-    const request = TweetsService.tweetsReadTweets(
+    const request = PseudoTweetsService.pseudoTweetsReadPseudoTweets(
       isAbuse,
       currSources,
-      aspects,
+      aspects as AspectEnum[],
       offset,
       10,
       startDate,
-      endDate
+      endDate,
+      true
     );
     request
       .then((data) => {

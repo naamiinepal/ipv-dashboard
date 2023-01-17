@@ -5,10 +5,10 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import type { TweetRead } from "../../client";
+import type { AspectEnum, TweetRead } from "../../client";
 import { CancelError, PseudoTweetsService, TweetsService } from "../../client";
 import { sentenceColumns } from "../../constants";
 import { toTitleCase } from "../../utility";
@@ -58,7 +58,13 @@ const TweetCollectionAdminPanel: React.FunctionComponent<
       ? PseudoTweetsService.pseudoTweetsReadPseudoTweets
       : TweetsService.tweetsReadTweets;
 
-    const request = tweetFetcher(isAbuse, currSources, aspects, offset, 10);
+    const request = tweetFetcher(
+      isAbuse,
+      currSources,
+      aspects as AspectEnum[],
+      offset,
+      10
+    );
     request
       .then((data) => setDataList(data))
       .catch((err) => {

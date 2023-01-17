@@ -5,12 +5,13 @@ import {
   MenuItem,
   Select,
 } from "@mui/material";
+import type { AspectEnum } from "../../client";
 import { Aspects } from "../../constants";
 import { toTitleCase } from "../../utility";
 import type { WrappedComponentProps } from "./SelectorHOC";
 import SelectorHOC from "./SelectorHOC";
 
-type ValueType = number;
+type ValueType = AspectEnum | -1;
 
 const titleAspects = Aspects.map(toTitleCase);
 
@@ -34,7 +35,7 @@ const TopicSelection: React.FunctionComponent<
     <ListSubheader>Phrases</ListSubheader>
     {titleAspects.map((field, index) => (
       <MenuItem key={field} value={index}>
-        <Checkbox checked={filters.indexOf(index) > -1} />
+        <Checkbox checked={filters.indexOf(index as AspectEnum) > -1} />
         <ListItemText primary={field} />
       </MenuItem>
     ))}
@@ -42,7 +43,7 @@ const TopicSelection: React.FunctionComponent<
 );
 
 // -1 is for is_abuse category
-const allTopics = [...Array(titleAspects.length).keys()];
+const allTopics = [...Array(titleAspects.length).keys()] as AspectEnum[];
 
 export default SelectorHOC(TopicSelection, "Topic", allTopics);
 

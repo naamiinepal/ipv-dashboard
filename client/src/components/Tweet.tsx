@@ -1,25 +1,21 @@
 import PersonIcon from "@mui/icons-material/Person";
+import type { ChipTypeMap } from "@mui/material";
 import { Card, Chip } from "@mui/material";
-import { useMemo } from "react";
+import type { OverridableComponent } from "@mui/material/OverridableComponent";
+import type { ComponentPropsWithoutRef } from "react";
 import { InteractiveHighlighter } from "react-interactive-highlighter";
-import type { TweetRead } from "../client";
+import type { TweetReadExtraInfo } from "../client";
 import { Aspects, months } from "../constants";
 import { toTitleCase } from "../utility";
 
 interface TweetProps {
-  tweet: TweetRead;
+  tweet: TweetReadExtraInfo;
 }
 
 const Tweet: React.FunctionComponent<TweetProps> = ({ tweet }) => {
-  const created_date = useMemo(
-    () => new Date(tweet.created_at),
-    [tweet.created_at]
-  );
+  const created_date = new Date(tweet.created_at);
 
-  const currentMonth = useMemo(
-    () => months[created_date.getMonth()],
-    [created_date]
-  );
+  const currentMonth = months[created_date.getMonth()];
 
   const highlights =
     tweet.aspects_anno?.map(([start, end]) => ({
@@ -27,14 +23,24 @@ const Tweet: React.FunctionComponent<TweetProps> = ({ tweet }) => {
       numChars: end - start,
     })) || [];
 
+  const verifiedProps: ComponentPropsWithoutRef<
+    OverridableComponent<ChipTypeMap>
+  > = tweet.verified
+    ? { label: "Verified", color: "success" }
+    : { label: "Unverified", color: "info" };
+
   return (
     <Card className="p-5 mb-2" variant="outlined">
-      <div>
-        <PersonIcon />
-        <span className="text-primary">{tweet.username}</span> on{" "}
-        <span className="text-primary">
-          {currentMonth} {created_date.getDate()}, {created_date.getFullYear()}
-        </span>
+      <div className="flex justify-between">
+        <div>
+          <PersonIcon />
+          <span className="text-primary">{tweet.username}</span> on{" "}
+          <span className="text-primary">
+            {currentMonth} {created_date.getDate()},{" "}
+            {created_date.getFullYear()}
+          </span>
+        </div>
+        <Chip size="small" {...verifiedProps} />
       </div>
       <InteractiveHighlighter
         text={tweet.text}
